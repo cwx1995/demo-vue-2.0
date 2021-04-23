@@ -1,15 +1,38 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Layout from '@/components/layout.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      path:'/',
+      component:Layout,
+      redirect:'/firstMod/index',
+    },
+    {
+      path:'/firstMod',
+      component:Layout,
+      redirect:'/firstMod/index',
+      children:[{
+        path: 'index',
+        name: 'firstMod',
+        component: ()=>import('@/views/firstMod/index.vue')
+      }]
+    },
+    {
+      path:'/secondMod',
+      component:Layout,
+      redirect:'/secondMod/index',
+      children:[{
+        path: 'index',
+        name: 'secondMod',
+        component: ()=>import('@/views/secondMod/index.vue')
+      }]
     }
+    
+    
+    
   ]
 })

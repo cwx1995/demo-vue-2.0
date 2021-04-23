@@ -1,7 +1,5 @@
 <template>
-  <div>
-    123456
-  </div>
+  <div>222</div>
 </template>
 
 <script>
