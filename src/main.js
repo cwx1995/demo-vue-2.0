@@ -4,10 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import { fetchGet, fetchPost} from './utils/http'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.prototype.$get = fetchGet
 Vue.prototype.$post = fetchPost
-
+Vue.use(ElementUI);
 Vue.config.productionTip = false
 require('./mock')
 

@@ -13,23 +13,23 @@ Vue.prototype.$static = ''
 
 // 配置接口地址
 axios.defaults.baseURL = '/'
-var loadingInstance
+// var loadingInstance
 // POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use(
   config => {
-    loadingInstance = Loading.service({
-      lock: true,
-      text: '数据加载中，请稍后...',
-      spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.7)'
-    })
+    // loadingInstance = Loading.service({
+    //   lock: true,
+    //   text: '数据加载中，请稍后...',
+    //   spinner: 'el-icon-loading',
+    //   background: 'rgba(0, 0, 0, 0.7)'
+    // })
     if (config.method === 'post') {
       config.data = qs.stringify(config.data)
     }
     return config
   },
   err => {
-    loadingInstance.close()
+    // loadingInstance.close()
     Message.error('请求错误')
     return Promise.reject(err)
   }
@@ -37,16 +37,16 @@ axios.interceptors.request.use(
 // 返回状态判断(添加响应拦截器)
 axios.interceptors.response.use(
   res => {
-    if (res.data.code === 200) {
-      loadingInstance.close()
+    // if (res.data.code === 200) {
+    //   loadingInstance.close()
       return res
-    } else {
-      loadingInstance.close()
-      Message.error(res.data.msg)
-    }
+    // } else {
+    //   loadingInstance.close()
+    //   Message.error(res.data.msg)
+    // }
   },
   err => {
-    loadingInstance.close()
+    // loadingInstance.close()
     Message.error('请求失败，请稍后再试')
     return Promise.reject(err)
   }

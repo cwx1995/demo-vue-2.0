@@ -1,6 +1,6 @@
 <template>
   <div>
-      124
+      共计{{count}}条
       <div @click="getData">
           请求数据
       </div>
@@ -11,17 +11,24 @@
 export default {
     data() {
         return {
-            
+           count:'' 
         }
     },
     created(){
-
+        this.getData()
     },
     methods:{
         getData(){
-                console.log('333')
-            this.$post('getData').then((res)=>{
-                console.log(res,'111')
+            let data={
+
+            }
+            console.log(data,'data')
+            this.$post('getData',data).then((res)=>{
+                if(res.code==='200'){
+                    this.count=res.result.count.count
+                }else{
+                    alert('error')
+                }
             }).catch((err)=>{
 console.log(err,'222')
             })
