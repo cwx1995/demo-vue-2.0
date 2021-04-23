@@ -83,8 +83,6 @@
          .view {
              margin-left: 200px;
          }
-        >>> .el-submenu__title{
-    color: red!important;
-}
+
      }
 </style>
