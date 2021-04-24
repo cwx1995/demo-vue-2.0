@@ -3,12 +3,12 @@
         <div class="header">
         </div>
         <div class="main">
-            <el-menu default-active="2" router class="el-menu-vertical-demo" @select="select"  background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+            <el-menu default-active="2" router class="el-menu-vertical-demo" @select="select" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
                 <el-submenu v-for="(item,index) in menuData" :key="index" :index="item.id">
                     <i class="el-icon-menu"></i>
                     <span slot="title">{{item.title}}</span>
                     <el-menu-item-group>
-                        <el-menu-item v-for="(item2,index2) in item.menu" :key="index2"  :index="item2.path">{{item2.name}}</el-menu-item>
+                        <el-menu-item v-for="(item2,index2) in item.menu" :key="index2" :index="item2.path">{{item2.name}}</el-menu-item>
                     </el-menu-item-group>
                 </el-submenu>
             </el-menu>
@@ -27,12 +27,12 @@
                     id: '1',
                     title: '一级菜单',
                     menu: [{
-                            id:'1-1',
+                            id: '1-1',
                             path: '/firstMod',
                             name: 'demo1'
                         },
                         {
-                            id:'1-2',
+                            id: '1-2',
                             path: '/secondMod',
                             name: 'demo2'
                         }
@@ -41,12 +41,12 @@
                     id: '2',
                     title: '二级菜单',
                     menu: [{
-                            id:'2-1',
+                            id: '2-1',
                             path: '',
                             name: 'demo3'
                         },
-                        {   
-                            id:'2-2',
+                        {
+                            id: '2-2',
                             path: '',
                             name: 'demo4'
                         }
@@ -55,11 +55,9 @@
             }
         },
         methods: {
-
-            select(key, keyPath){
-console.log(key, keyPath,'key, keyPath')
+            select(key, keyPath) {
+                console.log(key, keyPath, 'key, keyPath')
             }
-            
         }
     }
 </script>
