@@ -13,6 +13,7 @@ Vue.prototype.$static = ''
 
 // 配置接口地址
 axios.defaults.baseURL = '/'
+//设置loading
 // var loadingInstance
 // POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use(
@@ -37,18 +38,19 @@ axios.interceptors.request.use(
 // 返回状态判断(添加响应拦截器)
 axios.interceptors.response.use(
   res => {
-    // if (res.data.code === 200) {
+    if (res.data.code === 200) {
     //   loadingInstance.close()
-      return res
-    // } else {
+      return res.data
+    } else {
     //   loadingInstance.close()
-    //   Message.error(res.data.msg)
-    // }
+      // Message.error(res.data.msg)
+      return Promise.reject(res.data)
+    }
   },
   err => {
     // loadingInstance.close()
     Message.error('请求失败，请稍后再试')
-    return Promise.reject(err)
+    return Promise.reject(err.data)
   }
 )
 // 发送请求
@@ -58,14 +60,14 @@ export function fetchPost (url, params) {
       .post(url, params)
       .then(
         res => {
-          resolve(res.data)
+          resolve(res)
         },
         err => {
-          reject(err.data)
+          reject(err)
         }
       )
       .catch(err => {
-        reject(err.data)
+        reject(err)
       })
   })
 }
@@ -76,10 +78,10 @@ export function fetchGet (url, params) {
         params: params
       })
       .then(res => {
-        resolve(res.data)
+        resolve(res)
       })
       .catch(err => {
-        reject(err.data)
+        reject(err)
       })
   })
 }
