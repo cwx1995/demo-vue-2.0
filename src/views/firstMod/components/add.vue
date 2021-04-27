@@ -1,7 +1,7 @@
 <template>
     <div class="box">
         <div class="back" @click="callback">
-            返回
+            <i class="el-icon-arrow-left"></i> 返回
         </div>
         <div class="center">
             <div class="addScheduler">{{title}}</div>
@@ -14,15 +14,15 @@
                         <el-input type="information" v-model="ruleForm.information"></el-input>
                     </el-form-item>
                     <el-form-item label="执行时间段" class="timer" prop="time">
-                        <el-date-picker v-model="ruleForm.time" type="daterange" :picker-options="pickerOptions" range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期">
+                        <el-date-picker v-model="ruleForm.time" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="daterange" :picker-options="pickerOptions" range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="定时设置" class="settime" prop="setTiming" required>
                         <el-time-select v-model="ruleForm.setTiming" :picker-options="{
-                                    start: '08:30',
-                                    step: '00:15',
-                                    end: '14:30'
-                                    }">
+                                        start: '08:30',
+                                        step: '00:15',
+                                        end: '14:30'
+                                        }">
                         </el-time-select>
                         <div class="order">每周五下午2点30分</div>
                     </el-form-item>
@@ -49,19 +49,17 @@
 <script>
     export default {
         data() {
-            var validateName =(rule,value,callback)=> {
-                if(value === ''){
-                   callback(new Error('请输入名称')) 
-                }else {
-                    
+            var validateName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入名称'))
+                } else {
                     callback()
                 }
             };
-            var validateSettime = (rule,value,callback) => {
-                if(value === ''){
-                   callback(new Error('请设置时间')) 
-                }else {
-                   
+            var validateSettime = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请设置时间'))
+                } else {
                     // if(this.ruleForm.setTiming !== ''){
                     //     this.$ref.ruleForm.validateField('setTiming')
                     // }
@@ -81,7 +79,6 @@
                 },
                 pickerOptions: {
                     shortcuts: [{
-                        text: '最近一周',
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -89,7 +86,6 @@
                             picker.$emit('pick', [start, end]);
                         }
                     }, {
-                        text: '最近一个月',
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -97,7 +93,6 @@
                             picker.$emit('pick', [start, end]);
                         }
                     }, {
-                        text: '最近三个月',
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -127,7 +122,8 @@
                         validator: validateSettime,
                         trigger: 'blur'
                     }]
-                }
+                },
+                row:''
             }
         },
         created() {
@@ -138,15 +134,37 @@
             } else if (this.flag === 'edit') {
                 this.title = '编辑调度器'
             }
+            this.ruleForm = this.$route.query.row
         },
         methods: {
             callback() {
                 this.$router.go(-1)
             },
-            saveNum(form) {
-                console.log(form)
-                this.$message('已保存');
-                this.$router.go(-1)
+            saveNum(data) {
+                let params = {
+                    name: this.ruleForm.name,
+                    explain: this.ruleForm.information,
+                    startTime: this.ruleForm.time[0],
+                    endTime: this.ruleForm.time[1],
+                    timeSet: this.ruleForm.setTiming,
+                    collectionTask: this.ruleForm.collect
+                }
+                console.log(data)
+                this.$refs.ruleForm.validate((valid) => {
+                    if (valid) {
+                        this.$post('addData', params).then((res) => {
+                            console.log(res)
+                            if (res.code === 200) {
+                                this.$message('添加成功');
+                                this.$router.go(-1)
+                            } else {
+                                 this.$message('添加失败')
+                            }
+                        }).catch((err) => {
+                            console.log(error)
+                        })
+                    }
+                })
             },
             cancel() {
                 console.log('取消')
@@ -171,7 +189,7 @@
             margin: 15px;
             position: relative;
             .addScheduler {
-                background-color: skyblue;
+                background-color: #409eff;
                 height: 50px;
                 line-height: 50px;
                 font-size: 14px;

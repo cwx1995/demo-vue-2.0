@@ -1,10 +1,5 @@
 <template>
     <div class="firstMod">
-        <!-- 示例 -->
-        <!-- 共计{{count}}条
-                                              <div @click="getData">
-                                                  请求数据
-                                              </div> -->
         <div class="break">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>调度管理</el-breadcrumb-item>
@@ -28,29 +23,28 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                 <el-form-item label="执行时间段：" class="timer" v-if="show" prop="time">
+                <el-form-item label="执行时间段：" class="timer" v-if="show" prop="time">
                     <el-date-picker v-model="formInline.time" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="daterange" :picker-options="pickerOptions" range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item class="button">
-                    
-                    <div class="queryBtn"  @click="queryInf('1')">
-                        <i class="el-icon-search"></i>
-                        查询
+                    <div class="queryBtn" @click="queryInf('1')">
+                        <i class="el-icon-search"></i> 查询
                     </div>
                     <div class="resetBtn" @click="resetForm('formInline')">
-                        <i class="el-icon-refresh-right"></i>
-                        重置
+                        <i class="el-icon-refresh-right"></i> 重置
                     </div>
-                </el-form-item>  
+                </el-form-item>
             </el-form>
             <div class="packup" @click="packup">
-                {{show?'收起':'展开'}}
+                {{show?'收起':'展开'}}<i class="el-icon-arrow-down"></i>
             </div>
         </div>
         <div class="box">
             <div class="list">调度器列表</div>
-            <div class="add" @click="addNum">新增</div>
+            <div class="add" @click="addNum">
+                <i class="el-icon-plus"></i> 新增
+            </div>
         </div>
         <div class="form">
             <el-table :data="tableData" border style="width: 100%">
@@ -63,9 +57,9 @@
                 <el-table-column align="center" prop="system" label="使用系统" width="220">
                 </el-table-column>
                 <el-table-column align="center" prop="time" label="执行时间段" width="300">
-                <template slot-scope="scope">
-                    {{scope.row.startTime + '--' + scope.row.endTime}}
-                </template>
+                    <template slot-scope="scope">
+                        {{scope.row.startTime + '--' + scope.row.endTime}}
+            </template>
                 </el-table-column>
                 <el-table-column align="center" prop="timeSet" label="定时设置" width="220">
                 </el-table-column>
@@ -79,8 +73,8 @@
             <el-button @click="handleClick(scope.row)" type="text" size="small">
                 查看
             </el-button>
-            <el-button type="text" size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" @click="handleDelete(scope.row.id)">删除</el-button>
+            <el-button type="text" size="small" @click="handleEdit(scope.row)"><i class="el-icon-edit"></i></el-button>
+            <el-button type="text" size="small" @click="handleDelete(scope.row.id)"><i class="el-icon-delete"></i></el-button>
             </template>
                 </el-table-column>
             </el-table>
@@ -114,8 +108,8 @@
             return {
                 formInline: {
                     name: '',
-                    time:'',//时间选择器的值 数组
-                    system:'',
+                    time: '', //时间选择器的值 数组
+                    system: '',
                     endTime: '',
                     status: ''
                 },
@@ -187,8 +181,7 @@
                     console.log(res)
                     if (res.code === 200) {
                         this.tableData = res.result.tableData
-                    } else {
-                    }
+                    } else {}
                 }).catch((err) => {
                     console.log(error)
                 })
@@ -222,6 +215,7 @@
                 this.pageSize = 10
                 this.queryInf()
             },
+            // 收起
             packup() {
                 this.show = !this.show
             },
@@ -230,35 +224,42 @@
                 console.log(row);
             },
             // 删除
-            handleDelete(row) {
-                let params={
-                    id:row
+            handleDelete(id) {
+                let params = {
+                    id:id
                 }
-                console.log(params,'params')
-                this.$post('delData', params
-                ).then((res) => {
+                console.log(params, 'params')
+                this.$post('delData', params).then((res) => {
                     if (res.code == 200) {
+                        this.tableData.splice(params,1);
                         this.$message({
                             showClose: true,
                             message: '删除成功',
                             type: 'success'
                         });
-                    }else{
-                        this.$message.error('请求失败，请稍后再试')
-                    }
-                })
+                    } 
+                }).catch((err) => {
+                    console.log(error)
+                 })
             },
             // 编辑
-            handleEdit(id) {
-                console.log(id)
-                 this.$router.push({
-                     path:'components/add',
-                     query: {
-                         'id':id,
-                         flag:'edit'
-                     }
-                 })  
-                
+            handleEdit(row) {
+                console.log(row)
+                this.$post('editData').then((res) => {
+                   if (res.code == 200) {
+                       this.$router.push({
+                        path: 'components/add',
+                        query: {
+                            // 'id': id,
+                            'row':row,
+                            flag: 'edit'
+                        }
+                    })
+                    } else {
+                        this.$message.error('请求失败，请稍后再试')
+                    }
+                   
+                })
             },
             // 每页显示多少条数据
             handleSizeChange(val) {
@@ -275,11 +276,10 @@
             //新增
             addNum() {
                 this.$router.push({
-                    path:'components/add',
-                    query:{    
-                        id:'',
-                        flag:'add'
-                        
+                    path: 'components/add',
+                    query: {
+                        id: '',
+                        flag: 'add'
                     }
                 })
             }
@@ -302,10 +302,14 @@
             background-color: #fff;
             margin: 0 20px;
             padding: 20px 0;
-            >>> .el-input, .el-input__inner {
+            >>>.el-input .el-input__inner {
                 height: 30px;
                 line-height: 30px;
                 font-size: 12px;
+            }
+            .el-input__prefix,
+            .el-input__suffix {
+                top: 5px;
             }
             >>>.el-form-item {
                 margin-bottom: 0;
@@ -314,20 +318,21 @@
                 color: #333;
                 padding-left: 10px;
             }
-            >>>.el-form--inline .el-form-item {
-                display: inline-block;
+            .el-date-editor .el-range-input,
+            .el-date-editor .el-range-separator {
+                height: 0;
             }
-            >>> .el-date-editor .el-range__icon {
-                line-height: 0;
-                
+            >>>.el-input__inner {
+                height: 30px;
+                line-height: 30;
             }
-            .el-date-editor .el-range-input, .el-date-editor .el-range-separator  {
+            .el-input__icon {
                 height: 0;
             }
             .button {
-                    position: absolute;
-                    top: 20px;
-                    right: 100px;
+                position: absolute;
+                top: 20px;
+                right: 100px;
                 .queryBtn,
                 .resetBtn {
                     width: 65px;
@@ -341,10 +346,6 @@
                     background-color: #409eff;
                     cursor: pointer;
                     margin-left: 10px;
-                }
-                .el-icon-search {
-                    width: 18px;
-                    height: 18px;
                 }
             }
             .el-button--primary {
@@ -362,15 +363,16 @@
             .packup {
                 position: absolute;
                 right: 40px;
-                top: calc(25% - 5px);
+                top: 30px;
                 height: 20px;
                 font-size: 12px;
+                color: #409eff;
             }
         }
         .box {
             height: 50px;
             line-height: 50px;
-            margin:0 20px;
+            margin: 0 20px;
             background-color: #fff;
             margin-top: 20px;
             padding-left: 10px;
@@ -383,16 +385,20 @@
             position: absolute;
             right: 50px;
             top: 10px;
-            width: 50px;
+            width: 80px;
             height: 30px;
             line-height: 30px;
-             text-align: center;
-                    border-radius: 5px;
-                    display: inline-block;
-                    color: #fff;
-                    font-size: 12px;
-                    background-color: #409eff;
-                    cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+            display: inline-block;
+            color: #fff;
+            font-size: 12px;
+            background-color: #409eff;
+            cursor: pointer;
+        }
+        .el-icon-edit {
+            width: 20px;
+            height: 20px;
         }
         .edit {
             position: absolute;
@@ -401,17 +407,17 @@
             width: 50px;
             height: 30px;
             line-height: 30px;
-             text-align: center;
-                    border-radius: 5px;
-                    display: inline-block;
-                    color: #fff;
-                    font-size: 12px;
-                    background-color: #409eff;
-                    cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+            display: inline-block;
+            color: #fff;
+            font-size: 12px;
+            background-color: #409eff;
+            cursor: pointer;
         }
         .form {
             padding: 10px;
-            margin: 0 20px ;
+            margin: 0 20px;
             background-color: #fff;
         }
         .page {
