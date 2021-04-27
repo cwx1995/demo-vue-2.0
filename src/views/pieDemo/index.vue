@@ -107,9 +107,6 @@
         },
         created() {},
         methods: {
-            size() {
-                let leftBox = document.getElementById('leftBox')
-            },
             // 画图
             drawChart(res) {
                 if (res === 'Left') {

@@ -10,7 +10,7 @@ export const getDetail=[
                     startTime: '2020-08-08',//执行时间段开始
                     endTime:'2020-09-09',//执行时间段结束
                     timeSet: '9:30',//定时设置
-                    collectionTask:'1'//采集任务 1 黄金糕 2 双皮奶 3蚵仔煎
+                    collectionTask:['1','2']//采集任务 1 黄金糕 2 双皮奶 3蚵仔煎
                 }
             }
         }

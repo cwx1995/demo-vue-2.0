@@ -1,6 +1,6 @@
 <template>
     <div class="box">
-        <div class="back" @click="callback">
+        <div class="back" @click="cancel">
             <i class="el-icon-arrow-left"></i> 返回
         </div>
         <div class="center">
@@ -125,20 +125,31 @@
         },
         created() {
             this.ids = this.$route.query.id
+            console.log(this.ids)
             this.flag = this.$route.query.flag
             if (this.flag === 'add') {
                 this.title = '新增调度器'
             } else if (this.flag === 'edit') {
                 this.title = '编辑调度器'
-                this.ruleForm = this.$route.query.row
+                this.$post('getDetail',this.ids).then((res) => {
+                   if (res.code === 200) {
+                       console.log(res)
+                       this.ruleForm.name=res.result.data.name
+                       this.ruleForm.information=res.result.data.explain
+                       this.ruleForm.setTiming=res.result.data.timeSet
+                       this.ruleForm.collect=res.result.data.collectionTask
+                       this.ruleForm.time=new Array(res.result.data.startTime,res.result.data.endTime)
+                       console.log(this.ruleForm.time,'this.ruleForm.time')
+                    } else {
+                        this.$message.error('请求失败，请稍后再试')
+                    }
+                   
+                })
             }
         },
         methods: {
-            callback() {
-                this.$router.go(-1)
-            },
-            saveNum(form) {
-                console.log(form)
+            // 保存
+            saveNum() {
                 let params = {
                     name: this.ruleForm.name,
                     explain: this.ruleForm.information,
@@ -147,16 +158,31 @@
                     timeSet: this.ruleForm.setTiming,
                     collectionTask: this.ruleForm.collect
                 }
-                console.log(params)
                 if(this.flag === 'add'){
                     this.$refs.ruleForm.validate((valid) => {
                     if (valid) {
+                        console.log(params,'add params')
                         this.$post('addData', params).then((res) => {
-                            console.log(res)
                             if (res.code === 200) {
-                                // this.$router.go(-1)
-                                this.$message('添加成功');
-                                 this.tableData.push(params)
+                                console.log(res)
+                                this.$message('添加成功');  
+                            } else {
+                                 this.$message('添加失败')
+                            }
+                        })
+                    }
+                })
+                }else if(this.flag === 'edit'){
+                    this.$refs.ruleForm.validate((valid) => {
+                    if (valid) {
+                        // 编辑时 单独增加个id
+                        params.id=this.ids
+                        console.log(params,'edit params')
+                        this.$post('editData', params).then((res) => {
+                            if (res.code === 200) {
+                                console.log(res)
+                                this.$message('编辑成功');
+                                this.$router.push('/firstMod/index')
                             } else {
                                  this.$message('添加失败')
                             }
@@ -166,8 +192,9 @@
                 }
                 
             },
+            // 取消
             cancel() {
-                console.log('取消')
+              this.$router.go(-1)
             }
         }
     }

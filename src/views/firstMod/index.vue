@@ -19,7 +19,7 @@
                 </el-form-item>
                 <el-form-item label="启用状态：" prop="status">
                     <el-select v-model="formInline.status" placeholder="启用">
-                        <el-option v-for="item in option" :key="item.value" :label="item.label" :value="item.value">
+                        <el-option v-for="item in option" :key="item.value" :latimerbel="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -73,7 +73,7 @@
             <el-button @click="handleClick(scope.row)" type="text" size="small">
                 查看
             </el-button>
-            <el-button type="text" size="small" @click="handleEdit(scope.row)"><i class="el-icon-edit"></i></el-button>
+            <el-button type="text" size="small" @click="handleEdit(scope.row.id)"><i class="el-icon-edit"></i></el-button>
             <el-button type="text" size="small" @click="handleDelete(scope.row.id)"><i class="el-icon-delete"></i></el-button>
             </template>
                 </el-table-column>
@@ -104,6 +104,7 @@
 
 <script>
     export default {
+        name:'firstMod',
         data() {
             return {
                 formInline: {
@@ -243,15 +244,17 @@
                  })
             },
             // 编辑
-            handleEdit(row) {
-                console.log(row)
-                this.$post('editData').then((res) => {
+            handleEdit(id) {
+                console.log(id)
+                let params = {
+                    id:'id'
+                }
+                this.$post('editData',params).then((res) => {
                    if (res.code == 200) {
                        this.$router.push({
                         path: 'components/add',
                         query: {
-                            // 'id': id,
-                            'row':row,
+                            'id': id,
                             flag: 'edit'
                         }
                     })
@@ -322,10 +325,10 @@
             .el-date-editor .el-range-separator {
                 height: 0;
             }
-            >>>.el-input__inner {
-                height: 30px;
-                line-height: 30;
-            }
+            // >>>.el-input__inner {
+            //     height: 30px;
+            //     line-height: 30;
+            // }
             .el-input__icon {
                 height: 0;
             }
@@ -359,6 +362,18 @@
             }
             .timer {
                 margin-top: 20px;
+            >>> .el-range-editor.el-input__inner{
+                height: 30px;
+                padding: 0 3px;
+            }
+            >>> .el-date-editor .el-range__icon{
+                height: 30px;
+                line-height: 30px;
+            }
+            >>> .el-date-editor .el-range-separator{
+                height: 30px;
+                line-height: 30px;
+            }
             }
             .packup {
                 position: absolute;
