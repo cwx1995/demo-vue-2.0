@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="form">
-            <el-table :data="tableData" border style="width: 100%">
+            <el-table :data="tableData" border style="width: 100%" :header-cell-style="{background:'#E8ECF5'}">
                 <el-table-column align="center" prop="num" label="序号" width="100">
                 </el-table-column>
                 <el-table-column align="center" prop="serial" label="调度器编号" width="120">

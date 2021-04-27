@@ -49,10 +49,10 @@
 <script>
     export default {
         data() {
-            var validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入名称'))
-                } else {
+            var validateName =(rule,value,callback)=> {
+                if(value === ''){
+                   callback(new Error('请输入名称')) 
+                }else {
                     callback()
                 }
             };
@@ -60,9 +60,6 @@
                 if (value === '') {
                     callback(new Error('请设置时间'))
                 } else {
-                    // if(this.ruleForm.setTiming !== ''){
-                    //     this.$ref.ruleForm.validateField('setTiming')
-                    // }
                     // this.$refs.ruleForm.validateField('name')
                     callback()
                 }
@@ -75,7 +72,7 @@
                     information: '',
                     time: '',
                     setTiming: '',
-                    collect: []
+                    collect: ''
                 },
                 pickerOptions: {
                     shortcuts: [{
@@ -133,14 +130,15 @@
                 this.title = '新增调度器'
             } else if (this.flag === 'edit') {
                 this.title = '编辑调度器'
+                this.ruleForm = this.$route.query.row
             }
-            this.ruleForm = this.$route.query.row
         },
         methods: {
             callback() {
                 this.$router.go(-1)
             },
-            saveNum(data) {
+            saveNum(form) {
+                console.log(form)
                 let params = {
                     name: this.ruleForm.name,
                     explain: this.ruleForm.information,
@@ -149,22 +147,24 @@
                     timeSet: this.ruleForm.setTiming,
                     collectionTask: this.ruleForm.collect
                 }
-                console.log(data)
-                this.$refs.ruleForm.validate((valid) => {
+                console.log(params)
+                if(this.flag === 'add'){
+                    this.$refs.ruleForm.validate((valid) => {
                     if (valid) {
                         this.$post('addData', params).then((res) => {
                             console.log(res)
                             if (res.code === 200) {
+                                // this.$router.go(-1)
                                 this.$message('添加成功');
-                                this.$router.go(-1)
+                                 this.tableData.push(params)
                             } else {
                                  this.$message('添加失败')
                             }
-                        }).catch((err) => {
-                            console.log(error)
                         })
                     }
                 })
+                }
+                
             },
             cancel() {
                 console.log('取消')
@@ -189,7 +189,7 @@
             margin: 15px;
             position: relative;
             .addScheduler {
-                background-color: #409eff;
+                background-color: #4985E3;
                 height: 50px;
                 line-height: 50px;
                 font-size: 14px;
