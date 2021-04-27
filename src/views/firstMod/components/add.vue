@@ -53,7 +53,6 @@
                 if(value === ''){
                    callback(new Error('请输入名称')) 
                 }else {
-                    
                     callback()
                 }
             };
