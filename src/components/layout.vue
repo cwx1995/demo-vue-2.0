@@ -23,40 +23,26 @@
     export default {
         data() {
             return {
-                menuData: [{
-                    id: '1',
-                    title: '一级菜单',
-                    menu: [{
-                            id: '1-1',
-                            path: '/firstMod',
-                            name: 'demo1'
-                        },
-                        {
-                            id: '1-2',
-                            path: '/secondMod',
-                            name: 'demo2'
-                        }
-                    ]
-                }, {
-                    id: '2',
-                    title: '二级菜单',
-                    menu: [{
-                            id: '2-1',
-                            path: '',
-                            name: 'demo3'
-                        },
-                        {
-                            id: '2-2',
-                            path: '',
-                            name: 'demo4'
-                        }
-                    ]
-                }]
+                menuData: []
             }
+        },
+        created(){
+            this.getMenu()
         },
         methods: {
             select(key, keyPath) {
                 console.log(key, keyPath, 'key, keyPath')
+            },
+            // 获取菜单
+            getMenu(){
+                this.$post('getMenuList', ''
+                ).then((res) => {
+                    if (res.code === 200) {
+                        this.menuData=res.result.data
+                    }else{
+                        this.$message.error('请求失败，请稍后再试')
+                    }
+                })
             }
         }
     }

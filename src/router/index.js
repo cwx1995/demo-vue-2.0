@@ -39,6 +39,16 @@ export default new Router({
         name: 'secondMod',
         component: ()=>import('@/views/secondMod/index.vue')
       }]
+    },
+    {
+      path:'/pieDemo',
+      component:Layout,
+      redirect:'/pieDemo/index',
+      children:[{
+        path: 'index',
+        name: 'pieDemo',
+        component: ()=>import('@/views/pieDemo/index.vue')
+      }]
     }
     
     
