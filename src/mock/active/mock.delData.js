@@ -13,3 +13,8 @@ export const delData=[
         // }
     }
 ]
+
+// 所需上送
+// {
+//     id:String
+// }

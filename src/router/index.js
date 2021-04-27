@@ -19,6 +19,10 @@ export default new Router({
         path: 'index',
         name: 'firstMod',
         component: ()=>import('@/views/firstMod/index.vue')
+      },{
+        path: 'components/add',
+        name: 'firstMod',
+        component: ()=>import('@/views/firstMod/components/add.vue')
       }]
     },
     {

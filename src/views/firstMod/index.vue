@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="firstMod">
         <!-- 示例 -->
         <!-- 共计{{count}}条
-                                          <div @click="getData">
-                                              请求数据
-                                          </div> -->
+                                              <div @click="getData">
+                                                  请求数据
+                                              </div> -->
         <div class="break">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>调度管理</el-breadcrumb-item>
@@ -12,57 +12,76 @@
             </el-breadcrumb>
         </div>
         <div class="query">
-            <el-form :inline="true"  :model="formInline" class="demo-form-inline">
-                <el-form-item label="调度器信息：">
+            <el-form :inline="true" :model="formInline" ref="formInline" class="demo-form-inline">
+                <el-form-item label="调度器信息：" prop="name">
                     <el-input v-model="formInline.name" placeholder="调度器编号/名称/说明"></el-input>
                 </el-form-item>
-                <el-form-item label="适用系统：">
+                <el-form-item label="适用系统：" prop="system">
                     <el-select v-model="formInline.system" placeholder="数据资产">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="启用状态：">
+                <el-form-item label="启用状态：" prop="status">
                     <el-select v-model="formInline.status" placeholder="启用">
                         <el-option v-for="item in option" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item class="button">
-                    <el-button type="primary" @click="queryInf(formInline)">查询</el-button>
-                </el-form-item>
-                <el-form-item class="btn">
-                    <el-button type="primary">重置</el-button>
-                </el-form-item>
-                <el-form-item label="执行时间段：" class="timer" v-if="show">
-                    <el-date-picker v-model="formInline.time" type="daterange" :picker-options="pickerOptions" range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期">
+                 <el-form-item label="执行时间段：" class="timer" v-if="show" prop="time">
+                    <el-date-picker v-model="formInline.time" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="daterange" :picker-options="pickerOptions" range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
+                <el-form-item class="button">
+                    
+                    <div class="queryBtn"  @click="queryInf('1')">
+                        <i class="el-icon-search"></i>
+                        查询
+                    </div>
+                    <div class="resetBtn" @click="resetForm('formInline')">
+                        <i class="el-icon-refresh-right"></i>
+                        重置
+                    </div>
+                </el-form-item>  
             </el-form>
+            <div class="packup" @click="packup">
+                {{show?'收起':'展开'}}
+            </div>
         </div>
-        <div class="list">调度器列表</div>
+        <div class="box">
+            <div class="list">调度器列表</div>
+            <div class="add" @click="addNum">新增</div>
+        </div>
         <div class="form">
-            <el-table :data="tableData" border  style="width: 100%">
+            <el-table :data="tableData" border style="width: 100%">
                 <el-table-column align="center" prop="num" label="序号" width="100">
                 </el-table-column>
-                <el-table-column prop="serial" label="调度器编号" width="120">
+                <el-table-column align="center" prop="serial" label="调度器编号" width="120">
                 </el-table-column>
-                <el-table-column prop="name" label="调度器名称" width="220">
+                <el-table-column align="center" prop="name" label="调度器名称" width="220">
                 </el-table-column>
-                <el-table-column prop="system" label="使用系统" width="220">
+                <el-table-column align="center" prop="system" label="使用系统" width="220">
                 </el-table-column>
-                <el-table-column prop="time" label="执行时间段" width="300">
-                </el-table-column>
-                <el-table-column prop="timing" label="定时设置" width="220">
-                </el-table-column>
-                <el-table-column prop="states" label="启用状态" width="120">
-                </el-table-column>
-                <el-table-column fixed="right" label="操作" width="220">
-                    <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                    <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-                    <el-button type="text" size="small" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+                <el-table-column align="center" prop="time" label="执行时间段" width="300">
+                <template slot-scope="scope">
+                    {{scope.row.startTime + '--' + scope.row.endTime}}
                 </template>
+                </el-table-column>
+                <el-table-column align="center" prop="timeSet" label="定时设置" width="220">
+                </el-table-column>
+                <el-table-column align="center" label="启用状态" width="120">
+            <template slot-scope="scope">
+            {{sta[scope.row.states]}}
+            </template>
+                </el-table-column>
+                <el-table-column align="center" fixed="right" label="操作" width="220">
+            <template slot-scope="scope" align="center">
+            <el-button @click="handleClick(scope.row)" type="text" size="small">
+                查看
+            </el-button>
+            <el-button type="text" size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
+            <el-button type="text" size="small" @click="handleDelete(scope.row.id)">删除</el-button>
+            </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -80,10 +99,10 @@
 			@size-change="handleSizeChange"
 			@current-change="handleCurrentChange"
 			:current-page="currentPage"
-			:page-sizes="[100, 200, 300, 400]"
-			:page-size="100"
+			:page-sizes="[10, 20, 30, 40]"
+			:page-size="pageSize"
 			layout="total, sizes, prev, pager, next, jumper"
-			:total="400">
+			:total="total">
 			</el-pagination>
 		</div>
     </div>
@@ -93,12 +112,17 @@
     export default {
         data() {
             return {
-                //    count:'' 
                 formInline: {
                     name: '',
-                    system: '',
-                    status: '',
-                    time: ''
+                    time:'',//时间选择器的值 数组
+                    system:'',
+                    endTime: '',
+                    status: ''
+                },
+                sta: {
+                    '1': '未启用',
+                    '2': '已启用',
+                    '3': '已禁用'
                 },
                 options: [{
                     value: '0011',
@@ -122,7 +146,6 @@
                 valueone: '',
                 pickerOptions: {
                     shortcuts: [{
-                        text: '最近一周',
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -130,7 +153,6 @@
                             picker.$emit('pick', [start, end]);
                         }
                     }, {
-                        text: '最近一个月',
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -138,7 +160,6 @@
                             picker.$emit('pick', [start, end]);
                         }
                     }, {
-                        text: '最近三个月',
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -147,130 +168,258 @@
                         }
                     }]
                 },
-                show: false,
-                tableData: [{
-                    id:'1',
-                    num: '03',
-                    serial: '12',
-                    name: '质量调度',
-                    system: '数据',
-                    time: 'yyyy-mm-dd -- yyyy-mm-dd',
-                    timing: '2021-4-23 12:21:13',
-                    states: '启用',
-                    option: 'a'
-                }, {
-                    id:'2',
-                    num: '06',
-                    serial: '008',
-                    name: '规则调度',
-                    system: '质量',
-                    time: 'yyyy-mm-dd -- yyyy-mm-dd',
-                    timing: '2021-4-23 12:21:13',
-                    states: '启用',
-                    option: 'a'
-                }],
-				dialogTableVisible: false,
-        		dialogFormVisible: false,
-				currentPage:2
+                show: true,
+                tableData: [],
+                dialogTableVisible: false,
+                dialogFormVisible: false,
+                currentPage: 1,
+                total: 50,
+                pageSize: 10
             }
         },
         created() {
-            // this.getData()
+            this.queryInf()
         },
         methods: {
-            // 示例模拟请求接口
-            // getData(){
-            //     let data={
-            //     }
-            //     console.log(data,'data')
-            //     this.$post('getData',data).then((res)=>{
-            //         if(res.code==='200'){
-            //             this.count=res.result.count.count
-            //         }else{
-            //             alert('error')
-            //         }
-            //     }).catch((err)=>{
-            //         console.log(err,'222')
-            //     })
-            // }
+            // 获取列表
+            getData(params) {
+                this.$post('getData', params).then((res) => {
+                    console.log(res)
+                    if (res.code === 200) {
+                        this.tableData = res.result.tableData
+                    } else {
+                    }
+                }).catch((err) => {
+                    console.log(error)
+                })
+            },
             handleNodeClick(data) {
                 console.log(data);
             },
+            // 查询
             queryInf(res) {
-                console.log(res)
+                if (res === '1') {
+                    this.currentPage = 1
+                    this.pageSize = 10
+                }
+                let data = {
+                    name: this.formInline.name,
+                    system: this.formInline.system,
+                    startTime: this.formInline.time[0],
+                    endTime: this.formInline.time[1],
+                    status: this.formInline.status,
+                    current: this.currentPage,
+                    pageSize: this.pageSize
+                }
+                console.log(data, 'data')
+                this.getData(data)
+            },
+            // 重置
+            resetForm(form) {
+                // this.$refs[form].resetFields();
+                this.$refs.formInline.resetFields();
+                this.currentPage = 1
+                this.pageSize = 10
+                this.queryInf()
+            },
+            packup() {
+                this.show = !this.show
             },
             // 点击查看
             handleClick(row) {
                 console.log(row);
             },
-            handleDelete(index,row){
-                console.log(index)
-                // this.tableData.splice(index,1)
+            // 删除
+            handleDelete(row) {
+                let params={
+                    id:row
+                }
+                console.log(params,'params')
+                this.$post('delData', params
+                ).then((res) => {
+                    if (res.code == 200) {
+                        this.$message({
+                            showClose: true,
+                            message: '删除成功',
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message.error('请求失败，请稍后再试')
+                    }
+                })
             },
-			handleEdit(row){
-				console.log(row)
-				this.dialogFormVisible = true
-			},
-			 handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
-			},
-			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
-			}
+            // 编辑
+            handleEdit(id) {
+                console.log(id)
+                 this.$router.push({
+                     path:'components/add',
+                     query: {
+                         'id':id,
+                         flag:'edit'
+                     }
+                 })  
+                
+            },
+            // 每页显示多少条数据
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize = val;
+                // 重置当前页为1
+                this.handleCurrentChange(1)
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.currentPage = val;
+                this.queryInf()
+            },
+            //新增
+            addNum() {
+                this.$router.push({
+                    path:'components/add',
+                    query:{    
+                        id:'',
+                        flag:'add'
+                        
+                    }
+                })
+            }
         }
     }
 </script>
 
-<style>
-    .break .el-breadcrumb {
-        line-height: 60px;
-        height: 60px;
-        margin-left: 20px;
+<style lang="scss" scoped>
+    .firstMod {
+        .break {
+            >>>.el-breadcrumb {
+                line-height: 60px;
+                height: 60px;
+                margin-left: 20px;
+            }
+        }
+        .query {
+            position: relative;
+            overflow: hidden;
+            background-color: #fff;
+            margin: 0 20px;
+            padding: 20px 0;
+            >>> .el-input, .el-input__inner {
+                height: 30px;
+                line-height: 30px;
+                font-size: 12px;
+            }
+            >>>.el-form-item {
+                margin-bottom: 0;
+            }
+            >>>.el-form-item__label {
+                color: #333;
+                padding-left: 10px;
+            }
+            >>>.el-form--inline .el-form-item {
+                display: inline-block;
+            }
+            >>> .el-date-editor .el-range__icon {
+                line-height: 0;
+                
+            }
+            .el-date-editor .el-range-input, .el-date-editor .el-range-separator  {
+                height: 0;
+            }
+            .button {
+                    position: absolute;
+                    top: 20px;
+                    right: 100px;
+                .queryBtn,
+                .resetBtn {
+                    width: 65px;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    border-radius: 5px;
+                    display: inline-block;
+                    color: #fff;
+                    font-size: 12px;
+                    background-color: #409eff;
+                    cursor: pointer;
+                    margin-left: 10px;
+                }
+                .el-icon-search {
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+            .el-button--primary {
+                width: 50px;
+                height: 20px;
+                line-height: 20px;
+                vertical-align: middle;
+                span {
+                    display: block;
+                }
+            }
+            .timer {
+                margin-top: 20px;
+            }
+            .packup {
+                position: absolute;
+                right: 40px;
+                top: calc(25% - 5px);
+                height: 20px;
+                font-size: 12px;
+            }
+        }
+        .box {
+            height: 50px;
+            line-height: 50px;
+            margin:0 20px;
+            background-color: #fff;
+            margin-top: 20px;
+            padding-left: 10px;
+            font-size: 14px;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+        }
+        .add {
+            position: absolute;
+            right: 50px;
+            top: 10px;
+            width: 50px;
+            height: 30px;
+            line-height: 30px;
+             text-align: center;
+                    border-radius: 5px;
+                    display: inline-block;
+                    color: #fff;
+                    font-size: 12px;
+                    background-color: #409eff;
+                    cursor: pointer;
+        }
+        .edit {
+            position: absolute;
+            right: 120px;
+            top: 10px;
+            width: 50px;
+            height: 30px;
+            line-height: 30px;
+             text-align: center;
+                    border-radius: 5px;
+                    display: inline-block;
+                    color: #fff;
+                    font-size: 12px;
+                    background-color: #409eff;
+                    cursor: pointer;
+        }
+        .form {
+            padding: 10px;
+            margin: 0 20px ;
+            background-color: #fff;
+        }
+        .page {
+            height: 60px;
+            background-color: #fff;
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+        }
     }
-    .query {
-        overflow: hidden;
-        background-color: #fff;
-        margin: 0 20px;
-        padding: 20px 0;
-    }
-    .el-form-item {
-        margin-bottom: 0;
-    }
-    .el-form-item__label {
-        color: #333;
-    }
-    .el-form--inline .el-form-item {
-        display: inline-block;
-        vertical-align: top;
-    }
-    .button,
-    .btn {
-        float: right;
-        margin-right: 40px;
-    }
-    .timer {
-        margin-top: 20px;
-    }
-    .packup {
-        float: right;
-    }
-    .list {
-        height: 50px;
-        line-height: 50px;
-        margin-left: 20px;
-        padding-left: 5px;
-        background-color: #fff;
-        margin-top: 20px;
-    }
-    .form {
-        margin-left: 20px;
-        background-color: #fff;
-    }
-	.page {
-		height: 60px;
-		background-color: #fff;
-		text-align: center;
-		margin-top: 20px;
-		padding-top: 10px;
-	}
 </style>

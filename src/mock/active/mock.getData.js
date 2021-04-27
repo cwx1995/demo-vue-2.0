@@ -49,3 +49,15 @@ export const getData=[
         }
     }
 ]
+
+// 所需上送
+// {
+//                     name: String,
+//                     system: String,
+//                     startTime: String,
+//                     endTime: String,
+//                     status: String,
+//                     current: Number,
+//                     pageSize: Number
+// }
+

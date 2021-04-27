@@ -66,7 +66,7 @@
     .header {
         width: 100%;
         height: 50px;
-        z-index: 99999;
+        z-index: 1000;
         position: fixed;
         top: 0;
         left: 0;
@@ -74,7 +74,7 @@
     }
     .main {
         margin-top: 50px;
-        background-color: #f5f5f5;
+        background-color: #ccc;
     }
     .el-menu-vertical-demo {
         width: 200px;
