@@ -107,13 +107,13 @@
                     }]
                 },
                 options: [{
-                    value: '选项1',
+                    value: '1',
                     label: '黄金糕'
                 }, {
-                    value: '选项2',
+                    value: '2',
                     label: '双皮奶'
                 }, {
-                    value: '选项3',
+                    value: '3',
                     label: '蚵仔煎'
                 }],
                 value: '',
