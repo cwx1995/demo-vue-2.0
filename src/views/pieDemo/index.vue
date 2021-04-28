@@ -195,7 +195,7 @@
         }
         .left,
         .right {
-            display: inline-block;
+            // display: inline-block;
             width: 50%;
             float: left;
         }
