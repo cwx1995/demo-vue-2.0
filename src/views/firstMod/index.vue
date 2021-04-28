@@ -37,7 +37,9 @@
                 </el-form-item>
             </el-form>
             <div class="packup" @click="packup">
-                {{show?'收起':'展开'}}<i class="el-icon-arrow-down"></i>
+                {{show?'收起':'展开'}}
+                <i class="el-icon-arrow-down" v-if="show"></i>
+                <i class="el-icon-arrow-up" v-if="!show"></i>
             </div>
         </div>
         <div class="box">

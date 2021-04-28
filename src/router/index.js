@@ -38,6 +38,10 @@ export default new Router({
         path: 'index',
         name: 'secondMod',
         component: ()=>import('@/views/secondMod/index.vue')
+      },{
+        path: 'components/list',
+        name: 'secondMod',
+        component: ()=>import('@/views/secondMod/components/list.vue')
       }]
     },
     {

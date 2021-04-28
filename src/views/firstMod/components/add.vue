@@ -4,7 +4,11 @@
             <i class="el-icon-arrow-left"></i> 返回
         </div>
         <div class="center">
-            <div class="addScheduler">{{title}}</div>
+            <div class="addScheduler">
+                <i class="el-icon-edit" v-if="flag=='edit'"></i>
+                <i class="el-icon-plus" v-if="flag=='add'"></i>
+                {{title}}
+            </div>
             <div class="formNum">
                 <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="调度器名称" prop="name" required>
@@ -131,7 +135,15 @@
                 this.title = '新增调度器'
             } else if (this.flag === 'edit') {
                 this.title = '编辑调度器'
-                this.$post('getDetail',this.ids).then((res) => {
+                this.getDetail()
+            }
+        },
+        methods: {
+            getDetail(){
+                let params = {
+                    id:this.ids
+                }
+                this.$post('getDetail',params).then((res) => {
                    if (res.code === 200) {
                        console.log(res)
                        this.ruleForm.name=res.result.data.name
@@ -139,15 +151,12 @@
                        this.ruleForm.setTiming=res.result.data.timeSet
                        this.ruleForm.collect=res.result.data.collectionTask
                        this.ruleForm.time=new Array(res.result.data.startTime,res.result.data.endTime)
-                       console.log(this.ruleForm.time,'this.ruleForm.time')
                     } else {
-                        this.$message.error('请求失败，请稍后再试')
+                        this.$message.error('数据加载失败')
                     }
                    
                 })
-            }
-        },
-        methods: {
+            },
             // 保存
             saveNum() {
                 let params = {
