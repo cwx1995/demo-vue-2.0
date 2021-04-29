@@ -8,39 +8,52 @@
         </div>
         <div class="query">
             <el-form :inline="true" :model="formInline" ref="formInline" class="demo-form-inline">
+                <el-row :gutter="15">
+                <el-col :md="8" :lg="8" class="five" >
                 <el-form-item label="调度器信息：" prop="name">
-                    <el-input v-model="formInline.name" placeholder="调度器编号/名称/说明"></el-input>
-                </el-form-item>
-                <el-form-item label="适用系统：" prop="system">
+                                    <el-input v-model="formInline.name" placeholder="调度器编号/名称/说明"></el-input>
+                                </el-form-item>
+                </el-col>
+                 <el-col :md="8" :lg="8" class="four">
+                     <el-form-item label="适用系统：" prop="system">
                     <el-select v-model="formInline.system" placeholder="数据资产">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="启用状态：" prop="status">
+                </el-col>
+                 <el-col :md="8" :lg="8" class="four">
+                    <el-form-item label="启用状态：" prop="status">
                     <el-select v-model="formInline.status" placeholder="启用">
                         <el-option v-for="item in option" :key="item.value" :latimerbel="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="执行时间段：" class="timer" v-if="show" prop="time">
+                </el-col>
+                 <el-col :md="10" :lg="10" class="five">
+                    <el-form-item label="执行时间段：" class="timer" v-if="show" prop="time">
                     <el-date-picker v-model="formInline.time" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="daterange" :picker-options="pickerOptions" range-separator="--" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item class="button">
+                </el-col>
+                 <el-col :md="8" :lg="8" >
+                    <el-form-item class="button">
                     <div class="queryBtn" @click="queryInf('1')">
                         <i class="el-icon-search"></i> 查询
                     </div>
                     <div class="resetBtn" @click="resetForm('formInline')">
                         <i class="el-icon-refresh-right"></i> 重置
                     </div>
-                </el-form-item>
-            </el-form>
-            <div class="packup" @click="packup">
+                    <div class="packup" @click="packup">
                 {{show?'收起':'展开'}}
                 <i class="el-icon-arrow-down" v-if="show"></i>
                 <i class="el-icon-arrow-up" v-if="!show"></i>
             </div>
+                </el-form-item>
+                </el-col>  
+                </el-row>
+            </el-form>
+            
         </div>
         <div class="box">
             <div class="list">调度器列表</div>
@@ -80,17 +93,7 @@
             </template>
                 </el-table-column>
             </el-table>
-        </div>
-        <div class="wrapper">
-            <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-        
-  			<div slot="footer" class="dialog-footer">
-			<el-button @click="dialogFormVisible = false">取 消</el-button>
-			<el-button type="primary" @click="dialogFormVisible = false">保存</el-button>
-			</div>
-    		</el-dialog>
-        </div>
-		<div class="page">
+            	<div class="page">
 			<el-pagination
 			@size-change="handleSizeChange"
 			@current-change="handleCurrentChange"
@@ -101,6 +104,17 @@
 			:total="total">
 			</el-pagination>
 		</div>
+        </div>
+        <div class="wrapper">
+            <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+        
+  			<div slot="footer" class="dialog-footer">
+			<el-button @click="dialogFormVisible = false">取 消</el-button>
+			<el-button type="primary" @click="dialogFormVisible = false">保存</el-button>
+			</div>
+    		</el-dialog>
+        </div>
+	
     </div>
 </template>
 
@@ -302,11 +316,11 @@
             }
         }
         .query {
-            position: relative;
             overflow: hidden;
             background-color: #fff;
             margin: 0 20px;
-            padding: 20px 0;
+            padding: 15px;
+            padding-bottom: 0;
             >>>.el-input .el-input__inner {
                 height: 30px;
                 line-height: 30px;
@@ -317,27 +331,43 @@
                 top: 5px;
             }
             >>>.el-form-item {
-                margin-bottom: 0;
+                margin-bottom: 15px;
+                width: 100%;
             }
-            >>>.el-form-item__label {
+            .four{
+                >>>.el-form-item__label {
                 color: #333;
-                padding-left: 10px;
+                padding: 0;
+                width: 75px;
+            } 
+             >>>.el-form-item__content{
+                width: calc(100% - 75px);
+            }
+            }
+            .five{
+                    >>>.el-form-item__label {
+                color: #333;
+                padding: 0;
+                width: 85px;
+            }  
+             >>>.el-form-item__content{
+                width: calc(100% - 85px);
+            }
+            }
+             >>>.el-select{
+                width: 100%;
             }
             .el-date-editor .el-range-input,
             .el-date-editor .el-range-separator {
                 height: 0;
             }
-            // >>>.el-input__inner {
-            //     height: 30px;
-            //     line-height: 30;
-            // }
             .el-input__icon {
                 height: 0;
             }
             .button {
-                position: absolute;
-                top: 20px;
-                right: 100px;
+                >>>.el-form-item__content{
+                    width: 100%;
+                }
                 .queryBtn,
                 .resetBtn {
                     width: 65px;
@@ -363,10 +393,10 @@
                 }
             }
             .timer {
-                margin-top: 20px;
+                
             >>> .el-range-editor.el-input__inner{
                 height: 30px;
-                padding: 0 3px;
+                width: 100%;
             }
             >>> .el-date-editor .el-range__icon{
                 height: 30px;
@@ -378,9 +408,8 @@
             }
             }
             .packup {
-                position: absolute;
-                right: 40px;
-                top: 30px;
+                display: inline-block;
+                margin-left: 5px;
                 height: 20px;
                 font-size: 12px;
                 color: #409eff;

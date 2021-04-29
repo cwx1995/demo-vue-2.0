@@ -8,7 +8,7 @@
 				<img src="/src/assets/img/round.png" alt=""> 操作日志
 			</div>
 			<div class="tableLog">
-				<el-table :data="tableLog" height="250" border style="width: 100%" :header-cell-style="{background:'#E8ECF5'}">
+				<el-table :data="tableLog"  border style="width: 100%" :header-cell-style="{background:'#E8ECF5'}">
 					<el-table-column prop="num" align="center" label="序号" width="120">
 					</el-table-column>
 					<el-table-column prop="operationType" align="center" label="操作类型" width="180">
@@ -38,7 +38,7 @@
 				<img src="/src/assets/img/round.png" alt=""> 关联的采集任务
 			</div>
 			<div class="collectTask">
-				<el-table :data="collectTask" height="250" border style="width: 100%" :header-cell-style="{background:'#E8ECF5'}">
+				<el-table :data="collectTask" height="200"  border style="width: 100%" :header-cell-style="{background:'#E8ECF5'}">
 					<el-table-column prop="number" align="center" label="序号" width="120">
 					</el-table-column>
 					<el-table-column prop="taskName" align="center" label="任务名称" width="180">
