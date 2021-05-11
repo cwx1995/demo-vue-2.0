@@ -52,10 +52,20 @@ export default new Router({
         path: 'index',
         name: 'pieDemo',
         component: ()=>import('@/views/pieDemo/index.vue')
-      }]
+      },]
+    },
+    {
+      path:'/doubleTable',
+      component:Layout,
+      redirect:'/doubleTable/index',
+      children:[{
+        path: 'index',
+        name: 'doubleTable',
+        component: ()=>import('@/views/doubleTable/index.vue')
+      },]
+     
     }
-    
-    
+
     
   ]
 })

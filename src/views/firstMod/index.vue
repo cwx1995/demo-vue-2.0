@@ -127,7 +127,6 @@
                     name: '',
                     time: '', //时间选择器的值 数组
                     system: '',
-                    endTime: '',
                     status: ''
                 },
                 sta: {

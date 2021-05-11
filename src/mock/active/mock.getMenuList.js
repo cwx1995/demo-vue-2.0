@@ -28,7 +28,7 @@ export const getMenuList=[
                         },
                         {
                             id: '2-2',
-                            path: '',
+                            path: '/doubleTable',
                             name: 'demo4'
                         }
                     ]
