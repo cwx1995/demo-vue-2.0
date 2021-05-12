@@ -9,27 +9,36 @@
 			</div>
 			<div class="tableLog">
 				<el-table :data="tableLog"  border :header-cell-style="{background:'#E8ECF5'}">
-					<el-table-column prop="num" align="center" label="序号" width="120">
+					<el-table-column prop="id" align="center" label="序号" width="120">
 					</el-table-column>
-					<el-table-column prop="operationType" align="center" label="操作类型" width="180">
+					<el-table-column prop="type" align="center" label="操作类型" width="180">
+					<template slot-scope="scope">
+						{{type[scope.row.type]}}
+					</template>	
 					</el-table-column>
-					<el-table-column prop="description" align="center" label="内容描述" width="400">
+					<el-table-column prop="inner" align="center" label="内容描述" width="400">
 					</el-table-column>
 					<el-table-column prop="operationTime" align="center" label="操作时间" width="300">
+						<template slot-scope="scope">
+                        {{scope.row.startTime + '--' + scope.row.endTime}}
+            			</template>
 					</el-table-column>
-					<el-table-column prop="operater" align="center" label="操作人">
+					<el-table-column prop="operator" align="center" label="操作人">
+						<template slot-scope="scope">
+						{{operator[scope.row.operator]}}
+					</template>	
 					</el-table-column>
 				</el-table>
 			</div>
 			<div class="pagingLog">
 				<el-pagination
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-				:current-page="currentPage"
+				@size-change="handleSizeChange1"
+				@current-change="handleCurrentChange1"
+				:current-page="currentPage1"
 				:page-sizes="[10, 20, 30, 40]"
-				:page-size="pageSize"
+				:page-size="pageSize1"
 				layout="total, sizes, prev, pager, next, jumper"
-				:total="total">
+				:total="total1">
 			 	</el-pagination>
 			</div>
 		</div>
@@ -39,31 +48,34 @@
 			</div>
 			<div class="collectTask">
 				<el-table :data="collectTask" height="200"  border  :header-cell-style="{background:'#E8ECF5'}">
-					<el-table-column prop="number" align="center" label="序号" width="120">
+					<el-table-column prop="id" align="center" label="序号" width="120">
 					</el-table-column>
-					<el-table-column prop="taskName" align="center" label="任务名称" width="180">
+					<el-table-column prop="name" align="center" label="任务名称" width="180">
 					</el-table-column>
-					<el-table-column prop="taskExplain" align="center" label="任务说明" width="260">
+					<el-table-column prop="inner" align="center" label="任务说明" width="260">
 					</el-table-column>
-					<el-table-column prop="taskType" align="center" label="任务类型" width="120">
+					<el-table-column prop="type" align="center" label="任务类型" width="120">
+					<template slot-scope="scope">
+						{{type[scope.row.type]}}
+					</template>	
 					</el-table-column>
-					<el-table-column prop="sunSystem" align="center" label="子系统" width="120">
+					<el-table-column prop="system" align="center" label="子系统" width="120">
 					</el-table-column>
-					<el-table-column prop="taskState" align="center" label="任务状态" width="120">
+					<el-table-column prop="status" align="center" label="任务状态" width="120">
 					</el-table-column>
-					<el-table-column prop="taskTime" align="center" label="任务时间">
+					<el-table-column prop="time" align="center" label="任务时间">
 					</el-table-column>
 				</el-table>
 			</div>
 			<div class="taskLog">
 				<el-pagination
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-				:current-page="currentPage"
+				@size-change="handleSizeChange2"
+				@current-change="handleCurrentChange2"
+				:current-page="currentPage2"
 				:page-sizes="[10, 20, 30, 40]"
-				:page-size="pageSize"
+				:page-size="pageSize2"
 				layout="total, sizes, prev, pager, next, jumper"
-				:total="total">
+				:total="collectTask.length">
 			 	</el-pagination>
 			</div>
 		</div>
@@ -74,59 +86,24 @@
 	export default {
 		data() {
 			return {
-				tableLog: [{
-					num: '1',
-					operationType: '更新',
-					description: '系统更改为质量规则',
-					operationTime: 'yyyy-mm-dd--yyyy-mm-dd',
-					operater: '管理员'
-				}, {
-					num: '2',
-					operationType: '启用',
-					description: '系统更改为质量规则',
-					operationTime: 'yyyy-mm-dd--yyyy-mm-dd',
-					operater: '管理员'
-				}, {
-					num: '3',
-					operationType: '已使用',
-					description: '系统更改为质量规则',
-					operationTime: 'yyyy-mm-dd--yyyy-mm-dd',
-					operater: '管理员'
-				}, {
-					num: '4',
-					operationType: '停用',
-					description: '系统更改为质量规则',
-					operationTime: 'yyyy-mm-dd--yyyy-mm-dd',
-					operater: '管理员'
-				}],
-				collectTask:[{
-					number:'001',
-					taskName:'任务1',
-					taskExplain:'任务的难易程度怎么样',
-					taskType:'容易',
-					sunSystem:'数据资产',
-					taskState:'启用',
-					taskTime:'yyyy-mm-dd -- yyyy-mm-dd'
-				},{
-					number:'001',
-					taskName:'任务1',
-					taskExplain:'任务的难易程度怎么样',
-					taskType:'容易',
-					sunSystem:'数据资产',
-					taskState:'启用',
-					taskTime:'yyyy-mm-dd -- yyyy-mm-dd'
-				},{
-					number:'001',
-					taskName:'任务1',
-					taskExplain:'任务的难易程度怎么样',
-					taskType:'容易',
-					sunSystem:'数据资产',
-					taskState:'启用',
-					taskTime:'yyyy-mm-dd -- yyyy-mm-dd'
-				}],
-				currentPage: 1,
-                total: 100,
-                pageSize: 10
+				type:{
+					'1':'更新',
+					'2':'启用',
+					'3':'已使用',
+					'4':'停用'
+				},
+				operator:{
+					'1':'管理员',
+					'2':'业务员'
+				},
+				tableLog:[],
+				collectTask:[],
+				currentPage1: 1,
+				total1:0,
+                pageSize1: 10,
+				currentPage2: 1,
+				total2:0,
+                pageSize2: 5,
 			}
 		},
 		created() {
@@ -138,48 +115,52 @@
 			},
 			getData(){
 				let params1 = {
-					num: this.tableLog.num,
-					operationType:this.tableLog.operationType,
-					description:this.tableLog.description,
-					startTimelog:this.tableLog.operationTime[0],
-					ehdTimelog:this.tableLog.operationTime[1],
-					operater:this.tableLog.operater,
-					pageSize:this.pageSize,
-					currentPage:this.currentPage,
-					total:this.total
+					pageNum :this.currentPage1,
+					pageSize:this.pageSize1
 				}
 				let params2 = {
-					number:this.collectTask.number,
-					taskName:this.collectTask.taskName,
-					taskExplain:this.collectTask.taskExplain,
-					taskType:this.collectTask.taskType,
-					sunSystem:this.collectTask.sunSystem,
-					taskState:this.collectTask.taskState,
-					startTimetask:this.collectTask.taskTime[0],
-					endTimetask:this.collectTask.taskTime[1]
+					pageNum :this.currentPage2,
+					pageSize:this.pageSize2
 				}
-				let params = {
-					params1,
-					params2
-				}
-				this.$post('getData',params).then((res)=>{
-					if(res.code === '200'){
-						this.tableLog = res.data.tableLog
-						this.collectTask = res.data.collectTask
+				this.$post('getoperation',params1).then((res)=>{
+					if(res.code === 200){
+						console.log(res)
+						this.total1 = res.result.total
+						this.tableLog = res.result.operationList
+					}
+				}).catch((err)=>{
+						err
+				})
+				this.$post('getCollectionTask',params2).then((res)=>{
+					if(res.code === 200){
+						console.log(res)
+						this.total2 = res.result.total
+						this.collectTask = res.result.collectionTaskList
 					}
 				})
 			},
 			// 每页显示多少条数据
-            handleSizeChange(val) {
+            handleSizeChange1(val) {
                 console.log(`每页 ${val} 条`);
-                this.pageSize = val;
+                this.pageSize1 = val;
                 // 重置当前页为1
-                this.handleCurrentChange(1)
+                this.handleCurrentChange1(1)
             },
-            handleCurrentChange(val) {
+            handleCurrentChange1(val) {
                 console.log(`当前页: ${val}`);
-                this.currentPage = val;
+                this.currentPage1 = val;
+            }, 
+			handleSizeChange2(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize2 = val;
+                // 重置当前页为1
+                this.handleCurrentChange2(1)
             },
+            handleCurrentChange2(val) {
+                console.log(`当前页: ${val}`);
+                this.currentPage2 = val;
+            },
+
 		}
 	}
 </script>
