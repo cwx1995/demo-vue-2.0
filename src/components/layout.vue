@@ -5,7 +5,6 @@
         <div class="main">
             <el-menu default-active="2" router class="el-menu-vertical-demo" @select="select" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
                 <el-submenu v-for="(item,index) in menuData" :key="index" :index="item.id">
-                    <i class="el-icon-menu"></i>
                     <span slot="title">{{item.title}}</span>
                     <el-menu-item-group>
                         <el-menu-item v-for="(item2,index2) in item.menu" :key="index2" :index="item2.path">{{item2.name}}</el-menu-item>

@@ -64,6 +64,17 @@ export default new Router({
         component: ()=>import('@/views/doubleTable/index.vue')
       },]
      
+    },
+    {
+      path:'/testOne',
+      component:Layout,
+      redirect:'/testOne/index',
+      children:[{
+        path: 'index',
+        name: 'testOne',
+        component: ()=>import('@/views/test/testOne.vue')
+      },]
+     
     }
 
     
