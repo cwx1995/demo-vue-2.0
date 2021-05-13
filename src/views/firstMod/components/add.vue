@@ -143,6 +143,7 @@
                 let params = {
                     id:this.ids
                 }
+                console.log(params,'getDetail入参')
                 this.$post('getDetail',params).then((res) => {
                    if (res.code === 200) {
                        console.log(res)
@@ -170,7 +171,7 @@
                 if(this.flag === 'add'){
                     this.$refs.ruleForm.validate((valid) => {
                     if (valid) {
-                        console.log(params,'add params')
+                        console.log(params,'addData入参')
                         this.$post('addData', params).then((res) => {
                             if (res.code === 200) {
                                 console.log(res)
@@ -186,7 +187,7 @@
                     if (valid) {
                         // 编辑时 单独增加个id
                         params.id=this.ids
-                        console.log(params,'edit params')
+                        console.log(params,'editData入参')
                         this.$post('editData', params).then((res) => {
                             if (res.code === 200) {
                                 console.log(res)

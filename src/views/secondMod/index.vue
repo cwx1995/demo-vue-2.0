@@ -130,6 +130,7 @@
 					pageNum :this.currentPage1,
 					pageSize:this.pageSize1
 				}
+				console.log(params1,'getoperation入参')
 				this.$post('getoperation',params1).then((res)=>{
 					if(res.code === 200){
 						console.log(res)
@@ -146,6 +147,7 @@
 					pageNum :this.currentPage2,
 					pageSize:this.pageSize2
 				}
+				console.log(params2,'getCollectionTask入参')
 				this.$post('getCollectionTask',params2).then((res)=>{
 					if(res.code === 200){
 						console.log(res)

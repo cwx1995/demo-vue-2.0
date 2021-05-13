@@ -229,6 +229,7 @@
 		},
 		methods: {
 			getData(data) {
+				console.log(data,'getQualityRules入参')
 				this.$post('getQualityRules',data).then((res) => {
 					console.log(res)
 					if(res.code === 200){
@@ -288,7 +289,7 @@
 					pageSize:this.pageSize,
 					pageNum:this.currentPage
 				}
-				
+				console.log(params,'getQualityRules入参')
 				this.$post('getQualityRules',params).then((res) => {
 					console.log(res)
 					if(res.code === 200){
