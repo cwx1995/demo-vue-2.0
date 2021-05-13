@@ -176,7 +176,7 @@
                             if (res.code === 200) {
                                 console.log(res)
                                 this.$message('添加成功');  
-                                this.$router.go(-1)
+                                this.$router.push('/firstMod/index')
                             } else {
                                  this.$message('添加失败')
                             }

@@ -26,6 +26,9 @@ import { number } from 'echarts';
         test8: "",
       };
     },
+    created(){
+    
+    },
     methods: {
       //   test1输出当前时间,如2021年01月12日
       formatDate() {
@@ -48,8 +51,8 @@ import { number } from 'echarts';
       //  将2021-05-12转换为2021年05月12日
       two() {
         let time = '2021-05-12';
-        let newTime = time.replace('-', '月')
-        let s = newTime.replace('-','日')
+        let newTime = time.replace('-', '年')
+        let s = newTime.replace('-','月') + '日'
         this.test2 = s
       },
       //多维数组拿到字符串adf
@@ -62,24 +65,8 @@ import { number } from 'echarts';
           ['e', 'f']
         ]
         let newArr= []
-        if(arr.length != 0){
-            for(let i = 0; i < arr.length; i++){
-                for(let j = 0; j < arr[i].length; j++){
-                    for(let r =0; r < arr[i][j].length; r++){
-                        console.log(arr[i][j][r])
-                        newArr.push(arr[i][j][r])
-                    }
-                }
-            } 
-            console.log(newArr);
-            let s = newArr.join('')
-            console.log(s); //abcdef
-            let first = s.slice(0,1)
-            let two = s.slice(3,4)
-            let three = s.substring(5,6)
-            this.test3 = `${first}${two}${three}`
+        this.test3=arr[0][0][0]+arr[0][1][1]+arr[1][1]
 
-        }
         
       },
         //数组变字符串  要求a-b-c-d-e
@@ -94,29 +81,36 @@ import { number } from 'echarts';
         //字符串处理为  [1,2,3]
         five() {
         let str = '321'
-            let arr = str.split(',').map(Number) //将字符串转为数组，并已指定符号作为分隔符
-            console.log(arr)
-            // let newArr = arr.reverse()
-            // console.log(newArr)
-            this.test5 = arr
+            let arr = str.split('').reverse()
+            let arr2 = arr.map((item)=>{
+              item=Number(item)
+              return item
+            })
+            this.test5 = arr2
         },
 
         // 数组遍历处理 把偶数项换成666
         six() {
-        let arr = ['1', '2', '3', '4', '5', '6', '7', '8']
-        for(let i = 0; i < arr.length; i++) {
-            if(i%2 !== 0){
-                arr[i] = '666'
-            }
-        }
-        console.log(arr)
-        this.test6 = arr
-            arr.forEach(item=> {
-                if(item%2 !== 0){
-                    item = '666'
-                }
+        let arr = ['1', 'a', '3', 'b', '5', 'c', '7', '8']
+        // for(let i = 0; i < arr.length; i++) {
+        //     if(i%2 !== 0){
+        //         arr[i] = '666'
+        //     }
+        // }
+        // console.log(arr)
+        // this.test6 = arr
+            // arr.forEach((item,index)=> {
+            //     if(index%2 !== 0){
+            //        arr[index]='666' 
+            //     }
+            // })
+            let arr2 = arr.map((item,index)=>{
+              if(index%2 !== 0){
+                item='666'
+              }
+              return item
             })
-            console.log(arr)
+            this.test6 = arr2
         },
             //对象遍历处理  输出['a','b','c','d']
             seven() {
