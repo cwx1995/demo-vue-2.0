@@ -62,10 +62,16 @@
 					<el-table-column prop="system" align="center" label="子系统" width="120">
 					</el-table-column>
 					<el-table-column prop="status" align="center" label="任务状态" width="120">
+						<template slot-scope="scope">
+						{{status[scope.row.status]}}
+						</template>	
 					</el-table-column>
 					<el-table-column prop="time" align="center" label="任务时间">
 					</el-table-column>
 				</el-table>
+			</div>
+			<div class="none" v-if="active">
+				暂无数据
 			</div>
 			<div class="taskLog">
 				<el-pagination
@@ -75,7 +81,7 @@
 				:page-sizes="[10, 20, 30, 40]"
 				:page-size="pageSize2"
 				layout="total, sizes, prev, pager, next, jumper"
-				:total="collectTask.length">
+				:total="total2">
 			 	</el-pagination>
 			</div>
 		</div>
@@ -96,6 +102,10 @@
 					'1':'管理员',
 					'2':'业务员'
 				},
+				status:{
+					'1':'容易',
+					'2':'困难'
+				},
 				tableLog:[],
 				collectTask:[],
 				currentPage1: 1,
@@ -104,23 +114,21 @@
 				currentPage2: 1,
 				total2:0,
                 pageSize2: 5,
+				active:false
 			}
 		},
 		created() {
-			this.getData()
+			this.getData1()
+			this.getData2()
 		},
 		methods: {
 			cancel() {
 				this.$router.go(-1)
 			},
-			getData(){
+			getData1(){
 				let params1 = {
 					pageNum :this.currentPage1,
 					pageSize:this.pageSize1
-				}
-				let params2 = {
-					pageNum :this.currentPage2,
-					pageSize:this.pageSize2
 				}
 				this.$post('getoperation',params1).then((res)=>{
 					if(res.code === 200){
@@ -131,12 +139,25 @@
 				}).catch((err)=>{
 						err
 				})
+				
+			},
+			getData2() {
+				let params2 = {
+					pageNum :this.currentPage2,
+					pageSize:this.pageSize2
+				}
 				this.$post('getCollectionTask',params2).then((res)=>{
 					if(res.code === 200){
 						console.log(res)
 						this.total2 = res.result.total
-						this.collectTask = res.result.collectionTaskList
+						if(this.total == 0){
+							this.active = !this.active
+							this.collectTask = res.result.collectionTaskList
+						}
+						
 					}
+				}).catch((err)=> {
+					err
 				})
 			},
 			// 每页显示多少条数据
@@ -198,6 +219,9 @@
 				padding: 20px 0;
 				text-align: center;
 			}
+		}
+		.none {
+			text-align: center;
 		}
 	}
 </style>>

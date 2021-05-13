@@ -101,7 +101,7 @@
 				<el-table :data="tableData" border style="width: 100%" :header-cell-style="{background:'#E8ECF5'}">
 					<el-table-column prop="id" align="center" label="序号" min-width="60">
 					</el-table-column>
-					<el-table-column prop="beach" align="center" label="调度批次号" min-width="100">
+					<el-table-column prop="batch" align="center" label="调度批次号" min-width="100">
 					</el-table-column>
 					<el-table-column prop="schedulerNum" align="center" label="调度器编号" min-width="100">
 					</el-table-column>
@@ -112,6 +112,9 @@
 					<el-table-column prop="name" align="center" label="任务名称" wimin-widthdth="120">
 					</el-table-column>
 					<el-table-column prop="type" align="center" label="任务类型" min-width="100">
+						<template slot-scope="scope">
+						{{type[scope.row.type]}}
+					</template>	
 					</el-table-column>
 					<el-table-column prop="system" align="center" label="子系统" min-width="80">
 					</el-table-column>
@@ -121,7 +124,7 @@
 					</el-table-column>
 					<el-table-column fixed="right" align="center" label="操作" min-width="140">
 						<template slot-scope="scope">
-	             <el-button @click="handleClick(scope.row)"><i class="el-icon-document"></i></el-button>
+	             			<el-button @click="handleOperate(scope.row.id)"><i class="el-icon-document"></i></el-button>
 				        </template>
 			</el-table-column>
 		</el-table>
@@ -138,6 +141,24 @@
 				</el-pagination>
       </div>
     </div>
+	<div class="wrapper" v-if="popUp">
+		<el-dialog title="调查历史" :visible.sync="dialogTableVisible">
+		<el-table :data="gridData" border style="width: 100%" :header-cell-style="{background:'#E8ECF5'}">
+			<el-table-column property="id" label="序号" align="center" min-width="80"></el-table-column>
+			<el-table-column property="batch" label="调度批次号" align="center" min-width="100"></el-table-column>
+			<el-table-column property="schedulerNum" label="调度器编号" align="center" min-width="80"></el-table-column>
+			<el-table-column property="startTime" label="执行开始时间" align="center" min-width="120"></el-table-column>
+			<el-table-column property="status" label="执行状态" align="center" min-width="60"></el-table-column>
+			<el-table-column property="longtime" label="耗费时长" align="center" min-width="80"></el-table-column>
+			<el-table-column property="inner" label="说明" align="center" min-width="120"></el-table-column>
+			<el-table-column fixed="right" label="操作" align="center" min-width="80">
+				<template slot-scope="scope">
+	             	<el-button @click="handleOperate(scope.row)"><i class="el-icon-document"></i></el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		</el-dialog>
+	</div>
   </div>
 </template>
 
@@ -167,6 +188,10 @@
 					value: '3',
 					label: '已有数据采集'
 				}],
+				type:{
+					'1':'容易',
+					'2':'困难'
+				},
 				system: [{
 					value: '1',
 					label: '数据质量'
@@ -193,7 +218,10 @@
 				tableData: [],
 				pageSize: 10,
 				currentPage: 1,
-				total: 0
+				total: 0,
+				popUp:false,
+				dialogTableVisible:false,
+				gridData: [],
 			}
 		},
 		created() {
@@ -242,6 +270,31 @@
 			handleCurrentChange(val) {
 				console.log(val);
 				this.currentPage = val
+			},
+			handleOperate(id) {
+				this.dialogTableVisible = true
+				this.popUp = !this.popUp
+				let params = {
+					batch: this.formInline.beach,
+					schedulerNum:this.formInline.num,
+					exampleNum:this.formInline.exampleNum,
+					taskNum:this.formInline.taskNum,
+					type:this.formInline.taskType,
+					startTime:this.formInline.startTime,
+					overTime:this.formInline.endTime,
+					system:this.formInline.sunSystem,
+					longtime:this.formInline.longing,
+					status:this.formInline.state,
+					pageSize:this.pageSize,
+					pageNum:this.currentPage
+				}
+				
+				this.$post('getQualityRules',params).then((res) => {
+					console.log(res)
+					if(res.code === 200){
+						this.gridData = res.result.qualityRulesList
+					}
+				})
 			}
 		}
 	}
@@ -386,6 +439,23 @@
 			}
 			.page {
 				text-align: center;
+			}
+		}
+		.wrapper {
+			>>> .el-dialog__header{
+				background-color: #409eff;
+				padding: 10px;
+			}
+			>>> .el-dialog__title {
+				font-size: 12px;
+				color: #fff;
+			}
+			.el-dialog__headerbtn .el-dialog__close{
+				color: #fff;
+			}
+			>>> .el-dialog__body {
+				padding: 15px 20px;
+				height: 500px;
 			}
 		}
 	}

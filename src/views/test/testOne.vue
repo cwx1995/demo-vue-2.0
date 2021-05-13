@@ -1,67 +1,143 @@
 <template>
   <div>
-    <div>test1:{{ test1 }}</div>
-    <div>test2:{{ test2 }}</div>
-    <div>test3:{{ test3 }}</div>
-    <div>test4:{{ test4 }}</div>
-    <div>test5:{{ test5 }}</div>
-    <div>test6:{{ test6 }}</div>
-    <div>test7:{{ test7 }}</div>
+    <div @click="formatDate">test1:{{ test1 }}</div>
+    <div @click="two">test2:{{ test2 }}</div>
+    <div @click="handleArr">test3:{{ test3 }}</div>
+    <div @click="handleStr">test4:{{ test4 }}</div>
+    <div @click="five">test5:{{ test5 }}</div>
+    <div @click="six">test6:{{ test6 }}</div>
+    <div @click="seven">test7:{{ test7 }}</div>
     <div>test8:{{ test8 }}</div>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      test1: "",
-      test2: "",
-      test3: "",
-      test4: "",
-      test5: "",
-      test6: "",
-      test7: "",
-      test8: "",
-    };
-  },
-  methods:{
-    //   test1输出当前时间,如2021年01月12日
-    test1(){
-
-    }
-  },
-//   将2021-05-12转换为2021年05月12日
-    test2(){
-        let time = '021-05-12';
+import { number } from 'echarts';
+  export default {
+    data() {
+      return {
+        test1: "",
+        test2: "",
+        test3: "",
+        test4: "",
+        test5: "",
+        test6: "",
+        test7: "",
+        test8: "",
+      };
     },
-//多维数组拿到字符串adf
-test3(){
-    let arr = [[['a','b'],['c','d']],['e','f']]
-},
-//数组变字符串  要求a-b-c-d-e
-test4(){
-    let arr = ['e','d','c','b','a']
-},
-//字符串处理为  [1,2,3]
-test5(){
-    let str='321'
-},
-// 数组遍历处理 把偶数项换成666
-test6(){
-    let arr = ['1','2','3','4','5','6','7','8']
-},
-//对象遍历处理  输出['a','b','c','d']
-test7(){
-    let obj={
-        one:'a',
-        two:'b',
-        three:'c',
-        four:'d'
-    }
-}
+    methods: {
+      //   test1输出当前时间,如2021年01月12日
+      formatDate() {
+        let date = new Date()
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let day = date.getDate()
+        // let week = date.getDay()
+        // let weekArr = [ "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ]
+        // let hour = date.getHours()
+        // hour = hour < 10 ? "0" + hour : hour
+        // let minute = date.getMinutes()
+        // minute = minute < 10 ? "0" + minute : minute
+        // let second = date.getSeconds()
+        // second = second < 10 ? "0" + second : second
+        month = month > 10 ? month : '0' + month
+        day = day > 10 ? day : '0' + day
+        this.test1 = `${year}年${month}月${day}`
+      },
+      //  将2021-05-12转换为2021年05月12日
+      two() {
+        let time = '2021-05-12';
+        let newTime = time.replace('-', '月')
+        let s = newTime.replace('-','日')
+        this.test2 = s
+      },
+      //多维数组拿到字符串adf
+      handleArr() {
+        let arr = [
+          [
+            ['a', 'b'],
+            ['c', 'd']
+          ],
+          ['e', 'f']
+        ]
+        let newArr= []
+        if(arr.length != 0){
+            for(let i = 0; i < arr.length; i++){
+                for(let j = 0; j < arr[i].length; j++){
+                    for(let r =0; r < arr[i][j].length; r++){
+                        console.log(arr[i][j][r])
+                        newArr.push(arr[i][j][r])
+                    }
+                }
+            } 
+            console.log(newArr);
+            let s = newArr.join('')
+            console.log(s); //abcdef
+            let first = s.slice(0,1)
+            let two = s.slice(3,4)
+            let three = s.substring(5,6)
+            this.test3 = `${first}${two}${three}`
+
+        }
+        
+      },
+        //数组变字符串  要求a-b-c-d-e
+        handleStr() {
+        let arr = ['e', 'd', 'c', 'b', 'a']
+            let s =arr.reverse() //数组翻转
+            let str = s.join('-') //将数组转为字符串并以指定符号拼接
+            console.log(str)
+            this.test4 = str
+            
+        },
+        //字符串处理为  [1,2,3]
+        five() {
+        let str = '321'
+            let arr = str.split(',').map(Number) //将字符串转为数组，并已指定符号作为分隔符
+            console.log(arr)
+            // let newArr = arr.reverse()
+            // console.log(newArr)
+            this.test5 = arr
+        },
+
+        // 数组遍历处理 把偶数项换成666
+        six() {
+        let arr = ['1', '2', '3', '4', '5', '6', '7', '8']
+        for(let i = 0; i < arr.length; i++) {
+            if(i%2 !== 0){
+                arr[i] = '666'
+            }
+        }
+        console.log(arr)
+        this.test6 = arr
+            arr.forEach(item=> {
+                if(item%2 !== 0){
+                    item = '666'
+                }
+            })
+            console.log(arr)
+        },
+            //对象遍历处理  输出['a','b','c','d']
+            seven() {
+        let obj = {
+            one: 'a',
+            two: 'b',
+            three: 'c',
+            four: 'd'
+      }
+        let arr = []
+        for(var i in obj){
+            console.log(i,obj[i])
+            arr.push(obj[i])
+        }
+        console.log(arr)
+        this.test7 = arr
+        }
+    },
 };
 </script>
 
 <style>
+
 </style>
