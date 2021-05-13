@@ -193,6 +193,7 @@
         methods: {
             // 获取列表
             getData(params) {
+                console.log(params,'getData入参')
                 this.$post('getData', params).then((res) => {
                     console.log(res)
                     if (res.code === 200) {
@@ -244,7 +245,7 @@
                 let params = {
                     id:id
                 }
-                console.log(params, 'params')
+                console.log(params, 'delData 入参')
                 this.$post('delData', params).then((res) => {
                     if (res.code == 200) {
                         this.tableData.splice(params,1);
@@ -260,12 +261,12 @@
             },
             // 编辑
             handleEdit(id) {
-                console.log(id)
-                let params = {
-                    id:'id'
-                }
-                this.$post('editData',params).then((res) => {
-                   if (res.code == 200) {
+                console.log(id,'编辑id')
+                // let params = {
+                //     id:'id'
+                // }
+                // this.$post('editData',params).then((res) => {
+                //    if (res.code == 200) {
                        this.$router.push({
                         path: 'components/add',
                         query: {
@@ -273,11 +274,11 @@
                             flag: 'edit'
                         }
                     })
-                    } else {
-                        this.$message.error('请求失败，请稍后再试')
-                    }
+                    // } else {
+                        // this.$message.error('请求失败，请稍后再试')
+                    // }
                    
-                })
+                // })
             },
             // 每页显示多少条数据
             handleSizeChange(val) {
