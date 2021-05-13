@@ -43,7 +43,7 @@ import { number } from 'echarts';
         // second = second < 10 ? "0" + second : second
         month = month > 10 ? month : '0' + month
         day = day > 10 ? day : '0' + day
-        this.test1 = `${year}年${month}月${day}`
+        this.test1 = `${year}年${month}月${day}日`
       },
       //  将2021-05-12转换为2021年05月12日
       two() {
