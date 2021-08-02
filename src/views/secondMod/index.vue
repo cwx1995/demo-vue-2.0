@@ -172,6 +172,7 @@
             handleCurrentChange1(val) {
                 console.log(`当前页: ${val}`);
                 this.currentPage1 = val;
+				this.getData1();
             }, 
 			handleSizeChange2(val) {
                 console.log(`每页 ${val} 条`);
@@ -182,6 +183,7 @@
             handleCurrentChange2(val) {
                 console.log(`当前页: ${val}`);
                 this.currentPage2 = val;
+				this.getData2()
             },
 
 		}

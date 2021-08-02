@@ -96,7 +96,9 @@
 			</el-form>
 		</div>
 		<div class="tableLog">
-			<div class="title">质量规则执行日志</div>
+			<div class="title">质量规则执行日志
+				<div class="export" @click="handleExport(tableData)">导出</div>
+			</div>
 			<div class="logForm">
 				<el-table :data="tableData" border style="width: 100%" :header-cell-style="{background:'#E8ECF5'}">
 					<el-table-column prop="id" align="center" label="序号" min-width="60">
@@ -152,8 +154,8 @@
 			<el-table-column property="longtime" label="耗费时长" align="center" min-width="80"></el-table-column>
 			<el-table-column property="inner" label="说明" align="center" min-width="120"></el-table-column>
 			<el-table-column fixed="right" label="操作" align="center" min-width="80">
-				<template slot-scope="scope">
-	             	<el-button @click="handleOperate(scope.row)"><i class="el-icon-document"></i></el-button>
+				<template>
+	             	<el-button><i class="el-icon-document"></i></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -240,7 +242,7 @@
 			},
 			queryForm() {
 				let params = {
-					batch: this.formInline.beach,
+					batch: this.formInline.batch,
 					schedulerNum:this.formInline.num,
 					exampleNum:this.formInline.exampleNum,
 					taskNum:this.formInline.taskNum,
@@ -271,8 +273,9 @@
 			handleCurrentChange(val) {
 				console.log(val);
 				this.currentPage = val
+				this.queryForm()
 			},
-			handleOperate(id) {
+			handleExport(id) {
 				this.dialogTableVisible = true
 				this.popUp = !this.popUp
 				let params = {
@@ -296,6 +299,9 @@
 						this.gridData = res.result.qualityRulesList
 					}
 				})
+			},
+			handleOperate(id){
+				console.log(id);
 			}
 		}
 	}
@@ -428,12 +434,26 @@
 		.tableLog {
 			background-color: #fff;
 			.title {
+				position: relative;
 				height: 50px;
 				line-height: 50px;
 				font-size: 14px;
 				background-color: #fff;
 				padding-left: 25px;
 				border-bottom: 1px solid #ccc;
+			.export {
+				position: absolute;
+				top: 8px;
+				right: 50px;
+				height: 30px;
+				line-height: 30px;
+				width: 60px;
+				font-size: 14px;
+				text-align: center;
+				border: 1px solid #409eff;
+				color: #409eff;
+				border-radius: 3px;
+				}
 			}
 			.logForm {
 				padding: 10px 15px;
@@ -451,12 +471,15 @@
 				font-size: 12px;
 				color: #fff;
 			}
-			.el-dialog__headerbtn .el-dialog__close{
+			>>> .el-dialog__headerbtn .el-dialog__close{
 				color: #fff;
 			}
 			>>> .el-dialog__body {
 				padding: 15px 20px;
 				height: 500px;
+			}
+			>>> .el-dialog__headerbtn {
+				top: 13px;
 			}
 		}
 	}

@@ -262,11 +262,6 @@
             // 编辑
             handleEdit(id) {
                 console.log(id,'编辑id')
-                // let params = {
-                //     id:'id'
-                // }
-                // this.$post('editData',params).then((res) => {
-                //    if (res.code == 200) {
                        this.$router.push({
                         path: 'components/add',
                         query: {
@@ -274,11 +269,6 @@
                             flag: 'edit'
                         }
                     })
-                    // } else {
-                        // this.$message.error('请求失败，请稍后再试')
-                    // }
-                   
-                // })
             },
             // 每页显示多少条数据
             handleSizeChange(val) {
