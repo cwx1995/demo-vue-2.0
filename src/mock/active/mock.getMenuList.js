@@ -43,6 +43,17 @@ export const getMenuList=[
                         }
                        
                     ]
+                },
+                {
+                    id: '4',
+                    title: '第三迭代',
+                    menu: [{
+                            id: '4-1',
+                            path: '/i18nTest',
+                            name: 'i18n'
+                        }
+                       
+                    ]
                 }]
             }
         }

@@ -75,6 +75,17 @@ export default new Router({
         component: ()=>import('@/views/test/testOne.vue')
       },]
      
+    },
+    {
+      path:'/i18nTest',
+      component:Layout,
+      redirect:'/i18nTest/index',
+      children:[{
+        path: 'index',
+        name: 'i18nTest',
+        component: ()=>import('@/views/threeMod/test1/index.vue')
+      },]
+     
     }
 
     

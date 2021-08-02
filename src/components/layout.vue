@@ -1,7 +1,6 @@
 <template>
     <div>
-        <div class="header">
-        </div>
+        <headers></headers>
         <div class="main">
             <el-menu default-active="2" router class="el-menu-vertical-demo" @select="select" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
                 <el-submenu v-for="(item,index) in menuData" :key="index" :index="item.id">
@@ -19,6 +18,7 @@
 </template>
 
 <script>
+import headers from './header.vue'
     export default {
         data() {
             return {
@@ -27,6 +27,9 @@
         },
         created(){
             this.getMenu()
+        },
+        components:{
+            headers
         },
         methods: {
             select(key, keyPath) {
@@ -48,15 +51,6 @@
 </script>
 
 <style>
-    .header {
-        width: 100%;
-        height: 50px;
-        z-index: 1000;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color: #666;
-    }
     .main {
         margin-top: 50px;
         background-color: #ccc;

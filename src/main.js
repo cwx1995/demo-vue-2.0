@@ -6,6 +6,8 @@ import router from './router'
 import { fetchGet, fetchPost} from './utils/http'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import store from './store'
+import i18n from './i18n'
 
 Vue.prototype.$get = fetchGet
 Vue.prototype.$post = fetchPost
@@ -17,6 +19,8 @@ require('./mock')
 new Vue({
   el: '#app',
   router,
+  store,
+  i18n,
   components: { App },
   template: '<App/>'
 })
