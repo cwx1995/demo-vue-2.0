@@ -54,6 +54,17 @@ export const getMenuList=[
                         }
                        
                     ]
+                },
+                {
+                    id: '5',
+                    title: '记录文档',
+                    menu: [{
+                            id: '5-1',
+                            path: '/readMe',
+                            name: 'readMe'
+                        }
+                       
+                    ]
                 }]
             }
         }

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue3笔记</title>
+</head>
+
+<body>
+    <h4>
+        * ref <br />
+        用于非引用数据类型 原理是Object.defineProperty<br />
+        修改数据时需要.value 使用和交出数据时不需要<br />
+        也可用于引用数据类型，内部原理是Proxy 自动转为reactive<br />
+        如: <br />
+        let name = ref（'sz'） 修改 name.value = '123' <br />
+    </h4>
+    <hr />
+    <h4>
+        * reactive<br />
+        用于引用数据类型 原理是Proxy <br />
+        可以使用对象嵌套方式使用reactive处理非引用数据类型数据
+        无需.value
+    </h4>
+    <hr />
+    <h4>
+        * watch 语法格式<br />
+        watch(监听字段入参，(newValue,oldValue)=>{
+        ...
+        },{配置项})<br />
+        例：<br />
+        watch(name,(newValue,oldValue)=>{
+        console.log(newValue,oldValue)
+        },{
+        deep:true
+        })
+        <br />
+        监听ref时 <br />
+        1.基本数据类型监听 不带.value 如：name 非 name.value<br />
+        2.监听引用数据类型时，需要.value 如 obj.value 或 obj 配置项设置deep：true
+        <br /><br/>
+        监听recative存在的问题<br />
+        1.当监听整个对象时，oldValue无法正常使用 并且deep无法设置为false （强制深度监听）<br />
+        2.当监听对象中某个数据时，监听入参需写入函数， 如 ()=>obj.name<br />
+        3.当监听对象中某些数据时，入参须写数组（包裹函数）如[()=>obj.name,()=>obj.age]<br />
+        4.当监听对象中某个对象时<br />
+        例：
+        <br />
+        let obj = {
+        name:'zs',
+        age:20,
+        job:{
+        j1:{
+        salary:20
+        }
+        }
+        }
+        <br />
+        监听obj.job时 salary改变 watch无法监听到 需要增加配置项deep：true
+    </h4>
+    <hr />
+    <h4>
+        * 组合式API watchEffect<br />
+        watchEffect(()=>
+        <br />
+        ...功能代码
+        <br />
+        })
+        <br />
+        功能代码中用到哪些属性 就监听那些属性 类似计算属性 但是不返回值 只执行逻辑
+    </h4>
+    <hr />
+    <h4>
+        *生命周期改动 <br />
+        配置项生命周期<br />
+        beforeDestroy ===> beforeUnmount<br />
+        destroyed ===> unmounted<br /><br/>
+
+        组合API setup使用<br />
+        beforeCreate created ===>setup()<br />
+        beforeMount ===> onBeforeMount<br />
+        mounted ===> onMounted <br />
+        beforeUpdate ===> onBeforeUpdate <br />
+        updated ===> onUpdated <br />
+        beforeUnmount ===> onBeforeUnmount <br />
+        Unmounted ===> onUnmounted<br />
+    </h4>
+    <hr />
+    <h4>
+        *组合式API toRef toRefs<br />
+        let obj = {
+        name:"zs",
+        age:20
+        }
+        <br /> 
+        <br/>
+        toRef 将对象中单个数据转变为ref并实现响应式绑定<br />
+        return{
+        name: toRef(obj,'name'),
+        age:toRef(obj,'age')
+        }<br/><br/>
+        toRefs 将对象中所有数据转为ref  并实现与原数据响应式绑定<br/>
+        return {
+            ...toRefs(obj)
+        }
+    </h4>
+    <hr />
+
+<h4>
+    *组合式API shallowReactive <br/>
+    浅层双向绑定<br/>
+    不会识别嵌套对象中的值变化  只考虑对象第一层响应式<br/><br/>
+    shallowRef <br/>
+    浅层绑定 普通数据时和ref一致  当绑定对象时 变为浅层绑定<br/><br/>
+    readonly <br/>
+    只读  不允许修改其数据<br/>
+    如:<br/>
+    const copy = readonly(obj)<br/><br/>
+    shallowReadonly <br/>
+    浅层只读<br/>
+    普通数据类型下与readonly一致 对象下  只锁定对象第一层数据<br/>
+</h4>
+<hr/>
+<h4>
+    *组合式API  toRaw <br/>
+    将响应式数据转为原始数据，与reactive相反 只能处理reactive数据  ref不可转换<br/><br/>
+    markRaw <br/>
+    非响应式标记<br/>
+    如：<br/>
+    let sex = 'nan'<br/>
+    obj.sex = markRaw(sex)<br/>
+    则reactive对象obj上的sex属性永远不会变为响应式<br/>
+    若不加markRaw 添加的sex属性会自动变为响应式<br/>
+     *readonly是数据锁死 所以页面不会改变<br/>
+      而markRaw下数据是会改变的 只是取消了响应式 所以页面不会改变* 
+
+</h4>
+<hr/>
+<h4>
+    *组合式API customRef <br>
+    自定义ref<br>
+    接收一个函数传参 且必须返回一个对象 对象中包含get  set函数<br>
+    如：<br>
+    function myRef(value){<br>
+        //返回customRef<br>
+        return customRef((track,trigger)=>{<br>
+            // 返回方法内置参数get  set<br>
+            return {<br>
+                get(){<br>
+                    ...功能代码<br>
+                    track()//通知vue追踪数据变化 固定内置api写法<br>
+                    return value<br>
+                },<br>
+                set(newValue){<br>
+                    ...功能代码<br>
+                    value = newValue<br>
+                    trigger()//通知vue重新解析模板（执行get） 固定内置api写法<br>
+                }
+            }
+        })
+    
+    }<br>
+    使用自定义ref<br>
+    let str = myRef('str')
+</h4>
+<hr/>
+<h4>
+    *组合式API provide 与 inject <br/>
+祖孙组件通信 （后代组件都能用，建议子组件使用props）
+例：
+let obj = {
+    name:'zs',
+    age:18
+}
+
+祖组件使用  provide('定义的字段名',数据) 
+provide('car',obj)
+
+孙组件使用 inject('定义的字段名')
+let car = inject('car')
+</h4>
+<hr/>
+<h4>
+    * isRef isReactive  isReadonly isProxy <br/>
+ 数据类型判断  isReactive(obj)
+</h4>
+<hr/>
+<h3>
+    组件
+</h3>
+<hr/>
+<h4>
+    *Fragment 组件 <br/>
+    vue不写根标签时，会自动生成虚拟标签 Fragment  不需要开发者处理<br/><br/>
+    *Teleport<br/>
+    Dom传送  可以将dom元素传送至指定html标签下<br/>
+    &lt;teleport to="传送位置（标签或css选择器）"&gt; <br/>
+     ...组件代码<br/>
+     &lt;/teleport&gt;<br/>
+    例：<br/>
+    &lt;teleport to="body"&gt;<br/>
+    &lt;div&gt;123组件&lt;/div&gt;<br/>
+        &lt;/teleport&gt;<br/>
+    
+     将123组件传送至最外层body标签中  比如弹窗的实现
+    
+</h4>
+<hr/>
+<h4>
+    * Suspense <br/>
+    配合动态引入组件  解决动态引入加载页面白屏闪烁问题 增加loading  （在测试阶段）<br/>
+    语法：<br/>
+    原始页面： <br/>
+    &lt;Child&gt;&lt;/Child&gt; <br/><br/>
+    js: <br/>
+    import {defineAsyncComponent} from 'vue'<br/>
+    const Child = defineAsyncComponent(()=>import('组件路径'))<br/>
+     然后注册该组件 components{}<br/><br/>
+     使用Suspense页面：<br/>
+     &lt;Suspense&gt; <br/>
+     &lt;template v-slot="default"&gt; <br/>
+     &lt;Child&gt;&lt;/Child&gt; <br/>
+     &lt;/template&gt; <br/>
+     &lt;template v-slot="fallback"&gt; <br/>
+                 ...loading时需要的html代码 <br/>
+                 &lt;/template&lg; <br/>
+                 &lt;/Suspense&gt;
+</h4>
+<hr/>
+<h4>
+* 其他改动 <br/>
+ *移除了v-on.native<br/>
+ 会根据子组件是否释放emit事件判断父组件上的事件为原生事件还是自定义事件<br/><br/>
+
+ *删除了Vue实例对象<br/>
+ 1.配置项移动至app<br/>
+
+ 2.去除了Vue.config.productionTip = false 配置项 <br/>
+ 自动识别环境(生产打包自动关闭提示)<br/>
+
+ 3.Vue.prototype === > app.config.globalProperties<br/><br/>
+
+ *删除了fillter 过滤器
+</h4>
+<script type="text/javascript">
+
+
+
+   
+
+</script>
+
+</body>
+
+</html>

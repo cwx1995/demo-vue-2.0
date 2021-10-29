@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Es6</title>
+
+</head>
+
+<body>
+  <h4>
+    * Promise <br /><br />
+    const one =new Promise((resolve,reject)=>{<br />
+    setTimeout(() => {<br />
+    resolve('one成功')<br />
+    // reject('one失败')<br />
+    }, 1000);<br />
+    })<br />
+    const two =new Promise((resolve,reject)=>{<br />
+    setTimeout(() => {<br />
+    resolve('two成功')<br />
+    // reject('two失败')<br />
+    }, 1000);<br />
+    })<br />
+    const three =new Promise((resolve,reject)=>{<br />
+    setTimeout(() => {<br />
+    // resolve('three成功')<br />
+    reject('three失败')<br />
+    }, 1000);<br />
+    })<br /><br />
+    *Promose.allSettled([1,2]) <br />
+    返回一个Promise对象，为所有请求的执行结果，该Promise执行结果永远为成功（resolve）<br />
+    const allSettledRes = Promise.allSettled([one,two,three])<br />
+    console.log('allSettledRes',allSettledRes)<br /><br />
+    *Promise.all([1,2])<br />
+    请求全部成功后返回成功 否则返回失败(第一个失败的)<br />
+    const allRes = Promise.all([one,two,three]).then(()=>{<br />
+    console.log('1')<br />
+    }).catch(()=>{<br />
+    console.log('2')<br />
+    })<br />
+    console.log('allRes',allRes)<br /><br />
+    *Promise.any<br />
+    请求任意一个成功则返回成功（第一个成功的）全部失败返回失败<br />
+    const anyRes = Promise.any([one,two,three])<br />
+
+    console.log('anyRes',anyRes)
+  </h4>
+  <hr />
+  <h4>
+    *获取对象数据过滤空 <br />
+    let config = {
+    db:{
+    host:'123'
+    }
+    }<br /><br />
+    传统写法<br />
+    let s = config&&config.db&&config.db.host<br /><br />
+    ？写法<br />
+    let s = config?.db?.host<br />
+    console.log(s)
+  </h4>
+  <hr />
+  <h4>
+    *globalThis <br />
+    永远指向最外层<br />
+    console.log(globalThis,'globalThis') // window
+  </h4>
+  <hr />
+  <h4>
+    *逻辑运算符<br />
+    || 取第一个为真<br />
+    && 取最后一个为真<br />
+    ?? 设置默认值<br /><br />
+    a ||= b ==> a = a || b<br />
+    a &&= b ==> a = a && b<br />
+    a ??= "_" ===> a = a??"_"<br /><br />
+
+    ?? 类似 a = a || '_' 但是如果a为0 则|| 无法读取a 会跳到“_”
+  </h4>
+  <script type="text/JavaScript">
+    //  Promise
+        const one =new Promise((resolve,reject)=>{
+            setTimeout(() => {
+                resolve('one成功')
+                // reject('one失败')
+            }, 1000);
+        })
+        const two =new Promise((resolve,reject)=>{
+            setTimeout(() => {
+                resolve('two成功')
+                // reject('two失败')
+            }, 1000);
+        })
+        const three =new Promise((resolve,reject)=>{
+            setTimeout(() => {
+                // resolve('three成功')
+                reject('three失败')
+            }, 1000);
+        })
+
+        // Promose.allSettled([1,2])  
+    // 返回一个Promise对象，为所有请求的执行结果，该Promise执行结果永远为成功（resolve）
+    const allSettledRes = Promise.allSettled([one,two,three])
+    // console.log('allSettledRes',allSettledRes)
+
+    // Promise.all([1,2])
+    // 请求全部成功后返回成功 否则返回失败(第一个失败的)
+    const allRes = Promise.all([one,two,three]).then(()=>{
+        // console.log('1')
+    }).catch(()=>{
+        // console.log('2')
+    })
+    // console.log('allRes',allRes)
+
+    // Promise.any
+    // 请求任意一个成功则返回成功（第一个成功的）全部失败返回失败
+    const anyRes = Promise.any([one,two,three])
+
+    // console.log('anyRes',anyRes)
+
+
+    // 获取对象数据过滤空  简易写法
+    // let config = {
+    //     db:{
+    //         host:'123'
+    //     }
+    // }
+    // 传统
+    // let s = config&&config.db&&config.db.host
+    // let s = config?.db?.host
+    // console.log(s)
+
+    // globalThis  永远指向最外层
+    // console.log(globalThis,'globalThis')
+
+    // 逻辑运算符
+
+    // || 取第一个为真
+    // && 取最后一个为真
+    // ?? 设置默认值
+    // a ||= b   ==>  a = a || b
+    // a &&= b   ==>  a = a && b
+    // a ??= "_"   ===> a = a??"_"
+
+    // ?? 类似 a = a || '_'  但是如果a为0 则|| 无法读取a  会跳到“_”
+
+
+    </script>
+</body>
+
+</html>

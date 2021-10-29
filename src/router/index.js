@@ -86,6 +86,17 @@ export default new Router({
         component: ()=>import('@/views/threeMod/test1/index.vue')
       },]
      
+    },
+    {
+      path:'/readMe',
+      component:Layout,
+      redirect:'/readMe/index',
+      children:[{
+        path: 'index',
+        name: '/readMe',
+        component: ()=>import('@/views/readMe/index.vue')
+      }]
+     
     }
 
     
