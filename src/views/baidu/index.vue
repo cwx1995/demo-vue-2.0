@@ -1,6 +1,6 @@
 <template>
   <div>
-    baidu
+    baidu11
   </div>
 </template>
 
