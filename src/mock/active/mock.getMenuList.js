@@ -5,16 +5,16 @@ export const getMenuList=[
             "code":200,
             "result":{
                 data: [{
-                    id: '1',
-                    title: '第一迭代',
+                    id: '1', //页面id
+                    title: '第一迭代',//一级菜单标题
                     menu: [{
-                            id: '1-1',
-                            path: '/firstMod',
-                            name: '调度管理'
+                            id: '1-1',//二级页面id
+                            path: '/firstMod/dispatchManage',//跳转路由
+                            name: '调度管理' //菜单名称
                         },
                         {
                             id: '1-2',
-                            path: '/secondMod',
+                            path: '/firstMod/doubleTable',
                             name: '双表格'
                         }
                     ]
@@ -23,12 +23,12 @@ export const getMenuList=[
                     title: '第二迭代',
                     menu: [{
                             id: '2-1',
-                            path: '/pieDemo',
+                            path: '/secondMod/pieDemo',
                             name: '饼图案例'
                         },
                         {
                             id: '2-2',
-                            path: '/doubleTable',
+                            path: '/secondMod/dispatcherTask',
                             name: '调度任务执行日志'
                         }
                     ]
@@ -38,8 +38,13 @@ export const getMenuList=[
                     title: '综合练习',
                     menu: [{
                             id: '3-1',
-                            path: '/testOne',
+                            path: '/testOne/index',
                             name: '练习1'
+                        },
+                        {
+                            id: '3-2',
+                            path: '/baidu/index',
+                            name: 'baidu'
                         }
                        
                     ]
@@ -49,7 +54,7 @@ export const getMenuList=[
                     title: '第三迭代',
                     menu: [{
                             id: '4-1',
-                            path: '/i18nTest',
+                            path: '/threeMod/i18nTest',
                             name: 'i18n'
                         }
                        
@@ -60,7 +65,7 @@ export const getMenuList=[
                     title: '记录文档',
                     menu: [{
                             id: '5-1',
-                            path: '/readMe',
+                            path: '/readMe/index',
                             name: 'readMe'
                         }
                        

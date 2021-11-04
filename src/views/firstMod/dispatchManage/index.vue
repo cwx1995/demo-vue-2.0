@@ -263,7 +263,7 @@
             handleEdit(id) {
                 console.log(id,'编辑id')
                        this.$router.push({
-                        path: 'components/add',
+                        path: '/firstMod/dispatchManageAdd',
                         query: {
                             'id': id,
                             flag: 'edit'
@@ -285,7 +285,7 @@
             //新增
             addNum() {
                 this.$router.push({
-                    path: 'components/add',
+                    path: '/firstMod/dispatchManageAdd',
                     query: {
                         id: '',
                         flag: 'add'
