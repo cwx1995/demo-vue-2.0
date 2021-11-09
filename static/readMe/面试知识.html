@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面试知识</title>
+    <style>
+        .title{
+            color:red;
+            font-weight:bold;
+        }
+        h4{
+            font-weight:normal;
+        }
+        .skyblue{
+            color:skyblue;
+        }
+    </style>
+</head>
+<body>
+    <h4>
+        <div class="title">
+*深拷贝与浅拷贝
+        </div>
+        <br/>
+        引用数据类型，变量名存储在栈内，数据存储在堆中，由栈指向堆<br/>
+        普通数据类型，数据存在栈中，不存在深拷贝<br/>
+        1. 递归层层复制<br/>
+        2.lodash clonedeep方法<br/>
+        3.JSON处理 <br/>
+        function cloneObj(obj){<br/>
+            let obj1 = JSON.stringify(obj) //将json对象转为字符串 <br/>
+            objClone = JSON.parse(obj1) //将字符串转回json对象并赋值<br/>
+            return objClone<br/>
+        }
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *Map 和 Set 
+        </div>
+        <br/>
+        Map是键值对，Set是值的集合 <br/>
+        Map可以使用get方法获取值，Set没有键所以不行 <br/>
+        它们都可以使用for..of遍历 <br/>
+        Set存储的是唯一值 <br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *宏任务  微任务 
+        </div>
+        <br/>
+        宏任务为宿主（node  或  浏览器）发出的任务 如：setTimeout<br/>
+        微任务是js脚本发出的  如： promise<br/>
+        微任务优先级高于宏任务<br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+            *promose 与 async/await区别
+        </div>
+        <br/>
+        promise是es6 async/await是es7 是promise的语法糖<br/>
+        promise可以用catch捕获reject状态<br/>
+        async/await可以用.then或try/catch捕获reject状态<br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+            *JSON.stringify()转换
+        </div>
+        <br/>
+        转换function undefind Symbol时 返回undefind<br/>
+        转换null NaN Infinity 时 返回字符串”null“<br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *缓存 
+        </div>
+        <br/>
+
+        1.减少不必要的数据传输，节省带宽 <br/>
+        2.减少服务器负担，增强性能 <br/>
+        3.加快网页速度，提高用户体验 <br/> <br/>
+
+        强缓存： <br/>
+        内容强制缓存，只要缓存有效时间不到，不重新发起请求 <br/>
+        协商缓存： <br/>
+        拿着文件的etag唯一键值和last-modified最后修改时间与服务器对比 <br/>
+        如果服务器对比文件无改变，则返回304，使用缓存 <br/>
+        无果服务器对比文件发生改变，返回200，返回的新文件替换旧文件，并更新etag唯一键值和last-modified最后修改时间 <br/> <br/>
+        配置如下： <br/>
+        Response Headers: <br/>
+        cache-control:max-age=xxxx,public,immutable <br/>
+        //缓存事件xxxx秒 public客户端和代理服务器都可以缓存 immutable用户点击左上角刷新也不请求 <br/>
+        cache-control:max-age=xxxx,private <br/>
+        //缓存事件xxxx秒 客户端可以缓存代理服务器不可以 用户点击左上角刷新会重新请求 <br/>
+        cache-control:no-catch <br/>
+        //跳过强缓存，走协商缓存 <br/>
+        cache-control:no-store <br/>
+        //不缓存
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *输入url 按下回车
+        </div>
+        <br/>
+        <div class="skyblue">
+           输入地址 》 DNS解析 》TCP连接 》 发送http请求 》 返回http 》 浏览器解析页面 》 断开连接 
+        </div>
+        <br/>
+        DNS解析： ip地址不方便记忆，所以人们使用网址以便方便记忆，DNS解析就是将网址转换为ip地址<br/>
+        现查找本地缓存 》 查找本地服务器缓存 》 到域服务器查找 》 通过解析服务器查找 》找到后缓存方便后续使用<br/><br/>
+        TCP连接：通过ip地址与服务器建立TCP连接<br/><br/>
+        三次握手：<br/>
+        1.客户端发包等服务器确认<br/>
+        2.服务端收到后确认，设置数据包发送给客户端确认链接请求<br/>
+        3.客户端收到确认后，再次确认服务端地址位置信息，正确后完成链接<br/><br/>
+        HTTP请求：客户端发送请求及入参 post get put等<br/><br/>
+        返回http响应：服务端收到请求信息后返回响应数据<br/><br/>
+        浏览器渲染：客户端收到返回报文，浏览器执行DOM渲染<br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+            *广度优先遍历（BFS）和 深度优先遍历（DFS）
+        </div>
+        <br/>
+        <img style="width:80%" src="/static/images/bfs-dfs-dom.png" alt="">
+        <img style="width:80%" src="/static/images/bfs-dfs-domTree.png" alt="">
+        <h3 class="skyblue" style="margin-left: 32px;">广度优先遍历（BFS)</h3>
+        <div style="margin-left: 32px;">指的是从一个节点开始，遍历其所有兄弟节点后，再遍历其子节点  兄弟节点 》子节点</div>
+        <img style="width:80%" src="/static/images/bfs-domTree.png" alt="">
+        <h3 class="skyblue" style="margin-left: 32px;">
+            深度优先遍历（DFS）
+        </h3>
+        <div style="margin-left: 32px;">
+            指的是从一个节点开始，遍历其子节点，直到子节点的子节点全部遍历完成，再遍历其兄弟节点  子节点 》 兄弟节点
+        </div>
+        <img style="width:80%" src="/static/images//dfs-domTree.png" alt="">
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+            *$nextTick 事件循环 
+        </div>
+       <br/>
+        vue识别到数据改动后并不是同步去更新DOM 而是执行异步 将其操作放入下一个执行队列中<br/>
+        为的是做去重处理，避免不必要的DOM更新，在下一次事件循环时，开始实际DOM操作<br/>
+        $nextTick的原理是promise，MutationObserver,setImmediate 或setTimeout<br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+            *虚拟DOM和真实DOM 
+        </div>
+       <br/>
+        虚拟DOM不会进行排版和重绘<br/>
+        虚拟DOM频繁修改后会与真实DOM做对比，只修改真实DOM部分，减少损耗<br/>
+        真实DOM频繁排版重绘效率很低<br/>
+        虚拟DOM会大幅降低真实DOM的排版和重绘<br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *插槽 
+        </div>
+        <br/>
+        匿名插槽：<br/> 只能用一个 父组件无需配置slot属性  子组件&lt;slot&gt;...&lt;/slot&gt;即可<br/>
+        具名插槽：<br/>可以用多个 父组件需配置slot=“插槽名” 子组件&lt;slot name="插槽名"&gt;...&lt;/slot&gt;<br/>
+        作用域插槽：<br/>子组件可以传递数据 子组件 :data配置数据  &lt;slot name="xxx" :data="数据"&gt;...&lt;/slot&gt;<br/>
+                    父组件可以设置css 可以接收数据 如下面： user.data为子组件传递数据<br/>
+                    &lt;child&gt;<br/>
+                        &lt;template slot-scope="user"&gt;<br/>
+                        &lt;div class="xxx"&gt;<br/>
+                                {{user.data}}<br/>
+                                &lt;/div&gt;<br/>
+                                &lt;/template&gt;<br/>
+                                &lt;/child&gt;<br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *vuex 重名 
+        </div>
+        <br/>
+        使用配置项： namespaced:true //使用命名空间
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *vue key值 
+        </div>
+        <br/>
+        在DOM树进行diff算法时用到，是节点的唯一标识，用来判断Vnode是否可以复用，提高效率
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *父子组件生命周期顺序 
+        </div>
+        <br/>
+
+        初始化：<br/>
+        <div class="skyblue">
+            父beforeCreate 》 父created 》 父beforeMount 》 子beforeCreate 》子created 》子beforeMount 》子mounted 》父mounted
+        </div>
+<br/>
+        子组件数据更新时：<br/>
+        <div class="skyblue">
+           父beforeUpdate 》 子beforeUpdate 》子updated 》父updated 
+        </div>
+        <br/>
+        父组件数据更新于子组件无关<br/>
+        父组件销毁时：<br/>
+        <div class="skyblue">
+           父beforeDestory 》 子beforeDestory 》 子destoryed 》父destoryed 
+        </div>
+        <br/>
+    </h4>
+    <script type="text/javaScript">
+
+      
+    
+     
+     
+     
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue笔记</title>
+    <style>
+        .title{
+            color:red;
+            font-weight:bold;
+        }
+        h4{
+            font-weight:normal;
+        }
+        .skyblue{
+            color:skyblue;
+        }
+    </style>
+</head>
+<body>
+    <h4>
+        <div class="title">
+           *给对象添加一个属性 
+        </div>
+        <br/>
+        Object.defineProperty(对象名,'属性名',{配置项})<br/>
+        如:<br/>
+        Object.defineProperty(person,'name',{<br/>
+            value:'张三', //属性值<br/>
+            enumerable:true, //可否遍历 默认否<br/>
+            writable:true, //可否修改  默认否<br/>
+            configurable:true, //可否删除  默认否<br/>
+            get(){}, // get方法<br/>
+            set(v){} // set方法<br/>
+        })<br/>
+        vue就是通过vm代理data中数据，给每个数据设置getter和setter 实现数据响应式
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+          *事件修饰符  
+        </div>
+          <br/>
+        .prevent //阻止默认事件<br/>
+        .stop  //阻止冒泡<br/>
+        .once //事件只触发一次<br/>
+        .capture //使用事件捕获<br/>
+        .self //仅当前元素触发<br/>
+        .passive //默认行为立即执行  如鼠标滚动事件 无需等待回调执行完毕即可使滚动条滚动
+    </h4>
+    <hr />
+    <h4>
+        <div class="title">
+          *键盘事件  
+        </div><br/>
+        
+        @keyup  @keydown  默认$events 参数值为键盘code码<br/>
+        事件修饰符: @keydown.delete  .enter .esc .space .tab .up .left ...等等<br/>
+        同时按键触发: @keyup.ctrl.y  按住ctrl和y触发
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+            *计算属性 computed
+        </div>
+        <br/>
+
+        fullName : {<br/>
+            get(){<br/>
+                return ...<br/>
+            },<br/>
+            set(v){<br/>
+                ...<br/>
+            }<br/>
+        }<br/>
+        当无需set方法时，可简写为 fullName(){return ...}
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *watch 监听 
+        </div>
+        <br/>
+    
+        vm.$watch('fullName',{ <br/>
+            ...配置项 <br/>
+        }) <br/> <br/>
+       
+        fullName:{ <br/>
+            immediate:true, <br/>
+            deep:true, <br/>
+            handler(newV,oldV){ <br/>
+                ...代码段 <br/>
+            } <br/>
+        } <br/> <br/>
+    
+        fullName(newV,oldV){ <br/>
+            ...代码段 <br/>
+        } <br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+*自定义样式 :style
+        </div>
+        <br/>
+        data定义:<br/>
+        style1:{<br/>
+            color:"red",<br/>
+            backgroundColor:"red"<br/>
+        }<br/>
+        style2:{<br/>
+            fontSize:"16px"<br/>
+        }<br/><br/>
+        使用:<br/>
+        :style="style1"   //配置单个<br/>
+        :style="[style1,style2]" //配置多个
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *对象  数组响应式  
+        </div>
+       <br/>
+        对象： 因为vue2使用的Object.defineProperty无法获取到增加及删除动作  所以删除和增加无法直接实现数据响应式<br/>
+        对象增加属性 ： Vue.set('对象','字段名','值') 或 vm.$set('对象','字段名','值')<br/>
+        对象删除属性： Vue.delete('对象','字段名')  或 vm.$delete('对象','字段名')<br/><br/>
+    
+        数组： 直接通过索引修改数组，页面不会改变，因为数组无对应的setter及getter<br/>
+        识别方法： 使用数组原生的7个方法 可以触发vue2响应式（因为改变了源数组）<br/>
+        push,pop,shift,unshift,splice,sotr,reverse<br/>
+        也可以使用（不推荐）Vue.set 或  vm.$set
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+           *指令  
+        </div>
+       <br/>
+        on-clack ： 当vue实例渲染时，为标签增加缓冲默认样式，配合css设置 <br/>
+        html: <br/>
+        &lt;div on-clack&gt; &lt;/div&gt; <br/>
+        css: <br/>
+        [on-clack]:{ <br/>
+            ...css <br/>
+        } <br/>
+    
+        on-pre : 跳过节点编译，可以加快固定节点渲染（无指令 无插值语法的节点可以使用） <br/>
+    
+        on-once: 执行一次就不再编译  不会动态渲染节点 <br/>
+    </h4>
+    <hr/>
+    <h4>
+        <div class="title">
+            *自定义指令 directives
+        </div>
+        <br/>
+     
+        局部指令：  <br/>
+        <div class="skyblue">
+ directives:{  
+        </div>
+       
+            函数写法： 此写法相当于无inserted钩子   <br/>
+            // DOM 绑定参数  <br/>
+            big1(element,binding){ 
+                ...操作代码 
+            },  <br/><br/>
+            对象写法： 完整写法  <br/>
+            big2:{  <br/>
+                //指令与元素成功绑定时触发（一上来就执行）  <br/>
+                bing(element,binding){ 
+                    ...  
+                },  <br/>
+                //指令元素被插入页面时执行 （函数写法无）  <br/>
+                inserted(element,binding){ 
+                    ...  
+                },  <br/>
+                //指令所在模板重新解析时触发（数据响应式）  <br/>
+                update(element,binding) { 
+                    ...  
+                },  <br/>
+            }  <br/>
+        <div class="skyblue">
+        }
+        </div>  <br/>
+    
+        指令的this指向为window 并非vm  <br/>  <br/>
+    
+        全局指令：  <br/>
+    
+        第一个参数为指令名字，第二个参数为配置项（函数或对象）  <br/>
+    
+        Vue.directive('big1',{  <br/>
+            bing(element,binding){...},  <br/>
+            inserted(element,binding){...},  <br/>
+            update(element,binding){...}  <br/>
+        })
+    </h4>
+    <script  type="text/javaScript">
+
+    </script>
+</body>
+</html>

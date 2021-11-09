@@ -6,12 +6,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Es6</title>
-
+  <style>
+    .title{
+        color:red;
+        font-weight:bold;
+    }
+    h4{
+        font-weight:normal;
+    }
+</style>
 </head>
 
 <body>
   <h4>
-    * Promise <br /><br />
+    <div class="title">
+    * Promise 
+    </div>
+    <br />
     const one =new Promise((resolve,reject)=>{<br />
     setTimeout(() => {<br />
     resolve('one成功')<br />
@@ -30,11 +41,17 @@
     reject('three失败')<br />
     }, 1000);<br />
     })<br /><br />
-    *Promose.allSettled([1,2]) <br />
+    <div class="title">
+*Promose.allSettled([1,2])
+    </div>
+     <br />
     返回一个Promise对象，为所有请求的执行结果，该Promise执行结果永远为成功（resolve）<br />
     const allSettledRes = Promise.allSettled([one,two,three])<br />
     console.log('allSettledRes',allSettledRes)<br /><br />
-    *Promise.all([1,2])<br />
+    <div class="title">
+*Promise.all([1,2])
+    </div>
+    <br />
     请求全部成功后返回成功 否则返回失败(第一个失败的)<br />
     const allRes = Promise.all([one,two,three]).then(()=>{<br />
     console.log('1')<br />
@@ -42,7 +59,10 @@
     console.log('2')<br />
     })<br />
     console.log('allRes',allRes)<br /><br />
-    *Promise.any<br />
+    <div class="title">
+*Promise.any
+    </div>
+    <br />
     请求任意一个成功则返回成功（第一个成功的）全部失败返回失败<br />
     const anyRes = Promise.any([one,two,three])<br />
 
@@ -50,7 +70,10 @@
   </h4>
   <hr />
   <h4>
-    *获取对象数据过滤空 <br />
+    <div class="title">
+*获取对象数据过滤空
+    </div>
+     <br />
     let config = {
     db:{
     host:'123'
@@ -64,13 +87,19 @@
   </h4>
   <hr />
   <h4>
-    *globalThis <br />
+    <div class="title">
+*globalThis 
+    </div>
+    <br />
     永远指向最外层<br />
     console.log(globalThis,'globalThis') // window
   </h4>
   <hr />
   <h4>
-    *逻辑运算符<br />
+    <div class="title">
+*逻辑运算符
+    </div>
+    <br />
     || 取第一个为真<br />
     && 取最后一个为真<br />
     ?? 设置默认值<br /><br />
