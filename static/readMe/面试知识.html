@@ -222,13 +222,128 @@
         </div>
         <br/>
     </h4>
-    <script type="text/javaScript">
-
-      
-    
-     
-     
-     
-    </script>
+  
 </body>
 </html>
+<script type="text/javaScript">
+        *深拷贝与浅拷贝
+        引用数据类型，变量名存储在栈内，数据存储在堆中，由栈指向堆
+        普通数据类型，数据存在栈中，不存在深拷贝
+        1. 递归层层复制
+        2.lodash clonedeep方法
+        3.JSON处理
+        function cloneObj(obj){
+            let obj1 = JSON.stringify(obj) //将json对象转为字符串 
+            objClone = JSON.parse(obj1) //将字符串转回json对象并赋值
+            return objClone
+        }
+
+        *Map 和 Set        
+        Map是键值对，Set是值的集合 
+        Map可以使用get方法获取值，Set没有键所以不行 
+        它们都可以使用for..of遍历 
+        Set存储的是唯一值 
+
+        *宏任务  微任务 
+        宏任务为宿主（node  或  浏览器）发出的任务 如：setTimeout
+        微任务是js脚本发出的  如： promise
+        微任务优先级高于宏任务
+
+        *promose 与 async/await区别
+        promise是es6 async/await是es7 是promise的语法糖
+        promise可以用catch捕获reject状态
+        async/await可以用.then或try/catch捕获reject状态
+
+        *JSON.stringify()转换
+        转换function undefind Symbol时 返回undefind
+        转换null NaN Infinity 时 返回字符串”null“
+
+        *缓存 
+        1.减少不必要的数据传输，节省带宽 
+        2.减少服务器负担，增强性能 
+        3.加快网页速度，提高用户体验  
+
+        强缓存： 
+        内容强制缓存，只要缓存有效时间不到，不重新发起请求 
+        协商缓存： 
+        拿着文件的etag唯一键值和last-modified最后修改时间与服务器对比 
+        如果服务器对比文件无改变，则返回304，使用缓存 
+        无果服务器对比文件发生改变，返回200，返回的新文件替换旧文件，并更新etag唯一键值和last-modified最后修改时间  
+        配置如下： 
+        Response Headers: 
+        cache-control:max-age=xxxx,public,immutable 
+        //缓存事件xxxx秒 public客户端和代理服务器都可以缓存 immutable用户点击左上角刷新也不请求 
+        cache-control:max-age=xxxx,private 
+        //缓存事件xxxx秒 客户端可以缓存代理服务器不可以 用户点击左上角刷新会重新请求 
+        cache-control:no-catch 
+        //跳过强缓存，走协商缓存 
+        cache-control:no-store 
+        //不缓存
+
+        *输入url 按下回车
+           输入地址 》 DNS解析 》TCP连接 》 发送http请求 》 返回http 》 浏览器解析页面 》 断开连接 
+        
+        DNS解析： ip地址不方便记忆，所以人们使用网址以便方便记忆，DNS解析就是将网址转换为ip地址
+        现查找本地缓存 》 查找本地服务器缓存 》 到域服务器查找 》 通过解析服务器查找 》找到后缓存方便后续使用
+        TCP连接：通过ip地址与服务器建立TCP连接
+        三次握手：
+        1.客户端发包等服务器确认
+        2.服务端收到后确认，设置数据包发送给客户端确认链接请求
+        3.客户端收到确认后，再次确认服务端地址位置信息，正确后完成链接
+        HTTP请求：客户端发送请求及入参 post get put等
+        返回http响应：服务端收到请求信息后返回响应数据
+        浏览器渲染：客户端收到返回报文，浏览器执行DOM渲染
+ 
+        
+        *$nextTick 事件循环 
+ 
+        vue识别到数据改动后并不是同步去更新DOM 而是执行异步 将其操作放入下一个执行队列中
+        为的是做去重处理，避免不必要的DOM更新，在下一次事件循环时，开始实际DOM操作
+        $nextTick的原理是promise，MutationObserver,setImmediate 或setTimeout
+
+        *虚拟DOM和真实DOM 
+
+        虚拟DOM不会进行排版和重绘
+        虚拟DOM频繁修改后会与真实DOM做对比，只修改真实DOM部分，减少损耗
+        真实DOM频繁排版重绘效率很低
+        虚拟DOM会大幅降低真实DOM的排版和重绘
+
+        *插槽 
+         
+        匿名插槽： 只能用一个 父组件无需配置slot属性  子组件<slot>...</slot>即可
+        具名插槽：可以用多个 父组件需配置slot=“插槽名” 子组件<slot name="插槽名">...</slot>
+        作用域插槽：子组件可以传递数据 子组件 :data配置数据  <slot name="xxx" :data="数据">...</slot>
+                    父组件可以设置css 可以接收数据 如下面： user.data为子组件传递数据
+                    <child>
+                        <template slot-scope="user">
+                        <div class="xxx">
+                                {{user.data}}
+                                </div>
+                                </template>
+                                </child>
+
+        *vuex 重名 
+        使用配置项： namespaced:true //使用命名空间
+
+        *vue key值 
+        
+        在DOM树进行diff算法时用到，是节点的唯一标识，用来判断Vnode是否可以复用，提高效率
+        
+        *父子组件生命周期顺序 
+
+        初始化：
+
+            父beforeCreate 》 父created 》 父beforeMount 》 子beforeCreate 》子created 》子beforeMount 》子mounted 》父mounted
+  
+
+        子组件数据更新时：
+     
+           父beforeUpdate 》 子beforeUpdate 》子updated 》父updated 
+     
+        
+        父组件数据更新于子组件无关
+        父组件销毁时：
+     
+           父beforeDestory 》 子beforeDestory 》 子destoryed 》父destoryed 
+   
+</script>

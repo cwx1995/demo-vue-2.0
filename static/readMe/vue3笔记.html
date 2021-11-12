@@ -7,12 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue3笔记</title>
     <style>
-        .title{
-            color:red;
-            font-weight:bold;
+        .title {
+            color: red;
+            font-weight: bold;
         }
-        h4{
-            font-weight:normal;
+
+        h4 {
+            font-weight: normal;
         }
     </style>
 </head>
@@ -20,7 +21,7 @@
 <body>
     <h4>
         <div class="title">
-          * ref   
+            * ref
         </div>
         <br />
         用于非引用数据类型 原理是Object.defineProperty<br />
@@ -32,7 +33,7 @@
     <hr />
     <h4>
         <div class="title">
-          * reactive  
+            * reactive
         </div>
         <br />
         用于引用数据类型 原理是Proxy <br />
@@ -42,7 +43,7 @@
     <hr />
     <h4>
         <div class="title">
-           * watch 语法格式 
+            * watch 语法格式
         </div>
         <br />
         watch(监听字段入参，(newValue,oldValue)=>{
@@ -58,7 +59,7 @@
         监听ref时 <br />
         1.基本数据类型监听 不带.value 如：name 非 name.value<br />
         2.监听引用数据类型时，需要.value 如 obj.value 或 obj 配置项设置deep：true
-        <br /><br/>
+        <br /><br />
         监听recative存在的问题<br />
         1.当监听整个对象时，oldValue无法正常使用 并且deep无法设置为false （强制深度监听）<br />
         2.当监听对象中某个数据时，监听入参需写入函数， 如 ()=>obj.name<br />
@@ -81,7 +82,7 @@
     <hr />
     <h4>
         <div class="title">
-           * 组合式API watchEffect 
+            * 组合式API watchEffect
         </div>
         <br />
         watchEffect(()=>
@@ -95,12 +96,12 @@
     <hr />
     <h4>
         <div class="title">
-          *生命周期改动   
+            *生命周期改动
         </div>
         <br />
         配置项生命周期<br />
         beforeDestroy ===> beforeUnmount<br />
-        destroyed ===> unmounted<br /><br/>
+        destroyed ===> unmounted<br /><br />
 
         组合API setup使用<br />
         beforeCreate created ===>setup()<br />
@@ -114,201 +115,425 @@
     <hr />
     <h4>
         <div class="title">
-           *组合式API toRef toRefs 
+            *组合式API toRef toRefs
         </div>
         <br />
         let obj = {
         name:"zs",
         age:20
         }
-        <br /> 
-        <br/>
+        <br />
+        <br />
         toRef 将对象中单个数据转变为ref并实现响应式绑定<br />
         return{
         name: toRef(obj,'name'),
         age:toRef(obj,'age')
-        }<br/><br/>
-        toRefs 将对象中所有数据转为ref  并实现与原数据响应式绑定<br/>
+        }<br /><br />
+        toRefs 将对象中所有数据转为ref 并实现与原数据响应式绑定<br />
         return {
-            ...toRefs(obj)
+        ...toRefs(obj)
         }
     </h4>
     <hr />
 
-<h4>
-    <div class="title">
-        *组合式API shallowReactive     
-    </div>
-    <br/>
-    浅层双向绑定<br/>
-    不会识别嵌套对象中的值变化  只考虑对象第一层响应式<br/><br/>
-    shallowRef <br/>
-    浅层绑定 普通数据时和ref一致  当绑定对象时 变为浅层绑定<br/><br/>
-    readonly <br/>
-    只读  不允许修改其数据<br/>
-    如:<br/>
-    const copy = readonly(obj)<br/><br/>
-    shallowReadonly <br/>
-    浅层只读<br/>
-    普通数据类型下与readonly一致 对象下  只锁定对象第一层数据<br/>
-</h4>
-<hr/>
-<h4>
-    <div class="title">
-         *组合式API  toRaw     
-    </div>
-   <br/>
-    将响应式数据转为原始数据，与reactive相反 只能处理reactive数据  ref不可转换<br/><br/>
-    markRaw <br/>
-    非响应式标记<br/>
-    如：<br/>
-    let sex = 'nan'<br/>
-    obj.sex = markRaw(sex)<br/>
-    则reactive对象obj上的sex属性永远不会变为响应式<br/>
-    若不加markRaw 添加的sex属性会自动变为响应式<br/>
-     *readonly是数据锁死 所以页面不会改变<br/>
-      而markRaw下数据是会改变的 只是取消了响应式 所以页面不会改变* 
+    <h4>
+        <div class="title">
+            *组合式API shallowReactive
+        </div>
+        <br />
+        浅层双向绑定<br />
+        不会识别嵌套对象中的值变化 只考虑对象第一层响应式<br /><br />
+        shallowRef <br />
+        浅层绑定 普通数据时和ref一致 当绑定对象时 变为浅层绑定<br /><br />
+        readonly <br />
+        只读 不允许修改其数据<br />
+        如:<br />
+        const copy = readonly(obj)<br /><br />
+        shallowReadonly <br />
+        浅层只读<br />
+        普通数据类型下与readonly一致 对象下 只锁定对象第一层数据<br />
+    </h4>
+    <hr />
+    <h4>
+        <div class="title">
+            *组合式API toRaw
+        </div>
+        <br />
+        将响应式数据转为原始数据，与reactive相反 只能处理reactive数据 ref不可转换<br /><br />
+        markRaw <br />
+        非响应式标记<br />
+        如：<br />
+        let sex = 'nan'<br />
+        obj.sex = markRaw(sex)<br />
+        则reactive对象obj上的sex属性永远不会变为响应式<br />
+        若不加markRaw 添加的sex属性会自动变为响应式<br />
+        *readonly是数据锁死 所以页面不会改变<br />
+        而markRaw下数据是会改变的 只是取消了响应式 所以页面不会改变*
 
-</h4>
-<hr/>
-<h4>
-    <div class="title">
-       *组合式API customRef     
-    </div>
-     <br>
-    自定义ref<br>
-    接收一个函数传参 且必须返回一个对象 对象中包含get  set函数<br>
-    如：<br>
-    function myRef(value){<br>
+    </h4>
+    <hr />
+    <h4>
+        <div class="title">
+            *组合式API customRef
+        </div>
+        <br>
+        自定义ref<br>
+        接收一个函数传参 且必须返回一个对象 对象中包含get set函数<br>
+        如：<br>
+        function myRef(value){<br>
         //返回customRef<br>
         return customRef((track,trigger)=>{<br>
-            // 返回方法内置参数get  set<br>
-            return {<br>
-                get(){<br>
-                    ...功能代码<br>
-                    track()//通知vue追踪数据变化 固定内置api写法<br>
-                    return value<br>
-                },<br>
-                set(newValue){<br>
-                    ...功能代码<br>
-                    value = newValue<br>
-                    trigger()//通知vue重新解析模板（执行get） 固定内置api写法<br>
-                }
-            }
+        // 返回方法内置参数get set<br>
+        return {<br>
+        get(){<br>
+        ...功能代码<br>
+        track()//通知vue追踪数据变化 固定内置api写法<br>
+        return value<br>
+        },<br>
+        set(newValue){<br>
+        ...功能代码<br>
+        value = newValue<br>
+        trigger()//通知vue重新解析模板（执行get） 固定内置api写法<br>
+        }
+        }
         })
-    
-    }<br>
-    使用自定义ref<br>
-    let str = myRef('str')
-</h4>
-<hr/>
-<h4>
-    <div class="title">
-       *组合式API provide 与 inject      
-    </div>
-    <br/>
-祖孙组件通信 （后代组件都能用，建议子组件使用props）
-例：
-let obj = {
-    name:'zs',
-    age:18
-}
 
-祖组件使用  provide('定义的字段名',数据) 
-provide('car',obj)
+        }<br>
+        使用自定义ref<br>
+        let str = myRef('str')
+    </h4>
+    <hr />
+    <h4>
+        <div class="title">
+            *组合式API provide 与 inject
+        </div>
+        <br />
+        祖孙组件通信 （后代组件都能用，建议子组件使用props）
+        例：
+        let obj = {
+        name:'zs',
+        age:18
+        }
 
-孙组件使用 inject('定义的字段名')
-let car = inject('car')
-</h4>
-<hr/>
-<h4>
-    <div class="title">
-        * isRef isReactive  isReadonly isProxy     
-    </div>
-    <br/>
- 数据类型判断  isReactive(obj)
-</h4>
-<hr/>
-<h3>
-    <div class="title">
-       组件     
-    </div>
-    
-</h3>
-<hr/>
-<h4>
-    <div class="title">
-       *Fragment 组件      
-    </div>
-    <br/>
-    vue不写根标签时，会自动生成虚拟标签 Fragment  不需要开发者处理<br/><br/>
-    <div class="title">
-        *Teleport    
-    </div>
-    <br/>
-    Dom传送  可以将dom元素传送至指定html标签下<br/>
-    &lt;teleport to="传送位置（标签或css选择器）"&gt; <br/>
-     ...组件代码<br/>
-     &lt;/teleport&gt;<br/>
-    例：<br/>
-    &lt;teleport to="body"&gt;<br/>
-    &lt;div&gt;123组件&lt;/div&gt;<br/>
-        &lt;/teleport&gt;<br/>
-    
-     将123组件传送至最外层body标签中  比如弹窗的实现
-    
-</h4>
-<hr/>
-<h4>
-    <div class="title">
-      * Suspense      
-    </div>
-     <br/>
-    配合动态引入组件  解决动态引入加载页面白屏闪烁问题 增加loading  （在测试阶段）<br/>
-    语法：<br/>
-    原始页面： <br/>
-    &lt;Child&gt;&lt;/Child&gt; <br/><br/>
-    js: <br/>
-    import {defineAsyncComponent} from 'vue'<br/>
-    const Child = defineAsyncComponent(()=>import('组件路径'))<br/>
-     然后注册该组件 components{}<br/><br/>
-     使用Suspense页面：<br/>
-     &lt;Suspense&gt; <br/>
-     &lt;template v-slot="default"&gt; <br/>
-     &lt;Child&gt;&lt;/Child&gt; <br/>
-     &lt;/template&gt; <br/>
-     &lt;template v-slot="fallback"&gt; <br/>
-                 ...loading时需要的html代码 <br/>
-                 &lt;/template&lg; <br/>
-                 &lt;/Suspense&gt;
-</h4>
-<hr/>
-<h4>
-    <div class="title">
-       * 其他改动     
-    </div>
- <br/>
- *移除了v-on.native<br/>
- 会根据子组件是否释放emit事件判断父组件上的事件为原生事件还是自定义事件<br/><br/>
+        祖组件使用 provide('定义的字段名',数据)
+        provide('car',obj)
 
- *删除了Vue实例对象<br/>
- 1.配置项移动至app<br/>
+        孙组件使用 inject('定义的字段名')
+        let car = inject('car')
+    </h4>
+    <hr />
+    <h4>
+        <div class="title">
+            * isRef isReactive isReadonly isProxy
+        </div>
+        <br />
+        数据类型判断 isReactive(obj)
+    </h4>
+    <hr />
+    <h3>
+        <div class="title">
+            组件
+        </div>
 
- 2.去除了Vue.config.productionTip = false 配置项 <br/>
- 自动识别环境(生产打包自动关闭提示)<br/>
+    </h3>
+    <hr />
+    <h4>
+        <div class="title">
+            *Fragment 组件
+        </div>
+        <br />
+        vue不写根标签时，会自动生成虚拟标签 Fragment 不需要开发者处理<br /><br />
+        <div class="title">
+            *Teleport
+        </div>
+        <br />
+        Dom传送 可以将dom元素传送至指定html标签下<br />
+        &lt;teleport to="传送位置（标签或css选择器）"&gt; <br />
+        ...组件代码<br />
+        &lt;/teleport&gt;<br />
+        例：<br />
+        &lt;teleport to="body"&gt;<br />
+        &lt;div&gt;123组件&lt;/div&gt;<br />
+        &lt;/teleport&gt;<br />
 
- 3.Vue.prototype === > app.config.globalProperties<br/><br/>
+        将123组件传送至最外层body标签中 比如弹窗的实现
 
- *删除了fillter 过滤器
-</h4>
-<script type="text/javascript">
+    </h4>
+    <hr />
+    <h4>
+        <div class="title">
+            * Suspense
+        </div>
+        <br />
+        配合动态引入组件 解决动态引入加载页面白屏闪烁问题 增加loading （在测试阶段）<br />
+        语法：<br />
+        原始页面： <br />
+        &lt;Child&gt;&lt;/Child&gt; <br /><br />
+        js: <br />
+        import {defineAsyncComponent} from 'vue'<br />
+        const Child = defineAsyncComponent(()=>import('组件路径'))<br />
+        然后注册该组件 components{}<br /><br />
+        使用Suspense页面：<br />
+        &lt;Suspense&gt; <br />
+        &lt;template v-slot="default"&gt; <br />
+        &lt;Child&gt;&lt;/Child&gt; <br />
+        &lt;/template&gt; <br />
+        &lt;template v-slot="fallback"&gt; <br />
+        ...loading时需要的html代码 <br />
+        &lt;/template&lg; <br />
+        &lt;/Suspense&gt;
+    </h4>
+    <hr />
+    <h4>
+        <div class="title">
+            * 其他改动
+        </div>
+        <br />
+        *移除了v-on.native<br />
+        会根据子组件是否释放emit事件判断父组件上的事件为原生事件还是自定义事件<br /><br />
 
+        *删除了Vue实例对象<br />
+        1.配置项移动至app<br />
 
+        2.去除了Vue.config.productionTip = false 配置项 <br />
+        自动识别环境(生产打包自动关闭提示)<br />
 
-   
+        3.Vue.prototype === > app.config.globalProperties<br /><br />
 
-</script>
+        *删除了fillter 过滤器
+    </h4>
+
 
 </body>
 
 </html>
+<script type="text/javaScript">
+
+        * ref   
+
+        用于非引用数据类型 原理是Object.defineProperty
+        修改数据时需要.value 使用和交出数据时不需要
+        也可用于引用数据类型，内部原理是Proxy 自动转为reactive
+        如: 
+        let name = ref（'sz'） 修改 name.value = '123' 
+
+        * reactive  
+
+        用于引用数据类型 原理是Proxy 
+        可以使用对象嵌套方式使用reactive处理非引用数据类型数据
+        无需.value
+    
+        * watch 语法格式 
+        
+        watch(监听字段入参，(newValue,oldValue)=>{
+        ...
+        },{配置项})
+        例：
+        watch(name,(newValue,oldValue)=>{
+        console.log(newValue,oldValue)
+        },{
+        deep:true
+        })
+        
+        监听ref时 
+        1.基本数据类型监听 不带.value 如：name 非 name.value
+        2.监听引用数据类型时，需要.value 如 obj.value 或 obj 配置项设置deep：true
+ 
+        监听recative存在的问题
+        1.当监听整个对象时，oldValue无法正常使用 并且deep无法设置为false （强制深度监听）
+        2.当监听对象中某个数据时，监听入参需写入函数， 如 ()=>obj.name
+        3.当监听对象中某些数据时，入参须写数组（包裹函数）如[()=>obj.name,()=>obj.age]
+        4.当监听对象中某个对象时
+        例：
+        
+        let obj = {
+        name:'zs',
+        age:20,
+        job:{
+        j1:{
+        salary:20
+        }
+        }
+        }
+        
+        监听obj.job时 salary改变 watch无法监听到 需要增加配置项deep：true
+    
+
+        * 组合式API watchEffect 
+        
+        watchEffect(()=>
+        
+        ...功能代码
+        
+        })
+        
+        功能代码中用到哪些属性 就监听那些属性 类似计算属性 但是不返回值 只执行逻辑
+    
+        *生命周期改动   
+        
+        配置项生命周期
+        beforeDestroy ===> beforeUnmount
+        destroyed ===> unmounted
+
+        组合API setup使用
+        beforeCreate created ===>setup()
+        beforeMount ===> onBeforeMount
+        mounted ===> onMounted 
+        beforeUpdate ===> onBeforeUpdate 
+        updated ===> onUpdated 
+        beforeUnmount ===> onBeforeUnmount 
+        Unmounted ===> onUnmounted
+    
+        *组合式API toRef toRefs 
+                
+        let obj = {
+        name:"zs",
+        age:20
+        }
+         
+        toRef 将对象中单个数据转变为ref并实现响应式绑定
+        return{
+        name: toRef(obj,'name'),
+        age:toRef(obj,'age')
+        }
+        toRefs 将对象中所有数据转为ref  并实现与原数据响应式绑定
+        return {
+            ...toRefs(obj)
+        }
+    
+
+        *组合式API shallowReactive     
+        
+        浅层双向绑定
+        不会识别嵌套对象中的值变化  只考虑对象第一层响应式
+        shallowRef 
+        浅层绑定 普通数据时和ref一致  当绑定对象时 变为浅层绑定
+        readonly 
+        只读  不允许修改其数据
+        如:
+        const copy = readonly(obj)
+        shallowReadonly 
+        浅层只读
+        普通数据类型下与readonly一致 对象下  只锁定对象第一层数据
+
+
+
+        *组合式API  toRaw     
+    
+        将响应式数据转为原始数据，与reactive相反 只能处理reactive数据  ref不可转换
+        markRaw 
+        非响应式标记
+        如：
+        let sex = 'nan'
+        obj.sex = markRaw(sex)
+        则reactive对象obj上的sex属性永远不会变为响应式
+        若不加markRaw 添加的sex属性会自动变为响应式
+        *readonly是数据锁死 所以页面不会改变
+        而markRaw下数据是会改变的 只是取消了响应式 所以页面不会改变* 
+
+        *组合式API customRef     
+    
+     
+        自定义ref
+        接收一个函数传参 且必须返回一个对象 对象中包含get  set函数
+        如：
+        function myRef(value){
+            //返回customRef
+            return customRef((track,trigger)=>{
+                // 返回方法内置参数get  set
+                return {
+                    get(){
+                        ...功能代码
+                        track()//通知vue追踪数据变化 固定内置api写法
+                        return value
+                    },
+                    set(newValue){
+                        ...功能代码
+                        value = newValue
+                        trigger()//通知vue重新解析模板（执行get） 固定内置api写法
+                    }
+                }
+            })
+        
+        }
+        使用自定义ref
+        let str = myRef('str')
+
+
+       *组合式API provide 与 inject      
+    
+    
+        祖孙组件通信 （后代组件都能用，建议子组件使用props）
+        例：
+        let obj = {
+            name:'zs',
+            age:18
+        }
+
+        祖组件使用  provide('定义的字段名',数据) 
+        provide('car',obj)
+
+        孙组件使用 inject('定义的字段名')
+        let car = inject('car')
+
+    
+        * isRef isReactive  isReadonly isProxy     
+    
+    
+        数据类型判断  isReactive(obj)
+
+
+       *Fragment 组件      
+    
+    
+        vue不写根标签时，会自动生成虚拟标签 Fragment  不需要开发者处理
+        
+        *Teleport    
+        
+        Dom传送  可以将dom元素传送至指定html标签下
+        <teleport to="传送位置（标签或css选择器）">
+        ...组件代码
+        </teleport>
+        例：
+        <teleport to="body">
+        <div>123组件</div>
+            </teleport>
+    
+        将123组件传送至最外层body标签中  比如弹窗的实现
+    
+        * Suspense      
+       
+        配合动态引入组件  解决动态引入加载页面白屏闪烁问题 增加loading  （在测试阶段）
+        语法：
+        原始页面： 
+        <Child></Child>
+        js: 
+        import {defineAsyncComponent} from 'vue'
+        const Child = defineAsyncComponent(()=>import('组件路径'))
+        然后注册该组件 components{}
+        使用Suspense页面：
+        <Suspense>
+        <template v-slot="default">
+        <Child></Child>
+        </template>
+        <template v-slot="fallback">
+            ...loading时需要的html代码 
+            </template> 
+        </Suspense>
+
+       * 其他改动     
+    
+ 
+        *移除了v-on.native
+        会根据子组件是否释放emit事件判断父组件上的事件为原生事件还是自定义事件
+
+        *删除了Vue实例对象
+        1.配置项移动至app
+
+        2.去除了Vue.config.productionTip = false 配置项 
+        自动识别环境(生产打包自动关闭提示)
+
+        3.Vue.prototype === > app.config.globalProperties
+
+        *删除了fillter 过滤器
+</script>

@@ -48,46 +48,47 @@
             }<br/>
         })<br/>
     </h4>
-    <script type="text/JavaScript">
-        let person = {
-            name:'zs',
-            age:20
-        }
-    //    vue2
-    // Object.defineProperty只能监听改查  不能增删
-        let p = {}
-        Object.defineProperty(p,'name',{
-            get(){
-                console.log('name属性被读取')
-                return person.name
-            },
-            set(value){
-                console.log('name属性被修改')
-                person.name = value
-            }
-        })
-
-    // vue3
-    //proxy可监听增删改查
-    // 使用Reflect方法 其优点是Object的方法再不断迁移，并且返回执行结果状态，不会因为报错中断代码执行（单线程）
-
-    const pp = new Proxy(person,{
-        // 读取 target 源数据 等同person   propName 触发的字段
-        get(target,propName){
-            console.log(`${propName}属性被读取`)
-            return Reflect.get(target,propName)
-        },
-        // 修改或增加属性  value为属性的值
-        set(target,propName,value){
-            console.log(`增加或修改了${propName}属性，值为${value}`)
-            Reflect.set(target,propName,value)
-        },
-        // 删除 
-        deleteProperty(target,propName){
-            console.log(`删除了属性${propName}`)
-            return Reflect.deleteProperty(target,propName)
-        }
-    })
-    </script>
+   
 </body>
 </html>
+<script type="text/JavaScript">
+    let person = {
+        name:'zs',
+        age:20
+    }
+//    vue2
+// Object.defineProperty只能监听改查  不能增删
+    let p = {}
+    Object.defineProperty(p,'name',{
+        get(){
+            console.log('name属性被读取')
+            return person.name
+        },
+        set(value){
+            console.log('name属性被修改')
+            person.name = value
+        }
+    })
+
+// vue3
+//proxy可监听增删改查
+// 使用Reflect方法 其优点是Object的方法再不断迁移，并且返回执行结果状态，不会因为报错中断代码执行（单线程）
+
+const pp = new Proxy(person,{
+    // 读取 target 源数据 等同person   propName 触发的字段
+    get(target,propName){
+        console.log(`${propName}属性被读取`)
+        return Reflect.get(target,propName)
+    },
+    // 修改或增加属性  value为属性的值
+    set(target,propName,value){
+        console.log(`增加或修改了${propName}属性，值为${value}`)
+        Reflect.set(target,propName,value)
+    },
+    // 删除 
+    deleteProperty(target,propName){
+        console.log(`删除了属性${propName}`)
+        return Reflect.deleteProperty(target,propName)
+    }
+})
+</script>

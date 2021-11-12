@@ -1,205 +1,782 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue笔记</title>
-    <style>
-        .title{
-            color:red;
-            font-weight:bold;
-        }
-        h4{
-            font-weight:normal;
-        }
-        .skyblue{
-            color:skyblue;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue笔记</title>
+  <style>
+    .title {
+      color: red;
+      font-weight: bold;
+    }
+
+    h4 {
+      font-weight: normal;
+    }
+
+    .skyblue {
+      color: skyblue;
+    }
+
+  </style>
 </head>
+
 <body>
-    <h4>
-        <div class="title">
-           *给对象添加一个属性 
-        </div>
-        <br/>
-        Object.defineProperty(对象名,'属性名',{配置项})<br/>
-        如:<br/>
-        Object.defineProperty(person,'name',{<br/>
-            value:'张三', //属性值<br/>
-            enumerable:true, //可否遍历 默认否<br/>
-            writable:true, //可否修改  默认否<br/>
-            configurable:true, //可否删除  默认否<br/>
-            get(){}, // get方法<br/>
-            set(v){} // set方法<br/>
-        })<br/>
-        vue就是通过vm代理data中数据，给每个数据设置getter和setter 实现数据响应式
-    </h4>
-    <hr/>
-    <h4>
-        <div class="title">
-          *事件修饰符  
-        </div>
-          <br/>
-        .prevent //阻止默认事件<br/>
-        .stop  //阻止冒泡<br/>
-        .once //事件只触发一次<br/>
-        .capture //使用事件捕获<br/>
-        .self //仅当前元素触发<br/>
-        .passive //默认行为立即执行  如鼠标滚动事件 无需等待回调执行完毕即可使滚动条滚动
-    </h4>
-    <hr />
-    <h4>
-        <div class="title">
-          *键盘事件  
-        </div><br/>
-        
-        @keyup  @keydown  默认$events 参数值为键盘code码<br/>
-        事件修饰符: @keydown.delete  .enter .esc .space .tab .up .left ...等等<br/>
-        同时按键触发: @keyup.ctrl.y  按住ctrl和y触发
-    </h4>
-    <hr/>
-    <h4>
-        <div class="title">
-            *计算属性 computed
-        </div>
-        <br/>
+  <h4>
+    <div class="title">
+      *给对象添加一个属性
+    </div>
+    <br />
+    Object.defineProperty(对象名,'属性名',{配置项})<br />
+    如:<br />
+    Object.defineProperty(person,'name',{<br />
+    value:'张三', //属性值<br />
+    enumerable:true, //可否遍历 默认否<br />
+    writable:true, //可否修改 默认否<br />
+    configurable:true, //可否删除 默认否<br />
+    get(){}, // get方法<br />
+    set(v){} // set方法<br />
+    })<br />
+    vue就是通过vm代理data中数据，给每个数据设置getter和setter 实现数据响应式
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *事件修饰符
+    </div>
+    <br />
+    .prevent //阻止默认事件<br />
+    .stop //阻止冒泡<br />
+    .once //事件只触发一次<br />
+    .capture //使用事件捕获<br />
+    .self //仅当前元素触发<br />
+    .passive //默认行为立即执行 如鼠标滚动事件 无需等待回调执行完毕即可使滚动条滚动
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *键盘事件
+    </div><br />
 
-        fullName : {<br/>
-            get(){<br/>
-                return ...<br/>
-            },<br/>
-            set(v){<br/>
-                ...<br/>
-            }<br/>
-        }<br/>
-        当无需set方法时，可简写为 fullName(){return ...}
-    </h4>
-    <hr/>
-    <h4>
-        <div class="title">
-           *watch 监听 
-        </div>
-        <br/>
-    
-        vm.$watch('fullName',{ <br/>
-            ...配置项 <br/>
-        }) <br/> <br/>
-       
-        fullName:{ <br/>
-            immediate:true, <br/>
-            deep:true, <br/>
-            handler(newV,oldV){ <br/>
-                ...代码段 <br/>
-            } <br/>
-        } <br/> <br/>
-    
-        fullName(newV,oldV){ <br/>
-            ...代码段 <br/>
-        } <br/>
-    </h4>
-    <hr/>
-    <h4>
-        <div class="title">
-*自定义样式 :style
-        </div>
-        <br/>
-        data定义:<br/>
-        style1:{<br/>
-            color:"red",<br/>
-            backgroundColor:"red"<br/>
-        }<br/>
-        style2:{<br/>
-            fontSize:"16px"<br/>
-        }<br/><br/>
-        使用:<br/>
-        :style="style1"   //配置单个<br/>
-        :style="[style1,style2]" //配置多个
-    </h4>
-    <hr/>
-    <h4>
-        <div class="title">
-           *对象  数组响应式  
-        </div>
-       <br/>
-        对象： 因为vue2使用的Object.defineProperty无法获取到增加及删除动作  所以删除和增加无法直接实现数据响应式<br/>
-        对象增加属性 ： Vue.set('对象','字段名','值') 或 vm.$set('对象','字段名','值')<br/>
-        对象删除属性： Vue.delete('对象','字段名')  或 vm.$delete('对象','字段名')<br/><br/>
-    
-        数组： 直接通过索引修改数组，页面不会改变，因为数组无对应的setter及getter<br/>
-        识别方法： 使用数组原生的7个方法 可以触发vue2响应式（因为改变了源数组）<br/>
-        push,pop,shift,unshift,splice,sotr,reverse<br/>
-        也可以使用（不推荐）Vue.set 或  vm.$set
-    </h4>
-    <hr/>
-    <h4>
-        <div class="title">
-           *指令  
-        </div>
-       <br/>
-        on-clack ： 当vue实例渲染时，为标签增加缓冲默认样式，配合css设置 <br/>
-        html: <br/>
-        &lt;div on-clack&gt; &lt;/div&gt; <br/>
-        css: <br/>
-        [on-clack]:{ <br/>
-            ...css <br/>
-        } <br/>
-    
-        on-pre : 跳过节点编译，可以加快固定节点渲染（无指令 无插值语法的节点可以使用） <br/>
-    
-        on-once: 执行一次就不再编译  不会动态渲染节点 <br/>
-    </h4>
-    <hr/>
-    <h4>
-        <div class="title">
-            *自定义指令 directives
-        </div>
-        <br/>
-     
-        局部指令：  <br/>
-        <div class="skyblue">
- directives:{  
-        </div>
-       
-            函数写法： 此写法相当于无inserted钩子   <br/>
-            // DOM 绑定参数  <br/>
-            big1(element,binding){ 
-                ...操作代码 
-            },  <br/><br/>
-            对象写法： 完整写法  <br/>
-            big2:{  <br/>
-                //指令与元素成功绑定时触发（一上来就执行）  <br/>
-                bing(element,binding){ 
-                    ...  
-                },  <br/>
-                //指令元素被插入页面时执行 （函数写法无）  <br/>
-                inserted(element,binding){ 
-                    ...  
-                },  <br/>
-                //指令所在模板重新解析时触发（数据响应式）  <br/>
-                update(element,binding) { 
-                    ...  
-                },  <br/>
-            }  <br/>
-        <div class="skyblue">
-        }
-        </div>  <br/>
-    
-        指令的this指向为window 并非vm  <br/>  <br/>
-    
-        全局指令：  <br/>
-    
-        第一个参数为指令名字，第二个参数为配置项（函数或对象）  <br/>
-    
-        Vue.directive('big1',{  <br/>
-            bing(element,binding){...},  <br/>
-            inserted(element,binding){...},  <br/>
-            update(element,binding){...}  <br/>
-        })
-    </h4>
-    <script  type="text/javaScript">
+    @keyup @keydown 默认$events 参数值为键盘code码<br />
+    事件修饰符: @keydown.delete .enter .esc .space .tab .up .left ...等等<br />
+    同时按键触发: @keyup.ctrl.y 按住ctrl和y触发
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *计算属性 computed
+    </div>
+    <br />
 
-    </script>
+    fullName : {<br />
+    get(){<br />
+    return ...<br />
+    },<br />
+    set(v){<br />
+    ...<br />
+    }<br />
+    }<br />
+    当无需set方法时，可简写为 fullName(){return ...}
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *watch 监听
+    </div>
+    <br />
+
+    vm.$watch('fullName',{ <br />
+    ...配置项 <br />
+    }) <br /> <br />
+
+    fullName:{ <br />
+    immediate:true, <br />
+    deep:true, <br />
+    handler(newV,oldV){ <br />
+    ...代码段 <br />
+    } <br />
+    } <br /> <br />
+
+    fullName(newV,oldV){ <br />
+    ...代码段 <br />
+    } <br />
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *自定义样式 :style
+    </div>
+    <br />
+    data定义:<br />
+    style1:{<br />
+    color:"red",<br />
+    backgroundColor:"red"<br />
+    }<br />
+    style2:{<br />
+    fontSize:"16px"<br />
+    }<br /><br />
+    使用:<br />
+    :style="style1" //配置单个<br />
+    :style="[style1,style2]" //配置多个
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *对象 数组响应式
+    </div>
+    <br />
+    对象： 因为vue2使用的Object.defineProperty无法获取到增加及删除动作 所以删除和增加无法直接实现数据响应式<br />
+    对象增加属性 ： Vue.set('对象','字段名','值') 或 vm.$set('对象','字段名','值')<br />
+    对象删除属性： Vue.delete('对象','字段名') 或 vm.$delete('对象','字段名')<br /><br />
+
+    数组： 直接通过索引修改数组，页面不会改变，因为数组无对应的setter及getter<br />
+    识别方法： 使用数组原生的7个方法 可以触发vue2响应式（因为改变了源数组）<br />
+    push,pop,shift,unshift,splice,sotr,reverse<br />
+    也可以使用（不推荐）Vue.set 或 vm.$set
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *指令
+    </div>
+    <br />
+    on-clack ： 当vue实例渲染时，为标签增加缓冲默认样式，配合css设置 <br />
+    html: <br />
+    &lt;div on-clack&gt; &lt;/div&gt; <br />
+    css: <br />
+    [on-clack]:{ <br />
+    ...css <br />
+    } <br />
+
+    on-pre : 跳过节点编译，可以加快固定节点渲染（无指令 无插值语法的节点可以使用） <br />
+
+    on-once: 执行一次就不再编译 不会动态渲染节点 <br />
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *自定义指令 directives
+    </div>
+    <br />
+
+    局部指令： <br />
+    <div class="skyblue">
+      directives:{
+    </div>
+
+    函数写法： 此写法相当于无inserted钩子 <br />
+    // DOM 绑定参数 <br />
+    big1(element,binding){
+    ...操作代码
+    }, <br /><br />
+    对象写法： 完整写法 <br />
+    big2:{ <br />
+    //指令与元素成功绑定时触发（一上来就执行） <br />
+    bing(element,binding){
+    ...
+    }, <br />
+    //指令元素被插入页面时执行 （函数写法无） <br />
+    inserted(element,binding){
+    ...
+    }, <br />
+    //指令所在模板重新解析时触发（数据响应式） <br />
+    update(element,binding) {
+    ...
+    }, <br />
+    } <br />
+    <div class="skyblue">
+      }
+    </div> <br />
+
+    指令的this指向为window 并非vm <br /> <br />
+
+    全局指令： <br />
+
+    第一个参数为指令名字，第二个参数为配置项（函数或对象） <br />
+
+    Vue.directive('big1',{ <br />
+    bing(element,binding){...}, <br />
+    inserted(element,binding){...}, <br />
+    update(element,binding){...} <br />
+    })
+  </h4>
+
+
+  <hr />
+
+  <h4>
+    <div class="title">
+      *vue.extend()
+    </div><br />
+    当某个场景需要使用一些新功能，而新功能只需要在某组件上增加一部分代码<br />
+    子文件：<br />
+    import Vue from 'vue' //引入vue实例<br />
+    const zujian = Vue.extend({<br />
+    ...组件实例或配置代码<br />
+    })<br /><br />
+    export{<br />
+    zujian<br />
+    }<br /><br />
+
+    父文件：<br />
+    import {zujian} from '子文件路径'<br />
+    <div id="box"></div> //容器<br />
+    使用方式挂载：<br />
+    mounted() {<br />
+    new zujian().$mount('#box') //将组件挂载到div<br />
+    }
+
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">*minix 混入</div><br />
+    存放公共的变量或方法等，用于扩展组件自身的参数和方法<br />
+    局部混入：<br />
+    定义文件： mixin.js<br />
+    export const myMixins={<br />
+    data() {<br />
+    return {<br />
+    num:1<br />
+    }<br />
+    },<br />
+    methods: {<br />
+    xxx(){<br />
+    ...<br />
+    }<br />
+    },<br />
+    }<br /><br />
+
+    其他文件内使用minix.js<br />
+    import {myMixins} from './mixin.js' //引入<br />
+    js中增加配置： mixins:[myMixins] <br />
+    此时便可以使用num参数及xxx方法<br />
+    **如果方法参数重复 则以组件原有为主 不会替换<br />
+    如果是生命周期钩子内代码，则组件代码和mixin内代码都会执行<br /><br />
+
+    全局混入 vue.mixin('name')<br />
+
+    main.js中： <br />
+    import {myMixins} from './mixin.js' //引入<br />
+    Vue.mixin(myMixins)<br />
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *一些vue指令
+    </div>
+    <br />
+    导出Vue配置文件指令：vue inspect > output.js<br />
+    查看插件所有版本：npm view 插件<br />
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      * $off 移除自定义事件监听 （子组件内使用）
+    </div>
+    <br />
+    子组件发射自定义事件（$emit） 使用$off可以取消事件发射 或 组件销毁时 事件也会一起销毁<br />
+    使用后父组件无法使用$on 或 @ 接收到 <br />
+    this.$off('事件名') //使用解绑一个自定义事件<br />
+    this.$off(['事件1','事件2']) //解绑多个事件使用<br />
+    this.$off() //解绑所有自定义事件<br />
+    this.$destory()//组件销毁 事件也销毁<br />
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *全局事件总线 eventBus
+    </div>
+    <br />
+
+    第一步 将bus组件挂载到VM <br />
+    main.js : Vue.prototype.$bus = this<br />
+
+    第二步 传递值的组件<br />
+    this.$bus.$emit('事件名',data)<br />
+
+    第三步 接收值的组件 回调是箭头函数或本地method方法<br />
+    this.$bus.$on('事件名',(v)=>{...}) 或this.$bus.$on('事件名',this.xxx)<br />
+
+    销毁时销毁事件指令：<br />
+    beforeDestroy() {<br />
+    this.$bus.$off('事件名')<br />
+    }
+
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *消息订阅与发布 （第三方库传参）
+    </div>
+
+    例使用 ： pubsub.js <br />
+    安装: npm i pubsub-js<br />
+    发布：（传递值）<br />
+    import punsub from 'pubsub-js'<br />
+    使用（方法内）：pubsub.publish('发布的消息名',data)<br />
+    订阅：（接收值）<br />
+    import punsub from 'pubsub-js'<br />
+    mounted() {<br />
+    this.pubId = pubsub.subscribe('订阅消息名',(name,data)=>{}或this.xxx)<br />
+    //存储id 用于销毁 回调有两个参数 为消息名和数据 可以使用占位符 如： (_,data)=>{}<br />
+    },<br />
+    销毁： 取消订阅<br />
+    beforeDestroy() {<br />
+    pubsub.unsubscribe(this.pubId) //类似定时器 使用id<br />
+    },<br />
+
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *vue动画标签
+    </div>
+
+    css定义动画：<br />
+    @keyframes name {<br />
+    from{}/to{} / 0%{}~100%{} //动画分段配置<br />
+    }<br />
+    .cssName{<br />
+    animation: name 1s ; //动画设置<br />
+    }<br /><br />
+    1. 普通默认<br />
+    vue盒子：<br />
+    &lt;transtion&gt;<br />
+    &lt;div&gt;动画盒子&lt;/div&gt;<br />
+    &lt;/transtion&gt;<br />
+
+    使用vue动画标签时，“.cssName”必须使用固定命名 .v-enter-active 和 .v-leave-active代表进入动画和离开动画<br />
+
+    如 css：<br />
+    .v-enter-active{<br />
+    animation: name 1s ; //动画设置 <br />
+    }<br />
+    .v-leave-avtive{}<br /><br />
+
+    2.自定义命名 name：<br />
+
+    vue盒子：<br />
+    &lt;transtion name="abc"&gt;<br />
+    &lt;div&gt;动画盒子&lt;/div&gt;<br />
+    &lt;/transtion&gt;<br />
+    css:<br />
+    .abc-enter-active{<br />
+    animation: name 1s ; //动画设置<br />
+    }<br />
+    .abc-leave-avtive{}<br /><br />
+
+    3.初始化就执行动画<br />
+    vue盒子：<br />
+    &lt;transtion name="abc" appear&gt;<br />
+    &lt;div&gt;动画盒子&lt;/div&gt;<br />
+    &lt;/transtion&gt;
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *vue 过渡动画
+    </div>
+    <br />
+    css：<br />
+    .abc-enter{} //进入的起点<br />
+    .abc-enter-to{} //进入的终点<br />
+    .abc-leave{} //离开的起点<br />
+    .abc-leave-to{} //离开的终点<br />
+    .abc-enter-active{} //进入的全程<br />
+    .abc-leave-active{} //离开的全程<br /><br />
+
+    包裹多个元素动画：<br />
+
+    vue盒子：<br />
+    &lt;transtion-grpup&gt;<br />
+    &lt;div key="1"&gt;动画盒子1&lt;/div&gt;<br />
+    &lt;div key="2"&gt;动画盒子2&lt;/div&gt;<br />
+    &lt;/transtion-group&gt;
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *vue-cli代理
+    </div>
+    <br />
+
+    同源策略：协议名 主机名 端口号 一致 <br />
+    跨域： 请求发出了，服务器响应了，但是浏览器拦截了数据 <br />
+    cors解决：服务器后端配置响应头 <br />
+    jsonp解决：只能解决get方式请求，利用了script标签的src属性不受同源策略限制 <br />
+    代理： vue-cli 或 nginx <br /> <br />
+    方式一： <br />
+    vue.config.js中增加配置： <br />
+    devServe:{ <br />
+    proxy:'http://localhost:5000' //与实际请求地址一致（转发到的地址） <br />
+    } <br /> <br />
+
+    此方式不能配置多个代理，并且根目录不能有同名文件 <br /> <br />
+
+    方式二： <br />
+    vue.config.js中增加配置： <br />
+    devServe:{ <br />
+    proxy:{ <br />
+    '/xxx':{ //请求前缀 自定义 请求前缀时/xxx的自动使用此代理配置 <br />
+    target:'服务器地址', //请求的地址 <br />
+    pathRewrite:'^/xxx', //去除前缀 实际请求地址不需要前缀 （前缀用来判断是否需要进行代理 与后端无关） <br />
+    ws:true, // 用于支持webSocket 默认true <br />
+    changeOrigin:true // 控制请求头host值 是否掩盖真实值 默认true <br />
+    }, <br />
+    '/xx2':{} //多个代理 格式同上 <br />
+    } <br />
+    }
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *vue-resource 请求库 vue1.0 常用 了解
+    </div>
+    <br />
+    main.js:<br />
+    import vueResource from 'vue-resource'<br />
+    Vue.use('vueResource')<br /><br />
+
+    使用方式:<br />
+    this.$http.get().then()<br />
+    this.$http.post().then()
+  </h4>
 </body>
+
 </html>
+<script type="text/javaScript">
+
+  *给对象添加一个属性
+  
+    Object.defineProperty(对象名,'属性名',{配置项})
+    如:
+    Object.defineProperty(person,'name',{
+    value:'张三', //属性值
+    enumerable:true, //可否遍历 默认否
+    writable:true, //可否修改 默认否
+    configurable:true, //可否删除 默认否
+    get(){}, // get方法
+    set(v){} // set方法
+    })
+    vue就是通过vm代理data中数据，给每个数据设置getter和setter 实现数据响应式
+  
+      *事件修饰符
+
+    .prevent //阻止默认事件
+    .stop //阻止冒泡
+    .once //事件只触发一次
+    .capture //使用事件捕获
+    .self //仅当前元素触发
+    .passive //默认行为立即执行 如鼠标滚动事件 无需等待回调执行完毕即可使滚动条滚动
+  
+      *键盘事件   
+
+    @keyup @keydown 默认$events 参数值为键盘code码
+    事件修饰符: @keydown.delete .enter .esc .space .tab .up .left ...等等
+    同时按键触发: @keyup.ctrl.y 按住ctrl和y触发
+  
+      *计算属性 computed
+
+    fullName : {
+    get(){
+    return ...
+    },
+    set(v){
+    ...
+    }
+    }
+    当无需set方法时，可简写为 fullName(){return ...}
+   
+      *watch 监听
+    
+    vm.$watch('fullName',{ 
+    ...配置项 
+    })  
+
+    fullName:{ 
+    immediate:true, 
+    deep:true, 
+    handler(newV,oldV){ 
+    ...代码段 
+    } 
+    }  
+
+    fullName(newV,oldV){ 
+    ...代码段 
+    } 
+  
+      *自定义样式 :style
+      
+    data定义:
+    style1:{
+    color:"red",
+    backgroundColor:"red"
+    }
+    style2:{
+    fontSize:"16px"
+    }
+    使用:
+    :style="style1" //配置单个
+    :style="[style1,style2]" //配置多个
+  
+      *对象 数组响应式
+       
+    对象： 因为vue2使用的Object.defineProperty无法获取到增加及删除动作 所以删除和增加无法直接实现数据响应式
+    对象增加属性 ： Vue.set('对象','字段名','值') 或 vm.$set('对象','字段名','值')
+    对象删除属性： Vue.delete('对象','字段名') 或 vm.$delete('对象','字段名')
+
+    数组： 直接通过索引修改数组，页面不会改变，因为数组无对应的setter及getter
+    识别方法： 使用数组原生的7个方法 可以触发vue2响应式（因为改变了源数组）
+    push,pop,shift,unshift,splice,sotr,reverse
+    也可以使用（不推荐）Vue.set 或 vm.$set
+      
+      *指令
+        
+    on-clack ： 当vue实例渲染时，为标签增加缓冲默认样式，配合css设置 
+    html: 
+    <div on-clack> </div>
+    css: 
+    [on-clack]:{ 
+    ...css 
+    } 
+
+    on-pre : 跳过节点编译，可以加快固定节点渲染（无指令 无插值语法的节点可以使用） 
+
+    on-once: 执行一次就不再编译 不会动态渲染节点 
+  
+      *自定义指令 directives
+
+    局部指令： 
+
+    directives:{
+        函数写法： 此写法相当于无inserted钩子 
+        // DOM 绑定参数 
+        big1(element,binding){
+        ...操作代码
+        }, 
+        对象写法： 完整写法 
+        big2:{ 
+        //指令与元素成功绑定时触发（一上来就执行） 
+        bing(element,binding){
+        ...
+        }, 
+        //指令元素被插入页面时执行 （函数写法无） 
+        inserted(element,binding){
+        ...
+        }, 
+        //指令所在模板重新解析时触发（数据响应式） 
+        update(element,binding) {
+        ...
+        }, 
+            } 
+                }
+     
+    指令的this指向为window 并非vm  
+
+    全局指令： 
+
+    第一个参数为指令名字，第二个参数为配置项（函数或对象） 
+
+    Vue.directive('big1',{ 
+    bing(element,binding){...}, 
+    inserted(element,binding){...}, 
+    update(element,binding){...} 
+    })
+  
+
+  *vue.extend()
+       当某个场景需要使用一些新功能，而新功能只需要在某组件上增加一部分代码
+       子文件：
+       import Vue from 'vue' //引入vue实例
+       const zujian = Vue.extend({
+           ...组件实例或配置代码
+       })
+       export{
+           zujian
+       }
+
+       父文件：
+       import {zujian} from '子文件路径'
+       <div id="box"></div> //容器
+       使用方式挂载：
+       mounted() {
+           new zujian().$mount('#box') //将组件挂载到div
+       }
+
+
+       *minix   混入
+       存放公共的变量或方法等，用于扩展组件自身的参数和方法
+       局部混入：
+       定义文件： mixin.js
+       export const myMixins={
+           data() {
+               return {
+                   num:1
+               }
+           },
+           methods: {
+               xxx(){
+                   ...
+               }
+           },
+       }
+
+    其他文件内使用minix.js
+    import {myMixins} from './mixin.js'  //引入
+    js中增加配置：  mixins:[myMixins]  
+    此时便可以使用num参数及xxx方法
+    **如果方法参数重复 则以组件原有为主  不会替换
+      如果是生命周期钩子内代码，则组件代码和mixin内代码都会执行
+     
+     全局混入 vue.mixin('name')
+
+     main.js中： 
+     import {myMixins} from './mixin.js' //引入
+     Vue.mixin(myMixins)
+
+
+     *一些vue指令
+     导出Vue配置文件指令：vue inspect > output.js
+     查看插件所有版本：npm view 插件名  
+     
+     * $off 移除自定义事件监听 （子组件内使用）
+     子组件发射自定义事件（$emit）  使用$off可以取消事件发射  或 组件销毁时 事件也会一起销毁
+     使用后父组件无法使用$on 或 @ 接收到 
+     this.$off('事件名') //使用解绑一个自定义事件
+     this.$off(['事件1','事件2']) //解绑多个事件使用
+     this.$off() //解绑所有自定义事件
+     this.$destory()//组件销毁 事件也销毁
+
+     *全局事件总线 eventBus
+
+     第一步 将bus组件挂载到VM 
+     main.js  :  Vue.prototype.$bus = this
+
+     第二步 传递值的组件
+     this.$bus.$emit('事件名',data)
+
+     第三步 接收值的组件 回调是箭头函数或本地method方法
+     this.$bus.$on('事件名',(v)=>{...}) 或this.$bus.$on('事件名',this.xxx)
+
+     销毁时销毁事件指令：
+     beforeDestroy() {
+         this.$bus.$off('事件名')
+     }
+
+     *消息订阅与发布 （第三方库传参）
+     例使用 ： pubsub.js
+     安装: npm i pubsub-js
+     发布：（传递值）
+     import punsub from 'pubsub-js'
+     使用（方法内）：pubsub.publish('发布的消息名',data)
+     订阅：（接收值）
+     import punsub from 'pubsub-js'
+     mounted() {
+         this.pubId = pubsub.subscribe('订阅消息名',(name,data)=>{}或this.xxx)
+         //存储id  用于销毁  回调有两个参数 为消息名和数据 可以使用占位符 如： (_,data)=>{}
+     },
+     销毁： 取消订阅
+     beforeDestroy() {
+         pubsub.unsubscribe(this.pubId) //类似定时器  使用id
+     },
+     
+     *vue动画标签
+     css定义动画：
+     @keyframes name {
+         from{}/to{}  /  0%{}~100%{}  //动画分段配置
+     }
+    .cssName{
+        animation: name 1s ; //动画设置
+    }
+     1. 普通默认
+      vue盒子：
+     <transtion>
+     <div>动画盒子</div>
+     </transtion>
+
+     使用vue动画标签时，“.cssName”必须使用固定命名 .v-enter-active 和 .v-leave-active代表进入动画和离开动画
+
+     如 css：
+     .v-enter-active{
+       animation: name 1s ; //动画设置 
+     }
+     .v-leave-avtive{}
+
+     2.自定义命名 name：
+
+     vue盒子：
+     <transtion name="abc">
+     <div>动画盒子</div>
+     </transtion>
+     css:
+     .abc-enter-active{
+       animation: name 1s ; //动画设置 
+     }
+     .abc-leave-avtive{}
+     
+     3.初始化就执行动画
+     vue盒子：
+     <transtion name="abc" appear>
+     <div>动画盒子</div>
+     </transtion>
+
+     *vue 过渡动画
+     css：
+     .abc-enter{} //进入的起点
+     .abc-enter-to{} //进入的终点
+     .abc-leave{} //离开的起点
+     .abc-leave-to{} //离开的终点
+     .abc-enter-active{} //进入的全程
+     .abc-leave-active{} //离开的全程
+
+     包裹多个元素动画：
+
+     vue盒子：
+     <transtion-grpup>
+     <div key="1">动画盒子1</div>
+     <div key="2">动画盒子2</div>
+     </transtion-group>
+
+     *vue-cli代理
+
+     同源策略：协议名  主机名  端口号 一致
+     跨域： 请求发出了，服务器响应了，但是浏览器拦截了数据
+     cors解决：服务器后端配置响应头
+     jsonp解决：只能解决get方式请求，利用了script标签的src属性不受同源策略限制
+     代理： vue-cli 或 nginx
+       方式一：
+      vue.config.js中增加配置：
+       devServe:{
+           proxy:'http://localhost:5000' //与实际请求地址一致（转发到的地址）
+       }
+
+       此方式不能配置多个代理，并且根目录不能有同名文件
+
+       方式二：
+       vue.config.js中增加配置：
+       devServe:{
+           proxy:{
+               '/xxx':{ //请求前缀 自定义 请求前缀时/xxx的自动使用此代理配置
+                   target:'服务器地址', //请求的地址
+                   pathRewrite:'^/xxx', //去除前缀 实际请求地址不需要前缀 （前缀用来判断是否需要进行代理 与后端无关）
+                   ws:true, // 用于支持webSocket  默认true
+                   changeOrigin:true // 控制请求头host值  是否掩盖真实值  默认true
+               },
+               '/xx2':{} //多个代理 格式同上
+           }
+       }
+
+*vue-resource  请求库  vue1.0 常用  了解
+main.js:
+import vueResource from 'vue-resource'
+Vue.use('vueResource')
+
+使用方式:
+this.$http.get().then()
+this.$http.post().then()
+
+
+   </script>
