@@ -444,6 +444,230 @@
     this.$http.get().then()<br />
     this.$http.post().then()
   </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *vuex 集中式状态管理
+    </div><br />
+    dispatch('actions方法名','数据') //可以触发actions 在actions内部作数据处理或一异步请求操作等<br />
+    commit('mutations方法名','数据') //需手动调用commit出发mutations存值 如不需要数据处理 可以直接使用commit不使用dispatch<br />
+    配置代码如下：<br /><br />
+    安装vuex 创建store配置文件夹<br />
+    main.js:<br />
+    引入store 挂载store<br />
+    store:(index.js)<br />
+    import Vue from 'vue'<br />
+    import Vuex from 'vuex'<br />
+    Vue.use(Vuex)<br />
+    const state = {<br />
+    num:0,<br />
+    name:'zs',<br />
+    age:18<br />
+    }<br /><br />
+    const actions={<br />
+    //store上下文 接收到的数据<br />
+    jia(context,value){<br />
+    ...数据逻辑处理 例：value处理后变为value2<br />
+    context.commit('JIA',value2)//调用mutations<br />
+    },<br />
+    jian(context,value){<br />
+    ...数据逻辑处理 例：value处理后变为value2<br />
+    context.commit('JIAN',value2)//调用mutations<br />
+    },
+    }<br /><br />
+    const mutations={<br />
+    //state现有数据对象 value2数据<br />
+    JIA(state,value){<br />
+    state.num = value //此时state的num变为jia处理后的数据value2<br />
+    },<br />
+    JIAN(state,value){<br />
+    state.num = value //此时state的num变为jia处理后的数据value2<br />
+    }
+    }<br /><br />
+
+    const getters = {<br />
+    bigSum(state){<br />
+    return state.num * 10 //数据处理逻辑代码<br />
+    }
+    }<br /><br />
+
+    export deflault new Vuex.Store({<br />
+    state,<br />
+    mutations,<br />
+    actions,<br />
+    getters<br />
+    })<br /><br />
+
+    组件应用代码如下：<br />
+    this.$store.dispatch('jia',111) //触发actions<br />
+    this.$store.commit('JIA',111) //触发mutations<br />
+    this.$store.state.num //获取num值<br />
+    this.$store.getters.bigSum()//使用getters<br /><br />
+
+    语法糖 map系列：<br />
+    import {mapState,mapGetters,mapActions,mapMutations}<br />
+
+    data(){<br />
+    return{<br />
+    num:'',<br />
+    name:'',<br />
+    bigSum:''<br />
+    }<br />
+    }<br /><br />
+    computed:{<br />
+    //mapState对象结构赋值法：<br />
+    ...mapState({num:"num",name:"name"})<br />
+    //mapState数组写法 （数据名一致时）：<br />
+    ...mapState(['num','name'])<br />
+    //mapGetters对象写法<br />
+    ...mapGetters({bigSum:'bigSum'})<br />
+    //数组写法（数据名一致时）<br />
+    ...mapGetters(['bigSum'])<br />
+    }<br /><br />
+    methods:{<br />
+    ...mapActions({methods1:'jia',methods2:'jian'})<br />
+    //methods1 methods2为本地dom绑定的方法事件 需要传递参数（传值actions使用）适用map系列数组简写规则<br />
+    ...mapMutations({methods1:'JIA',methods2:'JIAN'})<br />
+    //methods1 methods2为本地dom绑定的方法事件 需要传递参数（传值mutations使用）适用map系列数组简写规则<br />
+    }<br />
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *vuex namespace 命名空间
+    </div>
+    <br />
+    store：<br /><br />
+    // 功能块1 XXX为实际配置代码<br />
+    const options1 = {<br />
+    namespace:true // 开启命名空间<br />
+    state:{XXX}, <br />
+    actions:{XXX},<br />
+    mutations:{XXX},<br />
+    getters:{XXX}<br />
+    }<br /><br />
+    // 功能块2 XXX为实际配置代码<br />
+    const options2 = {<br />
+    state:{XXX}, <br />
+    actions:{XXX},<br />
+    mutations:{XXX},<br />
+    getters:{XXX}<br />
+    }<br /><br />
+
+    export deflault new Vuex.Store({<br />
+    options1,<br />
+    options2<br />
+    })<br /><br />
+
+    使用namespace的数据,可以使用 ...mapState('options1',['xxx','xxx']) 直接获取到options1中state的数据 <br />
+    未使用namespace的数据,只能使用...mapState(['options1'])然后模板中使用options1.xxx 获取数据<br />
+    ...mapMutations('options1',{methods1:"xxx",methods2:"xxx"})<br />
+    ...mapActions('options1',{methods1:"xxx",methods2:"xxx"})<br />
+    ...mapGetters('options1',['xxx']) <br />
+    以上同理，第一个参数表示模块（对象）名，然后会自动寻找其下方的配置参数<br /><br />
+
+    原始用法（namespace）： <br />
+    this.$store.state.options1.num<br />
+    this.$store.getters[options.bigSum]<br />
+    this.$dispatch('options1/jia',111)<br />
+    this.$commit('options1/JIA',111)<br />
+
+  </h4>
+  <hr>
+  <h4>
+    <div class="title">
+      *路由
+    </div>
+    <br />
+    路由切换，组件销毁<br />
+    二级路由配置，path不需要加“/”<br /><br />
+
+    路由配置文件给组件传参：<br />
+    1.配置 props 如 props:{name:'zs',age:18} //以props传参给路由组件 但是数据是写死的<br />
+    2.布尔值 props:true //可以接收到所有params传参 并以props的方式传给组件<br />
+    3.函数 props($route){<br />
+    return {name:$route.query.xxx,age:$route.params.xxx} //可以获取到$route<br />
+    }<br /><br />
+
+
+    $route.back() //回退1<br />
+    $route.forward()//前进1<br />
+    $route.go(num) // num 为数字步数 正数前进 负数后退<br />
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *keep-alive 缓存标签
+    </div>
+    <br />
+    &lt;keep-alive include="组件名"&gt; <br />
+    ...组件 <br />
+    &lt;/keep-alive&gt; <br /><br />
+
+    &lt;keep-alive :include="['组件1','组件2']"&gt; <br />
+    ...组件 <br />
+    &lt;/keep-alive&gt; <br /><br />
+    include: 需要缓存的组件<br />
+    生命周期：<br />
+    activated() {<br />
+    //刚进入keep-alive组件触发<br />
+    },<br />
+    deactivated() {<br />
+    //离开keep-alive组件触发<br />
+    },<br />
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *路由守卫
+    </div>
+    <br />
+    //全局路由前置守卫 每次切换路由前触发 路由配置文件中书写<br />
+    router.beforeEach((to,from,next)=>{<br />
+    //to 去哪 from 来自 next() 继续执行跳转<br />
+    })<br /><br />
+
+    //全局路由后置守卫 每次切换路由完毕时触发 路由配置文件中书写<br />
+    router.beforeEach((to,from)=>{<br />
+    //to 去哪 from 来自 <br />
+    })<br /><br />
+
+    // 独享路由前置守卫 在需要守卫的路由配置项里写<br />
+    beforeEnter: (to, from, next) => {<br />
+    // ...<br />
+    }<br /><br />
+
+    //组件内路由守卫 生命周期同级<br /><br />
+
+    //进入该组件时调用<br />
+    beforeRouteEnter (to, from, next) {<br />
+    // ...<br />
+    }<br /><br />
+
+    // 离开该组件时调用<br />
+    beforeRouteLeave (to, from, next) {<br />
+    // ...<br />
+    }
+
+  </h4>
+  <hr />
+  <h4>
+    <div class="title">
+      *路由模式 history hash
+    </div>
+    <br />
+    路由配置 mode:history // 默认是hash <br /> <br />
+
+    hash: <br />
+    兼容性较好 <br />
+    路径带# #连同#后面的数据成为哈希值 不会发送给服务器 不会出现404 但不美观 <br />
+    部分app认为#地址非法 <br /> <br />
+
+    history: <br />
+    相对兼容性较差 <br />
+    路径不带# 会出现404 需要服务端处理 <br />
+
+  </h4>
 </body>
 
 </html>
@@ -769,14 +993,210 @@
            }
        }
 
-*vue-resource  请求库  vue1.0 常用  了解
-main.js:
-import vueResource from 'vue-resource'
-Vue.use('vueResource')
+      *vue-resource  请求库  vue1.0 常用  了解
+      main.js:
+      import vueResource from 'vue-resource'
+      Vue.use('vueResource')
 
-使用方式:
-this.$http.get().then()
-this.$http.post().then()
+      使用方式:
+      this.$http.get().then()
+      this.$http.post().then()
+
+      *vuex 集中式状态管理
+
+      dispatch('actions方法名','数据')  //可以触发actions  在actions内部作数据处理或一异步请求操作等
+      commit('mutations方法名','数据') //需手动调用commit出发mutations存值  如不需要数据处理 可以直接使用commit不使用dispatch
+      配置代码如下：
+      安装vuex  创建store配置文件夹
+      main.js:
+      引入store  挂载store
+      store:(index.js)
+      import Vue from 'vue'
+      import Vuex from 'vuex'
+      Vue.use(Vuex)
+      const state = {
+        num:0,
+        name:'zs',
+        age:18
+      }
+      const actions={
+        //store上下文 接收到的数据
+        jia(context,value){
+          ...数据逻辑处理 例：value处理后变为value2
+          context.commit('JIA',value2)//调用mutations
+        },
+        jian(context,value){
+          ...数据逻辑处理 例：value处理后变为value2
+          context.commit('JIAN',value2)//调用mutations
+        },
+      }
+      const mutations={
+        //state现有数据对象  value2数据
+        JIA(state,value){
+          state.num = value //此时state的num变为jia处理后的数据value2
+        },
+        JIAN(state,value){
+          state.num = value //此时state的num变为jia处理后的数据value2
+        }
+      }
+
+      const getters = {
+        bigSum(state){
+          return state.num * 10   //数据处理逻辑代码
+        }
+      }
+
+      export deflault new Vuex.Store({
+        state,
+        mutations,
+        actions,
+        getters
+      })
+
+      组件应用代码如下：
+      this.$store.dispatch('jia',111) //触发actions
+      this.$store.commit('JIA',111) //触发mutations
+      this.$store.state.num //获取num值
+      this.$store.getters.bigSum()//使用getters
+
+      语法糖 map系列：
+      import {mapState,mapGetters,mapActions,mapMutations}
+
+      data(){
+        return{
+          num:'',
+          name:'',
+          bigSum:''
+        }
+      }
+      computed:{
+        //mapState对象结构赋值法：
+        ...mapState({num:"num",name:"name"})
+        //mapState数组写法 （数据名一致时）：
+        ...mapState(['num','name'])
+        //mapGetters对象写法
+        ...mapGetters({bigSum:'bigSum'})
+        //数组写法（数据名一致时）
+        ...mapGetters(['bigSum'])
+      }
+      methods:{
+        ...mapActions({methods1:'jia',methods2:'jian'})
+        //methods1  methods2为本地dom绑定的方法事件  需要传递参数（传值actions使用）适用map系列数组简写规则
+        ...mapMutations({methods1:'JIA',methods2:'JIAN'})
+        //methods1  methods2为本地dom绑定的方法事件  需要传递参数（传值mutations使用）适用map系列数组简写规则
+      }
+
+      *vuex namespace 命名空间
+
+      store：
+      // 功能块1  XXX为实际配置代码
+      const options1 = {
+        namespace:true // 开启命名空间
+        state:{XXX}, 
+        actions:{XXX},
+        mutations:{XXX},
+        getters:{XXX}
+      }
+       // 功能块2  XXX为实际配置代码
+       const options2 = {
+        state:{XXX}, 
+        actions:{XXX},
+        mutations:{XXX},
+        getters:{XXX}
+      }
+
+      export deflault new Vuex.Store({
+        options1,
+        options2
+      })
+
+      使用namespace的数据,可以使用 ...mapState('options1',['xxx','xxx']) 直接获取到options1中state的数据 
+      未使用namespace的数据,只能使用...mapState(['options1'])然后模板中使用options1.xxx 获取数据
+      ...mapMutations('options1',{methods1:"xxx",methods2:"xxx"})
+      ...mapActions('options1',{methods1:"xxx",methods2:"xxx"})
+      ...mapGetters('options1',['xxx'])  
+      以上同理，第一个参数表示模块（对象）名，然后会自动寻找其下方的配置参数
+
+      原始用法（namespace）： 
+      this.$store.state.options1.num
+      this.$store.getters[options.bigSum]
+      this.$dispatch('options1/jia',111)
+      this.$commit('options1/JIA',111)
+
+      *路由
+
+      路由切换，组件销毁
+      二级路由配置，path不需要加“/”
+
+      路由配置文件给组件传参：
+      1.配置 props   如 props:{name:'zs',age:18} //以props传参给路由组件  但是数据是写死的
+      2.布尔值 props:true  //可以接收到所有params传参 并以props的方式传给组件
+      3.函数   props($route){
+              return {name:$route.query.xxx,age:$route.params.xxx} //可以获取到$route
+        }
+
+      
+      $route.back() //回退1
+      $route.forward()//前进1
+      $route.go(num) // num 为数字步数  正数前进  负数后退
+
+      *keep-alive 缓存标签
+      <keep-alive include="组件名">
+          ...组件
+      </keep-alive>
+
+      <keep-alive :include="['组件1','组件2']">
+          ...组件
+      </keep-alive>
+      include: 需要缓存的组件
+      生命周期：
+      activated() {
+        //刚进入keep-alive组件触发
+      },
+      deactivated() {
+        //离开keep-alive组件触发
+      },
+
+      *路由守卫
+      //全局路由前置守卫  每次切换路由前触发 路由配置文件中书写
+      router.beforeEach((to,from,next)=>{
+        //to 去哪  from 来自  next() 继续执行跳转
+      })
+
+      //全局路由后置守卫  每次切换路由完毕时触发 路由配置文件中书写
+      router.beforeEach((to,from)=>{
+        //to 去哪  from 来自 
+      })
+
+      // 独享路由前置守卫  在需要守卫的路由配置项里写
+      beforeEnter: (to, from, next) => {
+        // ...
+      }
+
+      //组件内路由守卫 生命周期同级
+
+      //进入该组件时调用
+      beforeRouteEnter (to, from, next) {
+        // ...
+      }
+
+      // 离开该组件时调用
+      beforeRouteLeave (to, from, next) {
+        // ...
+      }
+
+      *路由模式 history  hash
+      路由配置 mode:history  // 默认是hash
+
+      hash:
+      兼容性较好
+      路径带# #连同#后面的数据成为哈希值  不会发送给服务器  不会出现404  但不美观
+      部分app认为#地址非法
+
+      history:
+      相对兼容性较差
+      路径不带#  会出现404  需要服务端处理
+
 
 
    </script>
