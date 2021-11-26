@@ -6,6 +6,7 @@
       <li class="textStyle" @click="goPage('3')">vue模拟实现</li>
        <li class="textStyle" @click="goPage('4')">vue笔记</li>
         <li class="textStyle" @click="goPage('5')">面试知识</li>
+        <li class="textStyle" @click="goPage('6')">nodeJs笔记</li>
     </ul>
   </div>
 </template>
@@ -30,8 +31,9 @@ export default {
         case "4":
           window.open("/static/readMe/vue笔记.html");
         case "5":
-          window.open("/static/readMe/面试知识.html")
-          
+          window.open("/static/readMe/面试知识.html");
+          case "6":
+          alert('static/readMe 文档');
       }
     },
   },

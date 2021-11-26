@@ -87,7 +87,7 @@ export default new Router({
       children:[{
         path: 'i18nTest',
         name: 'i18nTest',
-        component: ()=>import('@/views/threeMod/test1/index.vue')
+        component: ()=>import('@/views/threeMod/i18nTest/index.vue')
       },]
      
     },
