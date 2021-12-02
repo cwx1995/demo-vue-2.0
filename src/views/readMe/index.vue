@@ -7,6 +7,7 @@
        <li class="textStyle" @click="goPage('4')">vue笔记</li>
         <li class="textStyle" @click="goPage('5')">面试知识</li>
         <li class="textStyle" @click="goPage('6')">nodeJs笔记</li>
+        <li class="textStyle" @click="goPage('7')">webpack配置笔记</li>
     </ul>
   </div>
 </template>
@@ -34,6 +35,8 @@ export default {
           window.open("/static/readMe/面试知识.html");
           case "6":
           alert('static/readMe 文档');
+          case "7":
+          alert('static/webpack 配置文档');
       }
     },
   },
