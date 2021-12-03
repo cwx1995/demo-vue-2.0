@@ -37,7 +37,7 @@ module.exports={
             },
             {  //记得在packjson中配置eslintConfig
                 test:/\.js$/,
-                exclude:/node-modules/,
+                exclude:/node_modules/,
                 loader:'eslint-loader',
                 options:{
                     fix:true
@@ -45,7 +45,7 @@ module.exports={
             },
             {
                 test:/\.js$/,
-                exclude:/node-modules/,
+                exclude:/node_modules/,
                 loader:'babel-loader',
                 options:{
                     presets:[

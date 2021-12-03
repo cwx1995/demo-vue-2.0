@@ -70,7 +70,7 @@
        rules:[
            {
            test:/\.js$/,
-           exclude:/node-modules/, //不检查第三方库
+           exclude:/node_modules/, //不检查第三方库
            loader:'eslint-loader',
            options:{
                fix:true  //自动修复
@@ -97,7 +97,7 @@
        rules:[
            {
             loader:'babel-loader',
-            exclude:/node-modules/,
+            exclude:/node_modules/,
             options:{
                 presets:['@babel/preset-env'] //预设 指示babel做怎样的兼容性处理
             }
@@ -113,7 +113,7 @@
    module:{
        rules:[
            {
-            exclude:/node-modules/,
+            exclude:/node_modules/,
             loader:'babel-loader',
             options:{
                 preset:[
@@ -202,4 +202,288 @@
     开发：eval-source-map  / eval-cheap-module-source-map
     生产：source-map / cheap-module-source-map
 
+    *优化 oneOf
+    一个文件只匹配一次loader 不会匹配所有loader 但不允许存在两个相同文件格式处理loader（test匹配的）
+    rules:[
+        {
+            oneOf:[...各种loader配置]
+        },
+        {
+            ...eslint配置   //因为eslint处理和babel处理都是js文件 所以拆分出来
+        }
+    ]
+
+    *优化 生产开启缓存
+    js： babel-loader配置
+    {
+        test:/\.js$/,
+        exclude:/node_modules/,
+        options:{
+            presets:[...],
+            cacheDirectory:true //第二次构建时 读取缓存
+        }
+    }
+
+    文件缓存：
+    打包输出的文件名增加hash值
+    built[contenthash].css
+    hash: 每次webpack打包都会生成唯一的hash值
+    chunkhash：根据chunk生成hash值
+    contenthash：根据内容生成hash值
+
+    *优化 tree shaking 树摇
+    打包时去除无用代码 必须使用es6语法  webpack4不能识别深度嵌套 webpack5可以识别并精简
+    使用mode:production 时 自动开启
+
+    package.json中 配置 sideEffects:false  //表示无副作用 所有代码都进行树摇 会把css过滤掉
+    sideEffects:[*.css,*.less]  //表示不进行树摇的文件格式
+    // 新版本无需配置，针对旧版本做以上配置
+
+    *优化 code split 代码分割：
+    第一种:
+    webpack.config.js:
+    //多入口 多页面应用
+    entry:{
+        main:'./index.js',
+        test:'./test.js'
+    }
+
+    第二种:
+    webpack.config.js
+    配置项  将node_modules的包单独打包 多入口会自动判断是否重复使用  不会重复打包
+    optimization:{
+        splitChunks:{
+            chunks:'all'
+        }
+    }
+
+    第三种:
+    js代码 结合 optimization 
+    js使用动态引入test:
+    import(/*webpackChunkName:'test'*/'./test').then().catch()
+    webpackChunkName为打包输出名字配置
+
+    *优化 PWA 渐进式网络开发应用程序 （无网访问技术）
+    workbox ==> workbox-webpack-plugin 
+
+    const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
+    plugins:[
+        //帮助serviceworker快速启动 删除旧的serviceworker
+        new WorkboxWebpackPlugin.GenerateSW({
+            clientsClaim:true,
+            skipWating:true
+        })
+    ]
+    
+    入口js文件注册:
+    //兼容处理
+    if('serviceworker' in navigator){
+        window.addEventListener('load',()=>{
+            navigator.serviceworker.register('/service-worker.js')
+            .then(()=>{
+                console.log('success')
+            })
+            .catch(()=>{
+                console.log('fail')
+            })
+        })
+    }
+
+    package.json eslintConfig 增加:
+     "env":{
+         "browser":true  //支持浏览器全局变量 兼容window
+     }
+     
+     *必须启动在服务器上*  node i serve -g   serve -s build //启动服务器 将build目录资源暴露
+
+     *优化 多进程打包
+     进程开启大概花费600ms  通信也需要时间  适合打包时间过长的项目使用多进程
+     loader配置:
+
+     {
+         test:/\.js$/,
+         exclude:/node_modules/,
+         use:[
+             'thread-loader',
+             {
+                 loader:'babel-loader',
+                 options:{
+                     presets:[
+                         [
+                             '@babel/preset-env',
+                             {
+                                 useBuiltIns:'usage',
+                                 corejs:{
+                                     version:3
+                                 },
+                                 targets:{
+                                     chrome:'60',
+                                     ie:'9'
+                                 }
+                             }
+                         ]
+                     ]
+                 }
+             }
+         ]
+     }
+     
+     *优化 externals 
+     禁止打包一些包  cdn引入的包适用
+
+     webpack.config.js 配置项:
+     externals:{
+         jquery:'jQuery' // 需要忽略的模块名（jquery）   包名（jQuery）
+     }
+
+     忽略后需要在html中手动使用cdn引入
+
+     *优化 dll 动态库:
+     将node_modules的模块打包成不同文件 防止第三方库多次重复打包 加快二次打包速度
+     先编写webpack.dll.js配置文件 ==> 运行webpack --config  webpack.dll.js ==>
+     生成mainfest文件 ==> 配置weback.config.js ==> 运行webpack
+
+     webpack.dll.js:
+     const {resolve} = require('path')
+     const webpack = require('webpack')
+     module.exports={
+        entry:{
+            jquery:['jquery'] // 最终打包生成的[name]为jquery  [jquery]表示要打包的组件库
+        },
+        output:{
+            filename:[name].js,
+            path:resolve(__dirname,'dll'),
+            library:'[name]_[hash]'//打包的库向外暴露的内容的命名
+        },
+        plugins:[
+            new webpack.DllPlugin({
+                name:'[name]_[hash]',//映射库的暴露内容名称
+                path:resolve(__dirname,'dll/mainfest') //输出
+            })
+        ],
+        mode:'production'
+
+     }
+
+     webpack.config.js:
+     const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
+     const webpack = require('webpack')
+     const HtmlWebpackPlugin = require('html-webpack-plugin')
+     plugins:[
+         new HtmlWebpackPlugin({
+             template:'./index.html'
+         }),
+         //告诉webpack哪些库不参与打包 使用时的名称也要变  
+         new webpack.DllReferencePlugin({
+             mainfest:resolve(__dirname,'dll/mainfest.json')
+         }),
+         //将某个文件打包输出，并在html自动引入
+         new AddAssetHtmlWebpackPlugin({
+             filepath:resolve(__dirname,'dll/jquery.js') //打包输出路径
+         })
+     ],
+     mode:'production'
+
+     总结: cdn引入的使用externals  下载的第三方库使用 dll
+
+     *entry 详细
+     数据内容为:
+     string ==> './index.js' 
+     单入口 打包为一个chunk  默认名称为main
+     array ===> ['./a.js','./b.js']  
+     多入口 但只输出一个chunk 只在HMR功能时 为了让html实现热更新时使用
+     object ===> {index:'./index.js',test:'./test.js'}
+     多入口，打包输出多个chunk chunk名称为key值 value为包 可以为数组  多个库打包成一个chunk
+    
+     *output 详细
+     filename:   //打包后的文件名称
+     path:   //打包后输出的目录（所有资源的大目录 如build）
+     publicPath:    //所有资源引入路径的公共前缀 如/api
+     chunkFilename:   //非入口chunk命名
+     library:   //暴露变量名
+     libraryTarget:   //变量名添加到哪里  如 window
+
+     *loader 详细
+     module:{rules:[]}
+     配置多个loader use:['xxx-loader','ccc-loader',{其他loader}]
+     配置单个loader  loader:'xxx-loader' options:{loader具体配置}
+     exclude:/node_modules/   //排除的文件
+     include:'./src'   //只处理的文件目录
+     enforce:'pre'/'post'    //优先 延后执行
+     oneOf:[]  //loader只匹配一次
+
+     *resolve 详细
+     resolve:{}
+     配置项:
+     alias:{
+         $css:resolve(__dirname,'src/css') //$代表此路径  简写  复用
+     }
+     extensions:['.js','.json'] //可以省略不写文件后缀
+     modules:[resolve(__dirname,'./node_modules')] //告知webpack解析模块的目录 免得一层层寻找耗时
+
+     *devServer 详情
+     配置项:
+     contentBase:path  //运行代码的目录为path
+     watchContentBase:true //监视运行目录
+     watchOptions:{
+         ignored:/node_modules/  //忽略部分文件监听
+     }
+     compress:true //启动gzip
+     port:5000 //端口设置
+     host:'localhost' //网址设置
+     open:true //自动开启浏览器
+     hot:true  //HMR开启
+     clientLogLevel:'none' //不显示服务器日志信息
+     quite:true //不提示过多内容
+     overlay:false  //不要全屏提示错误
+     proxy:{
+         '/api':{
+             target:'http://localhost:3000', //devServer服务器 5000 收到/api发送的请求  会把请求转发到3000服务器上
+             pathRewrite:{
+                 '^/api':''  //路径处理  将/api去除 因为后端不需要/api拼接在请求路径中 （会404）
+             }
+            }
+     }
+
+     *optimization 分割优化  生产环境
+     optimization:{
+         splitChunks:{
+            chunks:'all',
+            //以下为默认属性配置
+            minSize:30*1024,//分割最小为30kb
+            maxSize:0, //最大无限制
+            minChunks:1,//要提取的chunk至少被引用一次
+            maxAsyncResquests:5,//按需加载时并行加载文件数量最多5个
+            maxInitialResquests:3,//入口js文件最大并行请求数量
+            automaticNameDelimiter:'~',//名称连接符设置
+            name:true,//可以使用命名规则
+            cacheGroups:{  //分割chunk组
+                vendors:{ //node_modules文件会被打包到vendors组件的chunk中  名称为 vendors~xxx.js
+                    test:/[\\/]node_modules[\\/]/,
+                    priority:-10 //打包优先级
+                },
+                defult:{
+                    minChunks:2,//要提取的chunk最少被引用2次
+                    priority:-20,
+                    reuseExistringChunk:true //复用已打包的模块
+                }
+            }
+         },
+         /*上面会有一个问题  打包后的main文件中会存储hash值来对应其他js文件以便引用
+            其他js有代码变更  会触发其hash值改变  导致main中的hash值也发生改变 
+            所以会出现main无修改代码 依然会被重新打包的问题 */
+
+         //runtime  将记录hash的数据统一存放至一个文件 解决main重复打包问题
+         runtimeChunk:{
+             name:entrypoint => `runtime-${entrypoint.name}`         //`
+         },
+         minimizer:[
+             //配置生产环境压缩方案  js  css  TerserWebpackPlugin需要引入
+             new TerserWebpackPlugin({
+                 cache:true, //开启缓存
+                 parallel:true,//多进程打包
+                 sourceMap:true,//启用sourceMap
+             })
+            ]
+     }
 </script>
