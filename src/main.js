@@ -8,7 +8,8 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from './store'
 import i18n from './i18n'
-
+import Vconsole from 'vconsole';
+new Vconsole();
 Vue.prototype.$get = fetchGet
 Vue.prototype.$post = fetchPost
 Vue.use(ElementUI);

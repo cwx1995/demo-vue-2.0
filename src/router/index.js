@@ -82,7 +82,7 @@ export default new Router({
     // 菜单三
     {
       path:'/threeMod',
-      component:Layout,
+      component:noLayout,
       redirect:'/threeMod/i18nTest',
       children:[{
         path: 'i18nTest',

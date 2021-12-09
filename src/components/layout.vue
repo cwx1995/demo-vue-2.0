@@ -50,7 +50,7 @@ import headers from './header.vue'
     }
 </script>
 
-<style>
+<style lang="scss" scoped>
     .main {
         margin-top: 50px;
         background-color: #ccc;
