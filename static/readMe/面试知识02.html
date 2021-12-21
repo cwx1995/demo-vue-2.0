@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面试知识02</title>
+    <style>
+        /* css 盒子居中 */
+        /* 1.已知盒子宽高假定50*50 */
+        body{
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+        /* #box{
+            width: 50px;
+            height: 50px;
+            background-color: red;
+        }
+        .box{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -25px;
+            margin-top: -25px;
+        } */
+        /* 2.盒子有宽高 但不考虑具体宽高 */
+        /* #box{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+        .box{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        } */
+        /* 3.不考虑宽高 兼容性较差 */
+        /* .box{
+            position:absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        } */
+        /* 4.flex */
+        /* body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        } */
+        /* 5.teble-cell  父级需固定宽高*/
+        /* body{
+            display: table-cell;
+            width: 500px;
+            height: 500px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .box{
+            display: inline-block;
+        } */
+        /* 6.js获取 */
+
+        /* 盒模型 */
+        /* 标准盒模型： 内容+padding+margin+border */
+        /* box-sizing:content-box; */
+        /* ie盒模型 怪异盒模型  内容*/
+        /* box-sizing:border-box; */
+        /* elementUI等组件库使用该模型 */
+
+        /* 圣杯布局  左右固定 中间自适应 */
+        /* div布局在一个div盒子中的 */
+        /* .content{
+            padding:0 200px;
+        }
+        .common{
+            position: relative;
+            min-height: 200px;
+            float: left;
+        }
+        .center{
+            width: 100%;
+            background-color: red;
+        } */
+        /* .left{ 
+            margin-left: -100%;
+            left: -200px;
+            width: 200px;
+            background-color: blue;
+        }
+        .right{
+            margin-left: -200px;
+            right: -200px;
+            width: 200px;
+            background-color: blue;
+        } */
+
+        /* 双飞翼布局 两边自适应 中间固定 */
+        /* div布局同级 无共同父盒子 */
+        .container{
+            margin: 0 200px;
+        }
+        .left,.center,.right{
+            float: left;
+            min-height: 200px;
+        }
+        .center{
+            width: 100%;
+            min-height: 200px;
+            background-color: red;
+        }
+        .left,.right{
+            width: 200px;
+            min-height: 200px;
+            background-color: blue;
+        }
+        .left{
+            position: relative;
+            left: 200px;
+            margin-left: -100%;
+        }
+        .right{
+            margin-right: -200px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- 居中 -->
+    <!-- <div id="box" class="box">box</div> -->
+    <!-- 圣杯布局 -->
+    <!-- <div class="content" clearfix>
+        <div class="center common">center</div>
+        <div class="left common">left</div>
+        <div class="right common">right</div>
+    </div> -->
+    <!-- 双飞翼布局 -->
+    <!-- <div class="container">
+        <div class="center">center</div>
+    </div>
+    <div class="left">left</div>
+    <div class="right">right</div> -->
+</body>
+</html>
+<script>
+    // js居中
+    // let HTML = document.documentElement,
+    // winW=HTML.clientWidth,
+    // winH = HTML.clientHeight
+    // box.style.position="absolute";
+    // box.style.left=(winW-box.offsetWidth)/2+"px";
+    // box.style.top=(winH-box.offsetHeight)/2+"px";
+
+    // 练习1
+    // let a = {},b={name:'xxx'},c={age:18}
+    // a[b]="1";
+    // a[c]="2";
+    // console.log(a[b]);//"2"
+    // 解： 所有对象转换为字符串都是[object object] 比如alert 
+    // a["[object object]"]="1"
+    // a["[object object]"]="2"  
+    // 问 a["[object object]"]输出是什么
+
+    // 练习2
+    // function A(a) {
+    //     A=function(b){alert(a+b++)}
+    //     console.log(a++)
+    // }
+    // A(1)//1
+    // A(2)//4
+    // A(6)//8
+
+    // 解： 传入A(1)
+    // 执行： 函数A重置为function(b){alert(a+b++)} 然后执行console.log(a++)
+    // 输出1 因为a++ 执行后a被闭包保留 a为2
+    // 传入A(2)
+    // 执行：alert(a+b++) 
+    // a为2 b为传入的2  输出4 因为b++  所以b输出后自增  但是b执行后被释放
+    // 传入A(6)
+    // 执行：alert(a+b++) 
+    // a为2 b为传入6 输出8
+
+    let obj={
+        a:1,
+        b:[1,2,3],
+        c:{inner:"a"},
+        d:/.js$/,
+        e:function(){console.log('fun')}
+    }
+    // 浅克隆方式1
+    // let obj2 = {
+    //     ...obj
+    // }
+    // 浅克隆方式2
+    // let obj2 = {}
+    // for(let key in obj){
+    //     if(obj.hasOwnProperty(key)){
+    //         obj2[key]=obj[key]
+    //     }
+    // }
+    // 这种只能克隆一层
+
+    // 深克隆方式1
+    // let objString = JSON.stringify(obj) //json转字符串
+    // let obj2 = JSON.parse(objString) //字符串转回json对象
+    // console.log(obj2)
+    // *但是Function Reg Date 等格式会被忽略转换 
+
+    // 深克隆方式3  递归
+    // function deepClone(obj){
+        // 数据类型处理
+    //     if(obj===null){  //null
+    //         return null
+    //     }
+    //     if(typeof obj !=="object"){ //基本数据类型
+    //         return obj
+    //     }
+    //     if(obj instanceof Date){
+    //         return new Date(obj)
+    //     }
+    //     if(obj instanceof Function){
+    //         return new Function(obj)
+    //     }
+    //     if(obj instanceof RegExp){
+    //         return new RegExp(obj)
+    //     }
+            // 对象处理
+    //     let obj2= new obj.constructor //这种创建方式为了克隆的结果和之前保持相同的所属类
+    //     for(let key in obj){
+    //         if(obj.hasOwnProperty(key)){
+    //             obj2[key]=deepClone(obj[key])
+    //         }
+    //     }
+    //     return obj2
+    // }
+    // let obj2=deepClone(obj)
+    // console.log(obj2)
+
+    // 练习题
+    // function Foo(){
+    //     getName=function(){
+    //         console.log(1)
+    //     }
+    //     return this
+    // }
+    // Foo.getName=function(){
+    //     console.log(2)
+    // }
+    // Foo.prototype.getName=function(){
+    //     console.log(3)
+    // }
+    // var getName=function(){
+    //     console.log(4)
+    // }
+    // function getName(){
+    //     console.log(5)
+    // }
+    // Foo.getName() //2
+    // getName() //4
+    // Foo().getName() //1
+    // getName() //1
+    // new Foo.getName() //2
+    // new Foo().getName() //3
+    // new new Foo().getName() //3
+    
+    // 解：
+    // 变量提升 "function Foo" "var getName" "function getName"
+    // Foo=AAAFFF000 ==>指向Foo堆地址
+    // getName ==> undefined 仅声明
+    // function getName ==> getName === 5
+
+    // 代码执行 从上至下：
+    // Foo.getName  ==>  AAAFFF000存储的getName为2
+    // Foo.prototype.getName ==> AAAFFF000存储prototype 并指向BBBFFF000  BBBFFF000存储getName为3
+    // var getName ==》 此时全局变量getName从5变为4
+
+    // 输出执行：
+    // 1."Foo.getName()" //2
+    // 为AAAFFF000存储的getName  输出2
+    // 2."getName()" //4
+    // 相当于window.getName() 全局4
+    // 3."Foo().getName()"//1
+    // Foo()执行 生成执行上下文 全局getName修改为1  return this ==》 return window
+    // 4."getName()" //1
+    // window.getName() 输出1
+    // 5."new Foo.getName()" //2
+    // js运算符优先级 new无参数 18 .getName() 成员访问19
+    // Foo.getName()==> Foo指向AAAFFF000 其getName为2 
+    // new后依然为2 输出2
+    // 6."new Foo().getName()" //3
+    // js运算符优先级 new有参数 19 .getName() 成员访问19  从左至右
+    // new Foo() 创建实例Fo  ==》  Fo.getName() 读取Foo原型上的属性（BBBFFF000） 输出3
+    // 7."new new Foo().getName()" //3
+    // 连续new 从后往前
+    // new Foo() ==》创建实例Fo  new Fo.getName()
+    // new Fo.getName()==> 无参数列表 先执行Fo.getName() 调取Foo原型对象上属性 为3
+    // new 后  输出3
+
+    // Event Queue
+    // 主栈 =》 微任务（promise async await） =》 宏任务（定时器，时间绑定，ajax）
+
+    // async function async1(){
+    //     console.log('1 start')
+    //     await async2()
+    //     console.log('1 end')
+    // }
+    // async function async2(){
+    //     console.log('2')
+    // }
+    // console.log('script start')
+    // setTimeout(()=>{
+    //     console.log('setTimeout')
+    // },0)
+    // async1()
+    // new Promise(function(resolve){
+    //     console.log('promise1')
+    //     resolve()
+    // }).then(()=>{
+    //     console.log('promose2')
+    // })
+    // console.log('script end')
+
+    // 解：
+    // script start
+    // 1 start
+    // 2
+    // promise1
+    // script end
+    // 1 end
+    // promose2
+    // setTimeout
+    // 创建async1 
+    // 创建async2
+    // 输出“script start”
+    // 设置定时器  宏任务
+    // 执行async1 输出“1 start”  执行async2 输出“2” 等待执行结果 微任务（1 end）
+    // new Promise 输出“promise1” 执行resolve 等待结果 微任务（promise2）
+    // 执行console 输出“script end”
+    // 至此主栈任务执行完毕  执行微任务
+    // 输出“1 end” “promise2” 顺序不同浏览器可能不同
+    // 执行宏任务  输出“setTimeout”
+
+    // == 运算符转换规则
+    // 对象==字符串  对象转为字符串
+    // null==undefined 相等
+    // NAN == NAN  不等
+    // 剩下均转为数字对比
+
+    // MVC与MVVM
+    // MVC是视图改变没有驱动数据变化  需要自己处理onchange事件 为单向绑定
+    // 仅数据联动视图  如react
+    // MVVM是自动帮我们做了onchange处理 为双向绑定 如vue
+
+    // http协议默认端口80 https默认端口443
+
+    // 跨域
+    // 浏览器可以发出请求，但是请求回的数据被浏览器保护（同源策略）
+    // jsonp： 利用script link image标签不限制跨域机制 只能处理get 并且需要服务端配合
+    // iframe
+    // CORS：服务端进行配置
+    // proxy代理：开发环境可以使用 webpack的devServer配置proxy
+    // nginx反向代理：服务端配置
+
+    // 去重  练习题
+    // let ary=[22,12,3,5,8,4,5,8]
+    // sort
+    // let ary2=Array.from(new Set(ary))
+    // 循环
+    // function ary2(ary){
+    //     let newAry=[]
+    //     for(let i =0;i<ary.length;i++){
+    //         let item=ary[i]
+    //         let args=ary.slice(i+1)
+    //         if(args.indexOf(item)===-1){
+    //             newAry.push(item)
+    //         }
+    //     }
+    //     return newAry
+    // }
+
+    // 相邻项 
+    // ary.sort((a,b)=>a-b)
+    // ary=ary.join('@')+"@"
+    // let reg=/(\d+@)\1*/g
+    // let ary2=[]
+    // ary.replace(reg,(v,g)=>{
+    //     // ary2.push(Number(g.split('@')[0])) //方式1 转数字
+    //     // ary2.push(Number(g.slice(0,g.length-1)))//方式2 转数字
+    //     ary2.push(parseFloat(g))//方式3 转数字
+    // })
+    // console.log(ary2)
+
+    // 字符串截取
+    // .substring(start,end)//负值变0 索引start开始截取到end  不包括end
+    // .substr(start,count)//start负值 =》 负数+length  count负值 =》 0  索引start开始截取 count个
+    // .slice(start,end)//负值均按 负数+length处理 截取到end  不包括end
+
+    // 排序 练习题
+    // let arr = [31,5,6,9,1]
+    // 冒泡排序：
+    // function popSort(arr){
+    //     for(let i=0;i <arr.length;i++){
+    //         for(let j =0;j<arr.length-i;j++){
+    //             if(arr[j]>arr[j+1]){
+    //                 let temp=arr[j]
+    //                 arr[j]=arr[j+1]
+    //                 arr[j+1]=temp
+    //             }
+    //         }
+    //     }
+    //     return arr
+    // }
+    // console.log(popSort(arr))
+
+    // 快速排序： ？？？
+
+    // 数组扁平化方法
+    let  arr=[1,2,[1,2,[3,4]],[1,[2,[3,[4]]]]]
+    // es6
+    // arr=arr.flat(Infinity)//传参为扁平化层数 Infinity表示全部层
+    // toString
+    // arr.toString().split(',').map(item=>parseFloat(item))//转为字符串=》切割=》每项转回数字
+    // 循环
+    // while(arr.some(item=>Array.isArray(item))){
+    //     arr=[].concat(...arr)
+    // }
+    // console.log(arr)
+
+    // 斐波那契数列 1 1 2 3 5 8
+    // function fibonacci(n){
+    //     if(n<=1){
+    //         return 1  //前两项为1
+    //     }
+    //     let arr = [1,1] //初始数组
+    //     let i =n+1-2 //需要补充的数组数量
+    //     while(i>0){  //循环补充数组
+    //         let a = arr[arr.length-1] //前一项
+    //         let b = arr[arr.length-2] //前两项
+    //         arr.push(a+b)  //相加
+    //         i--  
+    //     }
+    //     return arr[arr.length-1] //返回最后一项
+    // }
+    // console.log(fibonacci(6))
+</script>

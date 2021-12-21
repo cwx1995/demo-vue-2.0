@@ -1,14 +1,14 @@
 <template>
   <div class="readMe">
-    <ul>
-      <li class="textStyle" @click="goPage('1')">es6笔记</li>
-      <li class="textStyle" @click="goPage('2')">vue3笔记</li>
-      <li class="textStyle" @click="goPage('3')">vue模拟实现</li>
-       <li class="textStyle" @click="goPage('4')">vue笔记</li>
-        <li class="textStyle" @click="goPage('5')">面试知识</li>
-        <li class="textStyle" @click="goPage('6')">nodeJs笔记</li>
-        <li class="textStyle" @click="goPage('7')">webpack配置笔记</li>
-    </ul>
+      <a class="textStyle" href="/static/readMe/es6笔记.html">es6笔记</a>
+      <a class="textStyle" href="/static/readMe/vue3笔记.html">vue3笔记</a>
+      <a class="textStyle" href="/static/readMe/vue模拟实现">vue模拟实现</a>
+       <a class="textStyle" href="/static/readMe/vue笔记.html">vue笔记</a>
+        <a class="textStyle" href="/static/readMe/面试知识01.html">面试知识01</a>
+        <a class="textStyle" href="javascript:void(0)" @click="alertErr('static/nodeJs笔记')">nodeJs笔记</a>
+        <a class="textStyle" href="javascript:void(0)" @click="alertErr('static/webpack 配置文档')">webpack配置笔记</a>
+        <a class="textStyle" href="/static/readMe/面试知识02.html">面试知识02</a>
+        <a class="textStyle" href="/static/readMe/每日三题.html">理论知识整理</a>
   </div>
 </template>
 
@@ -18,28 +18,10 @@ export default {
     return {};
   },
   methods: {
-    goPage(v) {
-      switch (v) {
-        case "1":
-          window.open("/static/readMe/es6笔记.html");
-          break;
-        case "2":
-          window.open("/static/readMe/vue3笔记.html");
-          break;
-        case "3":
-          window.open("/static/readMe/vue模拟实现.html");
-          break;
-        case "4":
-          window.open("/static/readMe/vue笔记.html");
-        case "5":
-          window.open("/static/readMe/面试知识.html");
-          case "6":
-          alert('static/readMe 文档');
-          case "7":
-          alert('static/webpack 配置文档');
-      }
-    },
-  },
+    alertErr(v){
+      alert(v)
+    }
+  }
 };
 </script>
 
@@ -50,8 +32,9 @@ export default {
   .textStyle {
     cursor: pointer;
     font-size: 20px;
-    color: skyblue;
+    font-weight: 400;
     margin-top: 20px;
+    display: block;
   }
 }
 </style>
