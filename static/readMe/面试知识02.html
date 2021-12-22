@@ -185,13 +185,13 @@
     // 执行：alert(a+b++) 
     // a为2 b为传入6 输出8
 
-    let obj={
-        a:1,
-        b:[1,2,3],
-        c:{inner:"a"},
-        d:/.js$/,
-        e:function(){console.log('fun')}
-    }
+    // let obj={
+    //     a:1,
+    //     b:[1,2,3],
+    //     c:{inner:"a"},
+    //     d:/.js$/,
+    //     e:function(){console.log('fun')}
+    // }
     // 浅克隆方式1
     // let obj2 = {
     //     ...obj
@@ -399,9 +399,12 @@
     // .substring(start,end)//负值变0 索引start开始截取到end  不包括end
     // .substr(start,count)//start负值 =》 负数+length  count负值 =》 0  索引start开始截取 count个
     // .slice(start,end)//负值均按 负数+length处理 截取到end  不包括end
+    // 数组截取
+    // .splice(start,count) //数组截取会改变原数组 返回截取的部分（数组）start为- ==》负+length count为-  ==》0
+    
 
     // 排序 练习题
-    // let arr = [31,5,6,9,1]
+    let arr = [31,5,6,9,1,22,3]
     // 冒泡排序：
     // function popSort(arr){
     //     for(let i=0;i <arr.length;i++){
@@ -417,10 +420,31 @@
     // }
     // console.log(popSort(arr))
 
-    // 快速排序： ？？？
+    // 快速排序： 
+    // 拿出中间项A 然后其他项与之对比 比A小放左边数组里 比A大放右边数组里
+    // 然后左边数组继续取中值重复操作  最后左边值+中值+右边值拼接完成排序
+    // function quickSort(arr){
+    //     if(arr.length<=1){ //一项直接返回
+    //         return arr
+    //     }
+    //     let midIndex=Math.floor(arr.length/2) //取中位索引
+    //     let flag=arr.splice(midIndex,1)[0] //截取 返回数组格式的中值 取第一个即为中值数字
+    //     let left=[]
+    //     let right=[]
+    //     for(let i =0;i<arr.length;i++){
+    //         if(flag>arr[i]){
+    //             left.push(arr[i]) //小的放左边
+    //         }
+    //         if(flag<arr[i]){
+    //             right.push(arr[i]) //大的放右边
+    //         }
+    //     }
+    //     return quickSort(left).concat([flag]).concat(quickSort(right)) //拼接
+    // }
+    // console.log(quickSort(arr))
 
     // 数组扁平化方法
-    let  arr=[1,2,[1,2,[3,4]],[1,[2,[3,[4]]]]]
+    // let  arr=[1,2,[1,2,[3,4]],[1,[2,[3,[4]]]]]
     // es6
     // arr=arr.flat(Infinity)//传参为扁平化层数 Infinity表示全部层
     // toString
