@@ -5,8 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>每日三题</title>
+    <style>
+        .img-style{
+            width: 70%;
+            margin-top: 50px;
+        }
+        img{
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
+    <div>原型图</div>
+    <div class="img-style">
+        <img src="/static/images/原型链.png" alt="">
+    </div>
+</body>
+</html>
+<script type="text/javaScript">
     1.js8种数据类型
     值类型：string number undefined null boolean symbol bigInt
     引用类型：object ==》 Array function Date
@@ -64,5 +80,108 @@
         浏览器将js所需的所有属性和方法存放内置GO中，并创建一个全局对象window，将window指向GO
         所有window上的属性和方法都来自GO
 
-</body>
-</html>
+    7.惰性函数，函数柯里化，级联函数
+    高阶函数：函数可以作为参数或函数可以作为返回值输出。
+    惰性函数：表示函数执行的分支只会在函数第一次调用时执行，在第一次调用过程中，该函数被覆盖
+    如判断浏览器类型：
+    function A(type){
+        if(type){
+            console.log('chrome')
+        }else{
+            console.log('ie')
+        }
+    }
+    *上述函数会一直执行，然而这种判断执行一次即可完成任务
+    使用惰性函数写法：
+    function A(type) {
+        if(type){
+            A=function () {
+               console.log('chrome') 
+            }
+        }else{
+            A=function () {
+                console.log('ie')
+            }
+        }
+    }
+    函数柯里化：把接收多个参数的函数变成接收单一参数的函数。
+    *只传一部分参数来调用函数，让函数返回另一个函数处理逻辑（闭包）
+    如：
+    function  A(x,y) {
+        return x+y
+    }
+    A(1,2) //3
+    柯里化为：
+    function A(x) {
+        return function (y) {
+            return x+y
+        }
+    }
+    A(1)(2) //3
+    级联函数：指函数的链式调用
+    如： a.setName().setAge().setJob() ...
+
+    8.单例设计模式
+    被称为单体模式，是只允许实例化一次的对象类。为js命名空间提供者，从全局命名空间提供一个唯一的访问点来访问该对象。
+    一般是先判断实例是否已经存在，存在直接返回，不存在则创建后再返回。
+    *例如一个div点击弹框，无论点击多少次，有且仅有一个弹窗出现（不会出一大堆重复窗）
+    登陆案例：
+    HTML: <div id="loginBtn"></div>
+    JS: var createLogin=function () { //创建弹窗并隐藏 返回该弹窗DOM
+        var div=document.createElement("div")
+        div.innerHTML="<h1>login</h1>"
+        div.style.display="none"
+        document.body.appendChild(div)
+        return div
+    }
+    var getSingle=function (fn) { //检查是否已经存在弹窗DOM
+        var result
+        return function () { //存在直接返回  不存在将this指向DOM（创建）
+            return result || (result=fn.apply(this,arguments))
+        }
+    }
+    document.getElementById("loginBtn").onclick=function () { //点击事件
+        var loginLay=getSingle(createLogin) //获取DOM
+        loginLay.style.display="block" //显示DOM
+    }
+
+    9.类和实例
+    类：一个构造函数称为一个类
+    实例：通过构造函数new出的对象，成为实例对象
+    instanceof可以检查一个对象是否为一个类的实例 如：obj instanceof Person
+    所有对象都是Object的后代 所以： 任何对象 instanceof Object 都为true
+    es5:
+    function  Animal(name) {
+        this.name=name //构造函数属性
+    }
+    Animal.prototype.sayHi=function () { //构造函数原型方法
+        console.log(this.name)
+    }
+    let dog = new Animal('dog') //dog就是Animal的实例对象
+    es6:
+    class Animal{
+        constructor(name){ //构造函数属性
+            this.name=name
+        }
+        sayHi(){ //等同于挂载到原型的方法
+            console.log(this.name)
+        }
+    }
+    let dog=new Animal('dog')
+    Animal.prototype.constructor===Animal //true
+
+    10.原型和原型链
+    原型：每个js对象创建时（除了null）都会关联另一个对象，这个对象就是原型，每个对象都会从原型上继承属性。
+    prototype：每个函数都有该属性，这个属性指向该函数的原型
+    __proto__：每个对象都有该属性，这个属性指向该对象的原型 (原型对象也有，指向上一级原型对象)
+    constructor：每个原型都有该属性，这个属性指向他所关联的构造函数
+    即：
+    Animal.prototype===dog.__proto__
+    Animal===Animal.prototype.constructor
+    Animal.prototype.constructor===dog.__proto__.constructor
+    Animal.prototype.__proto__===dog.__proto__.__proto__
+    原型链：查找属性时会在当前实例对象的原型上查找，找不到则使用__proto__自动向上级原型查找，直到找不到返回null（Object.prototype.__proto__）
+
+
+    
+</script>
