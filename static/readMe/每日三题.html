@@ -182,6 +182,143 @@
     Animal.prototype.__proto__===dog.__proto__.__proto__
     原型链：查找属性时会在当前实例对象的原型上查找，找不到则使用__proto__自动向上级原型查找，直到找不到返回null（Object.prototype.__proto__）
 
+    11.new运算符机制
+    var obj={} //new 首先会创建一个新的空对象
+    obj.__proto__=Animal.prototype;//然后空对象的__proto__指向构造函数的原型，这样obj就有了Animal的原型方法及属性
+    Animal.call(obj,'dog')//然后使用call方法将Animal的this指向obj并传参数 （name的参数）这样obj就有了Animal上的属性
+    retuen obj//返回obj  使用变量接收  obj包含Animal的属性及它原型上的属性
 
+    12.call/apply/bind机制
+    用来指定this的环境。
+    call(a,b,c)： a为指向的对象，b，c等后续参数为传参。 例： b.call(a,1,2) b的this指向a 并传递参数1 2
+    apply(a,[b,c])：a为指向的对象，第二个参数必须为数组。例：b.call(a,[1,2])
+    bind(a,b,c)：a为指向的对象，b，c等后续参数为传参（有顺序）返回一个函数 调用时可以继续传参
+    例：let c=b.call(a,1,2); c(4,5); //4,5会作为参数传递给b.call(a,1,2) ===> b.call(a,1,2,4,5)
+    总结：call与apply第一个参数为null时，this指向window，并且自动执行函数
+
+    13.constructor构造函数模式
+    是一种在内存已分配给该对象的情况下，用于初始化新创建对象的特殊方法。
+    有基本constructor构造器和带原型的constructor构造器（可以将方法挂载到原型，所有new实例都可以访问）
     
+    14.this的六种情况
+    1）.纯粹的函数调用
+    函数内部this指向全局对象window
+    var x=20;
+    function  test() {
+        var x=10
+        console.log(this.x,this) //20 window
+        console.log(x)//10
+    }
+    test()
+    2).作为对象的方法使用
+    函数作为某个对象的方法，this指向该对象(调用它的)
+    var x=20;
+    var obj={
+        x:10,
+        test:function a(){
+            console.log(this,this.x) //obj 10
+        }
+    }
+    obj.test()
+    3）.构造函数生成实例对象
+    作为构造函数使用时，this指向该对象新创建的实例
+    var x=20;
+    function Test() {
+        this.x=10;
+        console.log(this) //Test
+    }
+    var t = new Test()
+    console.log(t.x)//10
+    console.log(x) //20
+    4).使用apply
+    apply()方法可以改变函数的this指向，为空默认指向window
+    var x=20;
+    var obj={
+        x:10,
+        m:test
+    };
+    var obj2={
+        x:30
+    };
+    function test() {
+        console.log(this.x,this)
+    }
+    obj.m();//10 obj
+    obj.m.apply()//20 window
+    obj.m.apply(obj2)//30 obj2
+    5).事件处理中的this
+    在DOM级事件处理中的this指向该DOM元素，ie事件指向window
+    6).闭包中的this
+    function a(x){
+        this.x=x;
+        console.log(this,'1',x)
+        return function (y) {
+            console.log(this,'2',x+=y)
+        }
+    }
+    var b=a(10) //10 window  ==> window.a(20)
+    b(10)//20 window ==>window.b(10)
+    b(10)//30 window ==>每次的x没有被释放 闭包的保存机制
+    *).箭头函数特殊情况
+    箭头函数没有this，它的this会指向它父级代码块的this，所以箭头函数不能作为构造函数
+    var obj={
+        name:'zs',
+        sayHi:()=>{
+            console.log(this)//window  为sayHi自身的上级obj的this 
+        }
+    }
+    var obj={
+        name:'zs',
+        sayHi:()=>{
+            var test=()=>{
+                console.log(this)//obj 为test的上级sayHi的上级的this
+                return test
+            }
+        }
+    }
+
+    15.四大数据监测
+    1）.typeof
+    console.log(typeof "") //string
+    console.log(typeof 1) //number
+    console.log(typeof true) //boolean
+    console.log(typeof null)//object
+    console.log(typeof undefined)//undefined
+    console.log(typeof [])//object
+    console.log(typeof function(){})//function
+    console.log(typeof {})//object
+    array null会识别为object 基本数据有效
+    2）.instanceof
+    console.log("1" instanceof String) //f
+    console.log(1 instanceof Number)//f
+    console.log([]instanceof Array)//t
+    console.log(function(){} instanceof Function) //t
+    console.log({} instanceof Object) //t
+    只可以检测引用数据类型 基本数据不可用 null undefined 不可用
+    3).constructor
+    console.log("1".constructor===String)//t
+    cosole.log([].constructor===Array)//t
+    console.log({}.constructor===Object)//t
+    console.log(function(){}===Function)//t
+    function Fun() {}
+    Fun.prototype = new Array()
+    var f = new Fun()
+    console.log(f.constructor===Fun)//f 指向改变
+    console.log(f.constructor===Array) //t 
+    null undefinedu 不可用 ， 可用于所有类型
+    但是当构造函数的原型指向改变后，其实例的constructor也随之改变，所以失效
+    4）. Object.prototype.toString.call() 最优解
+    var test = Object.prototype.toString
+    test.call('1')//[object string]
+    test.call(1)//[object number]
+    test.call([])//[object array]
+    test.call(null)//[object null]
+    test.call(undefined)//[object undefined]
+    function Fun() {}
+    Fun.prototype=new Array()
+    var f=new Fun()
+    console.log(test.call(Fun))//[object function]
+    console.log(test.call(f))//[object object]
+
+
 </script>
